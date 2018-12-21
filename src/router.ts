@@ -24,7 +24,7 @@ export default new Router({
     {
       path: '*',
       component: () =>
-        import(/* webpackChunkName: "pagenotfound" */ './views/PageNotFound.vue')
+        import(/* webpackChunkName: "pagenotfound" */ './views/PageNotFound.vue'),
     },
   ],
 });

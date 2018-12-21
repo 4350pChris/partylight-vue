@@ -5,6 +5,8 @@
     "exclude": ["node_modules/**"]
   },
   "rules": {
+    "trailing-comma": false,
+    "arrow-parens": [true, "ban-single-arg-parens"],
     "quotemark": [true, "single"],
     "indent": [true, "spaces", 2],
     "interface-name": false,

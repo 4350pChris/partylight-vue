@@ -1,8 +1,8 @@
 import signalR from '@aspnet/signalr';
 
 export default class SettingsService {
-  public connection: signalR.HubConnection;
-  public settings: Settings | object = {};
+  private connection: signalR.HubConnection;
+  private settings: Settings | null = null;
 
   constructor() {
     this.connection = new signalR.HubConnectionBuilder()
@@ -11,19 +11,25 @@ export default class SettingsService {
 
     this.connection.on(
       'SettingsChanged',
-      (settings) => (this.settings = settings),
+      settings => (this.settings = settings)
     );
 
-    this.connection.start();
-
-    this.getSettings().then((settings) => (this.settings = settings));
+    this.connection
+      .start()
+      .then(res =>
+        this.getSettings().then(settings => (this.settings = settings))
+      );
   }
 
-  public getSettings() {
-    return this.connection.invoke<Settings>('GetSettings');
+  public async getSettings(): Promise<Settings> {
+    if (this.settings === null) {
+      return this.connection.invoke<Settings>('GetSettings');
+    } else {
+      return this.settings;
+    }
   }
 
-  public setSettings() {
+  public setSettings(): Promise<void> {
     return this.connection.invoke<void>('SetSettings', this.settings);
   }
 }
