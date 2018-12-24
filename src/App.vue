@@ -1,6 +1,6 @@
 <template>
   <v-app>
-    <v-navigation-drawer v-model="drawer" fixed clipped app>
+    <v-navigation-drawer id='navdrawer' v-model="drawer" fixed clipped app>
       <v-list dense>
         <v-list-tile
           v-for="route in routes"
@@ -15,6 +15,12 @@
           </v-list-tile-content>
         </v-list-tile>
       </v-list>
+      <v-img
+        id='logo'
+        class="mx-2 my-2"
+        :src="require('@/assets/splash.png')"
+        contain
+      ></v-img>
     </v-navigation-drawer>
     <v-toolbar id="toolbar" dense fixed clipped-left app>
       <v-toolbar-side-icon @click.stop="drawer = !drawer"></v-toolbar-side-icon>
@@ -45,6 +51,16 @@ export default class App extends Vue {
 #toolbar {
   /* needed so CodeMirror doesn't overlap when scrolling */
   z-index: 6;
+}
+
+#navdrawer {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+#logo {
+  flex: inherit;
 }
 </style>
 

@@ -1,6 +1,5 @@
 <template>
   <div class="home">
-    <img alt="Vue logo" src="../assets/splash.png">
     <settings-list/>
   </div>
 </template>
