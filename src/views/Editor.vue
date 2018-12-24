@@ -1,7 +1,5 @@
 <template>
-  <div>
-    <script-editor/>
-  </div>
+  <script-editor id='editor'/>
 </template>
 
 <script lang="ts">
@@ -17,3 +15,10 @@ export default class Editor extends Vue {
 
 }
 </script>
+
+<style scoped>
+#editor {
+  height: 100%;
+}
+</style>
+
