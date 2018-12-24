@@ -14,6 +14,11 @@ export default new Router({
       component: Home,
     },
     {
+      path: '/editor',
+      name: 'editor',
+      component: () => import(/* webpackChunkName: "about" */ './views/Editor.vue'),
+    },
+    {
       path: '/about',
       name: 'about',
       // route level code-splitting

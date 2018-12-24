@@ -1,38 +1,50 @@
 <template>
   <v-app>
-    <v-toolbar app>
-      <v-toolbar-title class="headline text-uppercase">
-        <span>Vuetify</span>
-        <span class="font-weight-light">MATERIAL DESIGN</span>
-      </v-toolbar-title>
-      <v-spacer></v-spacer>
-      <v-btn
-        flat
-        href="https://github.com/vuetifyjs/vuetify/releases/latest"
-        target="_blank"
-      >
-        <span class="mr-2">Latest Release</span>
-      </v-btn>
+    <v-navigation-drawer v-model="drawer" fixed clipped app>
+      <v-list dense>
+        <v-list-tile
+          v-for="route in routes"
+          :key="route.name"
+          :to="route.link"
+          @click.stop="">
+          <v-list-tile-action>
+            <v-icon>{{route.icon}}</v-icon>
+          </v-list-tile-action>
+          <v-list-tile-content>
+            <v-list-tile-title>{{route.name.toUpperCase()}}</v-list-tile-title>
+          </v-list-tile-content>
+        </v-list-tile>
+      </v-list>
+    </v-navigation-drawer>
+    <v-toolbar id="toolbar" dense fixed clipped-left app>
+      <v-toolbar-side-icon @click.stop="drawer = !drawer"></v-toolbar-side-icon>
     </v-toolbar>
 
     <v-content>
-      <HelloWorld/>
+      <router-view/>
     </v-content>
   </v-app>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld'
+import { Component, Vue } from "vue-property-decorator";
+import { RouteConfig } from 'vue-router';
 
-export default {
-  name: 'App',
-  components: {
-    HelloWorld
-  },
-  data () {
-    return {
-      //
-    }
-  }
+@Component
+export default class App extends Vue {
+  drawer = false;
+  routes = [
+    { icon: 'home', name: 'home', link: '/' },
+    { icon: 'code', name: 'editor', link: '/editor' },
+    { icon: 'contact_support', name: 'about', link: '/about' },
+  ]
 }
 </script>
+
+<style scoped>
+#toolbar {
+  /* needed so CodeMirror doesn't overlap when scrolling */
+  z-index: 6;
+}
+</style>
+

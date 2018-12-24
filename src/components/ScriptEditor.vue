@@ -1,7 +1,5 @@
 <template>
-  <div id="editor-wrapper">
-    <textarea ref="editor" v-text="defaultText"></textarea>
-  </div>
+  <textarea ref="editor" v-text="defaultText"></textarea>
 </template>
 
 <script lang="ts">
@@ -24,8 +22,9 @@ export default class ScriptEditor extends Vue {
 }
 </script>
 
-<style scoped>
-#editor-wrapper {
+<style>
+.CodeMirror {
   text-align: start;
+  height: 100%;
 }
 </style>
