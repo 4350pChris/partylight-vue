@@ -10,7 +10,7 @@
           <v-card-text>
             <v-slider
             :value="value"
-            @input="updateSetting(key, $event)"
+            @end="updateSetting(key, $event)"
             thumb-label="always"
           ></v-slider>
           </v-card-text>
