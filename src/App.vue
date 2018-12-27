@@ -57,6 +57,8 @@ export default class App extends Vue {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
+  /* toolbar + 1, otherwise toolbar overlaps drawer on mobile */
+  z-index: 7;
 }
 
 #logo {
