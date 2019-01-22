@@ -1,5 +1,7 @@
 export interface Settings {
-  brightness: number;
+  brightness: number | null;
 
-  delay: number;
+  delay: number | null;
+
+  color: number | null;
 }

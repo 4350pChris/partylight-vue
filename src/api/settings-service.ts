@@ -2,7 +2,7 @@ import * as signalR from '@aspnet/signalr';
 import { Settings } from './settings';
 
 export default class SettingsService {
-  public connection: signalR.HubConnection;
+  private connection: signalR.HubConnection;
 
   constructor(url: string) {
     this.connection = new signalR.HubConnectionBuilder().withUrl(url).build();
@@ -11,10 +11,20 @@ export default class SettingsService {
   }
 
   public async getSettings(): Promise<Settings> {
-    return this.connection.invoke<Settings>('GetSettings');
+    const [ brightness, delay, color ] = await Promise.all([
+      this.connection.invoke<number>('GetBrightness'),
+      this.connection.invoke<number>('GetDelay'),
+      this.connection.invoke<number>('GetColor')
+    ]);
+
+    return { brightness, delay, color } as Settings;
   }
 
-  public setSettings(settings: Settings): Promise<void> {
-    return this.connection.invoke<void>('SetSettings', settings);
+  public setSettings(settings: Settings): Promise<void[]> {
+    return Promise.all([
+      this.connection.invoke<void>('SetBrightness', settings.brightness),
+      this.connection.invoke<void>('SetDelay', settings.delay),
+      this.connection.invoke<void>('SetColor', settings.color)
+    ]);
   }
 }
