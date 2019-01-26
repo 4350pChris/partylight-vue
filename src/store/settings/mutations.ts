@@ -1,15 +1,27 @@
 import { MutationTree } from 'vuex';
-import { Settings } from '@/api/settings';
+import { state as moduleState } from '.';
 
-export const MUTATIONS = {
-  SET_SETTINGS: 'SET_SETTINGS'
-};
+export enum Mutations {
+  SetBrightness = 'settings/setBrightness',
+  SetDelay = 'settings/setDelay',
+  SetColor = 'settings/setColor',
+  SetSettings = 'settings/setSettings'
+}
 
 export default {
-  [MUTATIONS.SET_SETTINGS](state, payload) {
-    const { brightness, delay } = payload as Settings;
-    state.brightness = brightness;
-    state.delay = delay;
-  }
-} as MutationTree<Settings>;
+  [Mutations.SetBrightness](state, payload) {
+    state.brightness = payload as number;
+  },
 
+  [Mutations.SetDelay](state, payload) {
+    state.delay = payload as number;
+  },
+
+  [Mutations.SetColor](state, payload) {
+    state.color = payload as number;
+  },
+
+  [Mutations.SetSettings](state, payload) {
+    Object.assign(state, payload);
+  }
+} as MutationTree<typeof moduleState>;
