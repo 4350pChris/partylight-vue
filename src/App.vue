@@ -32,18 +32,18 @@
   </v-app>
 </template>
 
-<script>
-import { Component, Vue } from "vue-property-decorator";
+<script lang="ts">
+import { Component, Vue } from 'vue-property-decorator';
 import { RouteConfig } from 'vue-router';
 
 @Component
 export default class App extends Vue {
-  drawer = false;
-  routes = [
+  private drawer = false;
+  private routes = [
     { icon: 'home', name: 'home', link: '/' },
     { icon: 'code', name: 'editor', link: '/editor' },
     { icon: 'contact_support', name: 'about', link: '/about' },
-  ]
+  ];
 }
 </script>
 
