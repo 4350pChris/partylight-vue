@@ -24,7 +24,7 @@ import SliderCard from '@/components/SliderCard.vue';
 export default class SettingsList extends Vue {
   @State(store => store.settings) private settings!: Settings;
 
-  @Mutation private [Mutations.SetSettings]!: (settings: Settings) => void;
+  @Mutation(Mutations.SetSettings) private setSettings!: (settings: Settings) => void;
 
   private get sliders() {
     return {

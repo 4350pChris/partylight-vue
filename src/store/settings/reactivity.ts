@@ -5,15 +5,21 @@ import { Actions } from './actions';
 import { Mutations } from './mutations';
 import Settings from '@/models/settings';
 
-export function initWebsockets(store: Store<any>) {
+export function initWebsockets(store: Store<{ settings: Settings }>) {
   const settingsService = ServiceFactory.get<SettingsService>('settings');
 
   settingsService.startConnection().then(connected => {
     // init state first
-    store.dispatch(Actions.FetchSettings).then(res => {
+    store.dispatch(Actions.FetchSettings).finally(() => {
       // then make reactive
       settingsService.onSettingChanged((prop: string, value: number) => {
-        const updated = Object.assign({ ...store.state }, { [prop]: value });
+        // only update if new value is different to prevent looping beween client and server
+        const key = prop.toLowerCase() as keyof Settings;
+        const oldVal = store.state.settings[key];
+        if (oldVal === value) {
+          return;
+        }
+        const updated = Object.assign({ ...store.state.settings }, { [key]: value });
         store.commit(Mutations.SetSettings, updated);
       });
 
