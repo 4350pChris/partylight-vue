@@ -30,8 +30,8 @@ export default class SettingsList extends Vue {
     return {
       brightness: this.settings.brightness,
       delay: this.settings.delay
-    }
-  };
+    };
+  }
 
   private updateSettings(key: keyof Settings, value: Settings[typeof key]) {
     this.setSettings(Object.assign({ ... this.settings }, { [key]: value }));

@@ -1,5 +1,5 @@
 import { Module } from 'vuex';
-import actions, { Actions as noNsActions } from './actions';
+import actions from './actions';
 import mutations from './mutations';
 import Settings from '@/models/settings';
 
@@ -14,6 +14,5 @@ export const state: Settings = {
 export default {
   state,
   mutations,
-  actions,
-  namespaced: true
+  actions
 } as Module<Settings, any>;

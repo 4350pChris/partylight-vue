@@ -5,7 +5,7 @@ import { Actions } from './actions';
 import { Mutations } from './mutations';
 import Settings from '@/models/settings';
 
-export function initWebsockets(store: Store<{ settings: Settings }>) {
+export function initWebsockets(store: Store<any>) {
   const settingsService = ServiceFactory.get<SettingsService>('settings');
 
   settingsService.startConnection().then(connected => {
@@ -13,7 +13,7 @@ export function initWebsockets(store: Store<{ settings: Settings }>) {
     store.dispatch(Actions.FetchSettings).then(res => {
       // then make reactive
       settingsService.onSettingChanged((prop: string, value: number) => {
-        const updated = Object.assign({ ...store.state.settings }, { [prop]: value });
+        const updated = Object.assign({ ...store.state }, { [prop]: value });
         store.commit(Mutations.SetSettings, updated);
       });
 
@@ -23,5 +23,5 @@ export function initWebsockets(store: Store<{ settings: Settings }>) {
         }
       });
     });
-  })
+  });
 }

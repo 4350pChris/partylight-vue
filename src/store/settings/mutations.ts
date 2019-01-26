@@ -2,10 +2,10 @@ import { MutationTree } from 'vuex';
 import { state as moduleState } from '.';
 
 export enum Mutations {
-  SetBrightness = 'settings/setBrightness',
-  SetDelay = 'settings/setDelay',
-  SetColor = 'settings/setColor',
-  SetSettings = 'settings/setSettings'
+  SetBrightness = 'setBrightness',
+  SetDelay = 'setDelay',
+  SetColor = 'setColor',
+  SetSettings = 'setSettings'
 }
 
 export default {

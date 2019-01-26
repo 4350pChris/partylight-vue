@@ -7,12 +7,12 @@ import SettingsService from '@/api/settings/settingsService';
 const service = ServiceFactory.get<SettingsService>('settings');
 
 export const Actions = {
-  FetchSettings: 'settings/fetchSettings',
-  SaveSettings: 'settings/saveSettings'
+  FetchSettings: 'fetchSettings',
+  SaveSettings: 'saveSettings'
 };
 
 const actions: ActionTree<typeof moduleState, {}> = {
-  fetchSettings({ commit }) {
+  [Actions.FetchSettings]({ commit }) {
     return Promise.all([
       service.getBrightness().then(val => commit(Mutations.SetBrightness, val)),
       service.getColor().then(val => commit(Mutations.SetColor, val)),
@@ -20,7 +20,7 @@ const actions: ActionTree<typeof moduleState, {}> = {
     ]);
   },
 
-  saveSettings({ state }) {
+  [Actions.SaveSettings]({ state }) {
     return Promise.all([
       service.setBrightness(state.brightness),
       service.setColor(state.color),
