@@ -2,26 +2,22 @@ import { MutationTree } from 'vuex';
 import { state as moduleState } from '.';
 
 export enum Mutations {
-  SetBrightness = 'SetBrightness',
-  SetDelay = 'SetDelay',
-  SetColor = 'SetColor',
-  SetSettings = 'SetSettings'
+  SetBrightness = 'setBrightness',
+  SetDelay = 'setDelay',
+  SetColor = 'setColor',
+  SetSettings = 'setSettings'
 }
 
 export default {
-  [Mutations.SetBrightness](state, payload) {
-    state.brightness = payload as number;
+  [Mutations.SetBrightness](state, payload: number) {
+    state.brightness = payload;
   },
 
-  [Mutations.SetDelay](state, payload) {
-    state.delay = payload as number;
+  [Mutations.SetDelay](state, payload: number) {
+    state.delay = payload;
   },
 
-  [Mutations.SetColor](state, payload) {
-    state.color = payload as number;
-  },
-
-  [Mutations.SetSettings](state, payload) {
-    Object.assign(state, payload);
+  [Mutations.SetColor](state, payload: number) {
+    state.color = payload;
   }
 } as MutationTree<typeof moduleState>;

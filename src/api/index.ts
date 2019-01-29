@@ -1,16 +1,25 @@
 import SettingsService from './settings/settingsService';
 import { BaseSocketService } from './baseSocketService';
+import ScriptsService from './scripts/scriptsService';
 
 BaseSocketService.baseUrl = process.env.VUE_APP_HUB_URL || '';
 
-const services: { [name: string]: BaseSocketService } = {
-  settings: new SettingsService('/settingsHub')
-};
+class ServiceFactory {
 
-const serviceFactory = {
-  get<T extends BaseSocketService>(name: string): T {
-    return services[name] as T;
+  private services: Services = {
+    settings: new SettingsService('/settings'),
+    scripts: new ScriptsService('/scripts')
+  };
+
+  public get(name: keyof Services): Services[keyof Services] {
+    return this.services[name];
   }
-};
+}
 
-export default serviceFactory;
+export default new ServiceFactory();
+
+export interface Services {
+  settings: SettingsService;
+
+  scripts: ScriptsService;
+}

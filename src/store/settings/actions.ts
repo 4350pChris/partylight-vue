@@ -4,7 +4,7 @@ import { Mutations } from './mutations';
 import ServiceFactory from '@/api';
 import SettingsService from '@/api/settings/settingsService';
 
-const service = ServiceFactory.get<SettingsService>('settings');
+const service = ServiceFactory.get('settings') as SettingsService;
 
 export const Actions = {
   FetchSettings: 'FetchSettings',

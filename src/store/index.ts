@@ -1,6 +1,7 @@
 import Vue from 'vue';
 import Vuex from 'vuex';
-import settings, { initWebsockets } from './settings';
+import settings, { initSettings } from './settings';
+import scripts, { initScripts } from './scripts';
 import Settings from '@/models/settings';
 
 Vue.use(Vuex);
@@ -14,6 +15,6 @@ export const storeOptions = {
 
 const store = new Vuex.Store<{ settings: Settings }>(storeOptions);
 
-initWebsockets(store);
+
 
 export default store;

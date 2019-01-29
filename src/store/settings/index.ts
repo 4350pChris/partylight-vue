@@ -11,8 +11,10 @@ export const state: Settings = {
   color: 0
 };
 
-export default {
+const module: Module<Settings, any> = {
   state,
   mutations,
   actions
-} as Module<Settings, any>;
+};
+
+export default module;

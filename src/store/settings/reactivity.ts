@@ -5,10 +5,10 @@ import { Actions } from './actions';
 import { Mutations } from './mutations';
 import Settings from '@/models/settings';
 
-export function initWebsockets(store: Store<{ settings: Settings }>) {
-  const settingsService = ServiceFactory.get<SettingsService>('settings');
+export function initSettings(store: Store<{ settings: Settings }>) {
+  const settingsService = ServiceFactory.get('settings') as SettingsService;
 
-  settingsService.startConnection().then(connected => {
+  settingsService.startConnection().then(() => {
     // init state first
     store.dispatch(Actions.FetchSettings).finally(() => {
       // then make reactive
