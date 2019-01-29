@@ -1,20 +1,25 @@
 import { Module } from 'vuex';
 import actions from './actions';
 import mutations from './mutations';
-import Settings from '@/models/settings';
 
 export * from './reactivity';
 
-export const state: Settings = {
+export const state: State = {
   brightness: 0,
   delay: 0,
   color: 0
 };
 
-const module: Module<Settings, any> = {
+const module: Module<State, any> = {
   state,
   mutations,
   actions
 };
+
+export interface State {
+  brightness: number;
+  delay: number;
+  color: number;
+}
 
 export default module;

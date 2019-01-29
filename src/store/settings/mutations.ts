@@ -1,5 +1,5 @@
 import { MutationTree } from 'vuex';
-import { state as moduleState } from '.';
+import { State } from '.';
 
 export enum Mutations {
   SetBrightness = 'setBrightness',
@@ -20,4 +20,4 @@ export default {
   [Mutations.SetColor](state, payload: number) {
     state.color = payload;
   }
-} as MutationTree<typeof moduleState>;
+} as MutationTree<State>;

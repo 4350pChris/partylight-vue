@@ -1,5 +1,5 @@
 import { ActionTree } from 'vuex';
-import { state as moduleState } from '.';
+import { State } from '.';
 import { Mutations } from './mutations';
 import ServiceFactory from '@/api';
 import SettingsService from '@/api/settings/settingsService';
@@ -11,7 +11,7 @@ export const Actions = {
   SaveSettings: 'SaveSettings'
 };
 
-const actions: ActionTree<typeof moduleState, {}> = {
+const actions: ActionTree<State, {}> = {
   [Actions.FetchSettings]({ commit }) {
     return Promise.all([
       service.getBrightness().then(val => commit(Mutations.SetBrightness, val)),
