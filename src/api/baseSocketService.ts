@@ -12,7 +12,9 @@ export abstract class BaseSocketService {
 
   public startConnection = () => this.connection.start();
 
-  protected invoke = (name: string, ...args: any[]) => this.connection.invoke(name, ...args);
+  protected invoke<T>(name: string, ...args: any[]) {
+    return this.connection.invoke<T>(name, ...args);
+  }
 
   protected on = (name: string, cb: (...args: any) => void) => this.connection.on(name, cb);
 
