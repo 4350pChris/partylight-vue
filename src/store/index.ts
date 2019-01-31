@@ -14,6 +14,12 @@ export const storeOptions: StoreOptions<{ settings: SettingsState, scripts: Scri
 
 const store = new Vuex.Store(storeOptions);
 
+export interface Store {
+  settings: SettingsState;
+
+  scripts: ScriptsState;
+}
+
 Promise.all([
   initScripts(store),
   initSettings(store)
