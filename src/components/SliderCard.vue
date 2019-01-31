@@ -1,6 +1,6 @@
 <template>
   <v-card>
-    <v-card-title>{{ title }}</v-card-title>
+    <v-card-title>{{ title | capitalize }}</v-card-title>
     <v-card-text>
       <v-slider :value="value" @end="$emit('end', $event)" thumb-label="always"></v-slider>
     </v-card-text>
