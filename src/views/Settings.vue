@@ -1,10 +1,10 @@
 <template>
   <v-container grid-list-md text-xs-center>
     <v-layout row wrap>
-      <v-flex xs12>
-        <slider-card
-          v-for="(value, key) in sliders" :key="key"
-          :title="key" :value="value" @end="updateSettings(key, $event)">
+      <v-flex v-for="(value, key) in sliders" :key="key">
+        <slider-card flat
+          :title="key" :value="value"
+          @end="updateSettings(key, $event)">
         </slider-card>
       </v-flex>
     </v-layout>
