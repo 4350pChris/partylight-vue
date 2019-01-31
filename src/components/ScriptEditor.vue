@@ -1,6 +1,6 @@
 <template>
   <div id='editorwrapper'>
-    <textarea ref="editor" v-text="defaultText"></textarea>
+    <textarea ref="editor" v-text="code"></textarea>
   </div>
 </template>
 
@@ -8,14 +8,14 @@
 import CodeMirror from 'codemirror';
 import 'codemirror/mode/clike/clike.js';
 import 'codemirror/lib/codemirror.css';
-
 import { Component, Prop, Vue } from 'vue-property-decorator';
+import Script from '@/models/script';
 
 @Component
 export default class ScriptEditor extends Vue {
-  protected defaultText = 'public static void main() {\n\n}\n';
+  @Prop({ default: 'public static void main() {\n\n}\n' }) private code!: string;
 
-  public mounted() {
+  private mounted() {
     CodeMirror.fromTextArea(this.$refs.editor as HTMLTextAreaElement, {
       lineNumbers: true,
       mode: 'text/x-csharp',
