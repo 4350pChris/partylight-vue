@@ -10,7 +10,7 @@
         </v-list-tile-content>
       </v-list-tile>
     </v-list>
-    <v-img id="logo" class="" :src="require('@/assets/splash.png')" contain></v-img>
+    <v-img id="logo" pb-1 :src="require('@/assets/splash.png')" contain></v-img>
   </v-navigation-drawer>
 </template>
 
@@ -20,8 +20,21 @@ import { Route } from "vue-router";
 
 @Component
 export default class AppNavigation extends Vue {
-  @Prop() routes!: Route[];
+  @Prop() private routes!: Route[];
   private drawer = null;
 }
 </script>
 
+<style scoped>
+#navdrawer {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  /* toolbar + 1, otherwise toolbar overlaps drawer on mobile */
+  z-index: 7;
+}
+
+#logo {
+  flex: inherit;
+}
+</style>
