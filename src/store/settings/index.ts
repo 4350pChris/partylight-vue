@@ -2,6 +2,8 @@ import { Module } from 'vuex';
 import actions from './actions';
 import mutations from './mutations';
 
+export { Mutations } from './mutations';
+export { Actions } from './actions';
 export * from './reactivity';
 
 export const state: State = {

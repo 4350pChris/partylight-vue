@@ -1,5 +1,7 @@
 import { MutationTree } from 'vuex';
 import { State } from '.';
+import Vue from 'vue';
+import Settings from '@/models/settings';
 
 export enum Mutations {
   SetBrightness = 'setBrightness',
@@ -19,5 +21,11 @@ export default {
 
   [Mutations.SetColor](state, payload: number) {
     state.color = payload;
+  },
+
+  [Mutations.SetSettings](state, payload: { [key: string]: number}) {
+    for (const key of Object.keys(payload)) {
+      Vue.set(state, key, payload[key]);
+    }
   }
 } as MutationTree<State>;

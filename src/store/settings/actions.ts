@@ -7,8 +7,8 @@ import SettingsService from '@/api/settings/settingsService';
 const service = ServiceFactory.get('settings') as SettingsService;
 
 export const Actions = {
-  FetchSettings: 'FetchSettings',
-  SaveSettings: 'SaveSettings'
+  FetchSettings: 'fetchSettings',
+  SaveSettings: 'saveSettings'
 };
 
 const actions: ActionTree<State, {}> = {

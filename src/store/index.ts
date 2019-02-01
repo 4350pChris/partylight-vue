@@ -23,6 +23,6 @@ export interface Store {
 Promise.all([
   initScripts(store),
   initSettings(store)
-]).catch(e => console.log(e));
+]).catch(e => console.log("DAMN: " + e));
 
 export default store;

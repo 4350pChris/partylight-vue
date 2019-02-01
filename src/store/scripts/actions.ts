@@ -20,8 +20,18 @@ const actions: ActionTree<typeof moduleState, {}> = {
   },
 
   [Actions.SaveScript]({ commit }, payload: Script) {
-    commit(Mutations.UpdateScript, payload);
-    return scriptsService.replaceScript(payload);
+    if (payload.id) {
+      commit(Mutations.UpdateScript, payload);
+      return scriptsService.replaceScript(payload);
+    } else {
+      commit(Mutations.AddScript, payload);
+      return scriptsService.addScript(payload);
+    }
+  },
+
+  [Actions.SetActiveScript]({ commit }, payload) {
+    commit(Mutations.SetActiveScript, payload);
+    return scriptsService.setActiveScript(payload.id);
   }
 };
 
