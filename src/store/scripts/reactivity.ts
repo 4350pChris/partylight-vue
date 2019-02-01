@@ -12,5 +12,6 @@ export async function initScripts(store: Store<any>) {
         scriptsService.onScriptAdded(script => store.commit(Mutations.AddScript, script));
         scriptsService.onScriptDeleted(script => store.commit(Mutations.DeleteScript, script));
         scriptsService.onScriptUpdated(script => store.commit(Mutations.UpdateScript, script));
+        scriptsService.onScriptStarted(script => store.commit(Mutations.SetActiveScript, script));
     });
 }

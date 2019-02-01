@@ -19,4 +19,6 @@ export default class ScriptsService extends BaseSocketService {
     public onScriptUpdated = (cb: (script: Script) => void) => this.on('ScriptReplaced', cb);
 
     public onScriptDeleted = (cb: (script: Script) => void) => this.on('ScriptDeleted', cb);
+
+    public onScriptStarted = (cb: (script: Script) => void) => this.on('ScriptStarted', cb);
 }
