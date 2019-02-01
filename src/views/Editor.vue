@@ -1,14 +1,23 @@
 <template>
-  <v-container>
-    <v-layout row fill-height>
-      <v-flex xs12 md8>
-        <v-card raised>
-          <script-editor id="editor" v-model="editorScript.code"/>
-        </v-card>
+  <v-container grid-list-md>
+    <v-layout row>
+      <v-flex md8>
+        <v-layout row wrap justify-space-between align-end>
+          <v-flex md5>
+            <v-text-field outline v-model="editorScript.name" hide-details label="Name"></v-text-field>
+          </v-flex>
+          <v-flex md6 text-xs-right>
+            <v-btn @click="saveScript(editorScript)">Save</v-btn>
+            <v-btn @click="setActiveScript(editorScript)">Set Active</v-btn>
+          </v-flex>
+          <v-flex md12>
+            <v-card raised>
+              <script-editor id="editor" v-model="editorScript.code"/>
+            </v-card>
+          </v-flex>
+        </v-layout>
       </v-flex>
-      <v-flex xs12 md4 mx-1>
-        <v-btn @click="saveScript(editorScript)">Save</v-btn>
-        <v-btn @click="setActiveScript(editorScript)">Set Active</v-btn>
+      <v-flex md4>
         <script-list :scripts="scripts" @new="newScript()" @select="scriptSelected($event)"></script-list>
       </v-flex>
     </v-layout>
@@ -23,7 +32,7 @@ import ScriptList from "@/components/ScriptList.vue";
 import Script from "@/models/script";
 import { Store } from "@/store";
 import { Actions } from "@/store/scripts";
-import { Mutations } from '@/store/scripts';
+import { Mutations } from "@/store/scripts";
 
 @Component({
   components: {
