@@ -15,8 +15,8 @@
 </template>
 
 <script lang="ts">
-import { Component, Vue, Prop } from "vue-property-decorator";
-import { Route } from "vue-router";
+import { Component, Vue, Prop } from 'vue-property-decorator';
+import { Route } from 'vue-router';
 
 @Component
 export default class AppNavigation extends Vue {

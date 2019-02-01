@@ -7,8 +7,8 @@ export enum Getters {
 }
 
 const getters: GetterTree<State, {}> = {
-  [Getters.ActiveScript]({ scripts, activeScriptIndex }): Script {
-    return scripts[activeScriptIndex];
+  [Getters.ActiveScript]({ scripts, activeScriptIndex }): Script | null {
+    return scripts.find(s => s.id === activeScriptIndex) || null;
   }
 };
 

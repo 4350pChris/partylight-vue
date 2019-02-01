@@ -18,21 +18,20 @@
         </v-layout>
       </v-flex>
       <v-flex md4>
-        <script-list :scripts="scripts" @new="newScript()" @select="scriptSelected($event)"></script-list>
+        <script-list :scripts="scripts" :active="activeScript" @new="newScript()" @select="scriptSelected($event)"></script-list>
       </v-flex>
     </v-layout>
   </v-container>
 </template>
 
 <script lang="ts">
-import { Component, Vue } from "vue-property-decorator";
-import { State, Action, Mutation } from "vuex-class";
-import ScriptEditor from "@/components/ScriptEditor.vue";
-import ScriptList from "@/components/ScriptList.vue";
-import Script from "@/models/script";
-import { Store } from "@/store";
-import { Actions } from "@/store/scripts";
-import { Mutations } from "@/store/scripts";
+import { Component, Vue } from 'vue-property-decorator';
+import { State, Action, Mutation, Getter } from 'vuex-class';
+import ScriptEditor from '@/components/ScriptEditor.vue';
+import ScriptList from '@/components/ScriptList.vue';
+import Script from '@/models/script';
+import { Store } from '@/store';
+import { Actions, Getters, Mutations } from '@/store/scripts';
 
 @Component({
   components: {
@@ -41,10 +40,9 @@ import { Mutations } from "@/store/scripts";
   }
 })
 export default class Editor extends Vue {
-  private editorScript: Script = { name: "New Script", code: "" };
+  private editorScript: Script = { name: 'New Script', code: '' };
 
-  @State((store: Store) => store.scripts.activeScript)
-  private activeScript!: Script | null;
+  @Getter(Getters.ActiveScript) private activeScript!: Script | null;
 
   @State((store: Store) => store.scripts.scripts) private scripts!: Script[];
 
@@ -57,7 +55,7 @@ export default class Editor extends Vue {
   ) => Promise<boolean>;
 
   private newScript() {
-    this.editorScript = { name: "New Script", code: "" };
+    this.editorScript = { name: 'New Script', code: '' };
   }
 
   private scriptSelected(script: Script) {

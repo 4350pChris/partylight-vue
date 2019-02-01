@@ -17,7 +17,8 @@ export default class ScriptEditor extends Vue {
 
   @Prop() private value!: string;
 
-  @Watch('value') onCodeChanged() {
+  @Watch('value')
+  public onCodeChanged() {
     if (this.cm === null || this.value === null || this.value === this.cm.getValue()) {
       return;
     }
