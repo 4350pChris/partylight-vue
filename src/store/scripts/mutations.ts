@@ -18,7 +18,9 @@ const mutations: MutationTree<State> = {
 
   [Mutations.UpdateScript]({ scripts }, payload: Script) {
     const i = scripts.findIndex(s => s.id === payload.id);
-    Vue.set(scripts, i, payload);
+    if (i > -1) {
+      Vue.set(scripts, i, payload);
+    }
   },
 
   [Mutations.DeleteScript]({ scripts }, payload: Script) {
