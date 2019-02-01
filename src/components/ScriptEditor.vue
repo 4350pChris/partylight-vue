@@ -1,6 +1,6 @@
 <template>
   <div id='editorwrapper'>
-    <textarea ref="editor" v-text="value"></textarea>
+    <textarea ref="editor"></textarea>
   </div>
 </template>
 
@@ -13,12 +13,12 @@ import Script from '@/models/script';
 
 @Component
 export default class ScriptEditor extends Vue {
-  private cm: CodeMirror.Editor | null = null;
+  private cm!: CodeMirror.Editor;
 
-  @Prop() private value: string | null = null;
+  @Prop() private value!: string;
 
   @Watch('value') onCodeChanged() {
-    if (this.cm === null || this.value === null) {
+    if (this.cm === null || this.value === null || this.value === this.cm.getValue()) {
       return;
     }
     this.cm.setValue(this.value);
@@ -29,6 +29,7 @@ export default class ScriptEditor extends Vue {
       lineNumbers: true,
       mode: 'text/x-csharp',
     });
+    this.cm.on('change', () => this.$emit('input', this.cm.getValue()));
   }
 }
 </script>
