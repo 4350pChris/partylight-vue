@@ -29,9 +29,10 @@ const mutations: MutationTree<State> = {
 
   [Mutations.AddScript]({ scripts }, payload: Script) {
     if (payload.id === undefined) {
-      payload.id = scripts
+      const maxId = scripts
         .map(s => (s.id === undefined ? 0 : s.id))
         .reduce((a, b) => (a > b ? a : b));
+      payload.id = maxId + 1;
     }
     scripts.push(payload);
   },
