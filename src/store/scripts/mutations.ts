@@ -37,7 +37,7 @@ const mutations: MutationTree<State> = {
   },
 
   [Mutations.SetActiveScript](state, payload: Script) {
-    state.activeScriptIndex = payload.id || -1;
+    state.activeScriptId = payload.id || -1;
   }
 };
 
