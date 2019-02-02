@@ -20,7 +20,7 @@ export const state: State = {
     { id: 3, name: 'notha Script', code: '1 + 1 = 3' },
     { id: 4, name: 'dat Script', code: 'whattup' }
   ],
-  activeScriptIndex: -1
+  activeScriptId: -1
 };
 
 const module: Module<typeof state, any> = {
@@ -33,7 +33,7 @@ const module: Module<typeof state, any> = {
 export interface State {
   scripts: Script[];
 
-  activeScriptIndex: number;
+  activeScriptId: number;
 }
 
 export default module;
