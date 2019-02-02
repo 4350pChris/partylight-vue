@@ -1,7 +1,7 @@
 <template>
   <v-navigation-drawer id="navdrawer" v-model="drawer" fixed clipped app permanent>
     <v-list dense>
-      <v-list-tile v-for="route in routes" :key="route.name" :to="route.link" ripple @click.stop>
+      <v-list-tile v-for="route in routes" :key="route.name" :to="route.link" ripple>
         <v-list-tile-action>
           <v-icon>{{route.icon}}</v-icon>
         </v-list-tile-action>

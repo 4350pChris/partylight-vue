@@ -30,7 +30,7 @@ import { State, Action, Mutation, Getter } from 'vuex-class';
 import ScriptEditor from '@/components/ScriptEditor.vue';
 import ScriptList from '@/components/ScriptList.vue';
 import Script from '@/models/script';
-import { Store } from '@/store';
+import { StoreState } from '@/store';
 import { Actions, Getters, Mutations } from '@/store/scripts';
 
 @Component({
@@ -45,7 +45,7 @@ export default class Editor extends Vue {
   @Getter(Getters.ActiveScript)
   private activeScript!: Script | null;
 
-  @State((store: Store) => store.scripts.scripts)
+  @State((store: StoreState) => store.scripts.scripts)
   private scripts!: Script[];
 
   @Action(Actions.SaveScript)
