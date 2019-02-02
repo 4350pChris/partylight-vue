@@ -1,14 +1,14 @@
 <template>
   <v-container grid-list-md>
     <v-layout row>
-      <v-flex md8>
+      <v-flex md8 mr-3>
         <v-layout row wrap justify-space-between align-end>
           <v-flex md5>
             <v-text-field outline v-model="editorScript.name" hide-details label="Name"></v-text-field>
           </v-flex>
           <v-flex md6 text-xs-right>
-            <v-btn @click="saveScript(editorScript)">Save</v-btn>
-            <v-btn @click="setActiveScript(editorScript)">Set Active</v-btn>
+            <v-btn @click="saveScript(editorScript)" class="mb-0">Save</v-btn>
+            <v-btn @click="setActiveScript(editorScript)" class="mb-0 mr-0">Set Active</v-btn>
           </v-flex>
           <v-flex md12>
             <v-card raised>
