@@ -42,17 +42,17 @@ import { Actions, Getters, Mutations } from '@/store/scripts';
 export default class Editor extends Vue {
   private editorScript: Script = { name: 'New Script', code: '' };
 
-  @Getter(Getters.ActiveScript) private activeScript!: Script | null;
+  @Getter(Getters.ActiveScript)
+  private activeScript!: Script | null;
 
-  @State((store: Store) => store.scripts.scripts) private scripts!: Script[];
+  @State((store: Store) => store.scripts.scripts)
+  private scripts!: Script[];
 
-  @Action(Actions.SaveScript) private saveScript!: (
-    script: Script
-  ) => Promise<boolean>;
+  @Action(Actions.SaveScript)
+  private saveScript!: (script: Script) => Promise<boolean>;
 
-  @Action(Actions.SetActiveScript) private setActiveScript!: (
-    script: Script
-  ) => Promise<boolean>;
+  @Action(Actions.SetActiveScript)
+  private setActiveScript!: (script: Script) => Promise<boolean>;
 
   private newScript() {
     this.editorScript = { name: 'New Script', code: '' };
