@@ -10,4 +10,9 @@ export default class AudioService extends BaseSocketService {
   public setAudioParameters = (params: AudioParameters) => this.invoke<void>('SetAudioParameters', params);
 
   public setAudioBuffer = (buffer: number[]) => this.invoke<void>('SetAudioBuffer', buffer);
+
+  public onChange = (cb: (
+    prop: keyof AudioParameters | 'buffer',
+    value: AudioParameters[keyof AudioParameters] | number[])
+    => void) => this.on('AudioPropertyChanged', cb)
 }
