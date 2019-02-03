@@ -1,7 +1,7 @@
-import SettingsService from './settings/settingsService';
 import { BaseSocketService } from './baseSocketService';
-import ScriptsService from './scripts/scriptsService';
 import AudioService from './audio/audioService';
+import SettingsService from './settings/settingsService';
+import ScriptsService from './scripts/scriptsService';
 
 BaseSocketService.baseUrl = process.env.VUE_APP_HUB_URL || '';
 
