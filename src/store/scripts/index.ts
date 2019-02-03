@@ -23,7 +23,7 @@ export const state: State = {
   activeScriptId: -1
 };
 
-const module: Module<typeof state, any> = {
+const module: Module<State, any> = {
   state,
   mutations,
   getters,
