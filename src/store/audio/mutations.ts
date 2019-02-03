@@ -9,7 +9,7 @@ export enum Mutations {
 
 const mutations: MutationTree<State> = {
   [Mutations.SetParameters](state, payload: AudioParameters) {
-    state.parameters = payload;
+    state.parameters = Object.assign({}, state.parameters, payload);
   },
 
   [Mutations.SetBuffer](state, payload: number[]) {
