@@ -3,7 +3,7 @@ export default interface AudioParameters {
   minimumFrequency: number;
   numberOfChannels: number;
   maximumAmplitude: number;
-  scalingStrategy: string;
+  scalingStrategy: ScalingStrategy;
   useAverage: boolean;
 }
 
