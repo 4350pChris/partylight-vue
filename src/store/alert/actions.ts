@@ -7,11 +7,11 @@ export enum Actions {
 }
 
 const actions: ActionTree<State, any> = {
-  [Actions.ShowAlert]({ commit }, payload: { color: string, duration: number, message: string }) {
+  [Actions.ShowAlert]({ commit }, payload: { type: string, duration?: number, message: string }) {
     commit(Mutations.SetMessage, payload.message);
-    commit(Mutations.SetColor, payload.color);
+    commit(Mutations.SetType, payload.type);
     commit(Mutations.SetVisibility, true);
-    setTimeout(() => commit(Mutations.SetVisibility, false), payload.duration);
+    setTimeout(() => commit(Mutations.SetVisibility, false), payload.duration || 4000);
   }
 };
 

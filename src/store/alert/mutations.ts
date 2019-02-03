@@ -4,7 +4,7 @@ import { State } from '.';
 export enum Mutations {
   SetVisibility = 'setVisibility',
   SetMessage = 'setMessage',
-  SetColor = 'setColor'
+  SetType = 'setType'
 }
 
 const mutations: MutationTree<State> = {
@@ -16,8 +16,8 @@ const mutations: MutationTree<State> = {
     state.message = payload;
   },
 
-  [Mutations.SetColor](state, payload: string) {
-    state.color = payload;
+  [Mutations.SetType](state, payload) {
+    state.type = payload;
   }
 };
 

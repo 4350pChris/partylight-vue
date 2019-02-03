@@ -8,7 +8,7 @@ export { Actions } from './actions';
 export const state: State = {
   visible: false,
   message: '',
-  color: ''
+  type: 'info'
 };
 
 const module: Module<State, any> = {
@@ -22,7 +22,7 @@ export interface State {
 
   message: string;
 
-  color: string;
+  type: 'success' | 'info' | 'warning' | 'alert';
 }
 
 export default module;
