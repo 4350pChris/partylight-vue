@@ -1,8 +1,7 @@
 import { ActionTree } from 'vuex';
 import ServiceFactory from '@/api';
 import ScriptsService from '@/api/scripts/scriptsService';
-import { state as moduleState } from '.';
-import { Mutations } from './mutations';
+import { state as moduleState, Mutations } from '.';
 import Script from '@/models/script';
 
 const scriptsService = ServiceFactory.get('scripts') as ScriptsService;
@@ -29,9 +28,11 @@ const actions: ActionTree<typeof moduleState, {}> = {
     }
   },
 
-  [Actions.SetActiveScript]({ commit }, payload) {
-    commit(Mutations.SetActiveScript, payload);
-    return scriptsService.setActiveScript(payload.id);
+  [Actions.SetActiveScript]({ commit }, payload: Script) {
+    if (payload.id) {
+      commit(Mutations.SetActiveScript, payload);
+      return scriptsService.setActiveScript(payload.id);
+    }
   }
 };
 

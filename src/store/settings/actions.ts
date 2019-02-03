@@ -1,6 +1,5 @@
 import { ActionTree } from 'vuex';
-import { State } from '.';
-import { Mutations } from './mutations';
+import { State, Mutations } from '.';
 import ServiceFactory from '@/api';
 import SettingsService from '@/api/settings/settingsService';
 

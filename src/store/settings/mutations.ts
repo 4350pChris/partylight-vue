@@ -1,7 +1,6 @@
 import { MutationTree } from 'vuex';
 import { State } from '.';
 import Vue from 'vue';
-import Settings from '@/models/settings';
 
 export enum Mutations {
   SetBrightness = 'setBrightness',

@@ -1,8 +1,7 @@
 import ServiceFactory from '@/api';
 import SettingsService from '@/api/settings/settingsService';
 import { Store } from 'vuex';
-import { Actions } from './actions';
-import { Mutations } from './mutations';
+import { Actions, Mutations } from '.';
 import Settings from '@/models/settings';
 
 export function initSettings(store: Store<{ settings: Settings }>) {
