@@ -1,12 +1,12 @@
 <template>
   <v-card>
-    <v-card-title>{{ title }}</v-card-title>
+    <v-card-title>{{ title | capitalize }}</v-card-title>
     <v-card-text>
       <div
-        :is="typeof range === 'undefined' ? 'v-slider' : 'v-range-slider'"
+        :is="range ? 'v-range-slider' : 'v-slider'"
         :value="value"
-        :min="range.min"
-        :max="range.max"
+        :min="min"
+        :max="max"
         @end="$emit('end', $event)"
         thumb-label='always'
       ></div>
@@ -21,7 +21,9 @@ import { CreateElement } from 'vue';
 @Component
 export default class SliderCard extends Vue {
     @Prop() private value!: number;
-    @Prop({ type: { min: Number, max: Number } }) private range?: { min: number, max: number };
+    @Prop({ type: Boolean, default: false }) private range!: boolean;
+    @Prop() private min?: number;
+    @Prop() private max?: number;
     @Prop() private title!: string;
 }
 </script>
