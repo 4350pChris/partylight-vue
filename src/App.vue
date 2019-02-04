@@ -2,11 +2,13 @@
   <v-app>
     <app-navigation :routes="routes"></app-navigation>
     <v-content>
-      <router-view/>
+      <v-container fluid>
+        <router-view/>
+      </v-container>
     </v-content>
-        <v-alert :type="alertType" :value="alertVisible" transition="scale-transition">
-          <span v-html="alertMessage"></span>
-        </v-alert>
+    <v-alert id="error-alert" :type="alertType" :value="alertVisible" transition="scale-transition">
+      <span v-html="alertMessage"></span>
+    </v-alert>
   </v-app>
 </template>
 
@@ -37,3 +39,10 @@ export default class App extends Vue {
   private alertType!: string;
 }
 </script>
+
+<style scoped>
+#error-alert {
+  position: sticky;
+  bottom: 0;
+}
+</style>
