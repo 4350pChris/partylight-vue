@@ -1,3 +1,5 @@
+// convert to range types as soon as typescript implements it
+// might be in ts version 3.4
 export default interface AudioParameters {
   maximumFrequency: number;
   minimumFrequency: number;
