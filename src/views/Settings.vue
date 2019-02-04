@@ -1,5 +1,5 @@
 <template>
-    <v-tabs v-model="tab" class="elevation-2">
+    <v-tabs v-model="tab" class="elevation-2" centered fixed-tabs>
       <v-tab v-for="(name, i) in ['Settings', 'Audio Parameters']" :key="i">
         {{name}}
       </v-tab>
@@ -25,7 +25,7 @@
           <v-flex>
             <v-card flat>
               <v-card-actions>
-                <v-flex xs12>
+                <v-flex xs12 pl-2>
                   <v-radio-group v-model="scaling" label="Scaling Strategy">
                     <v-radio
                       v-for="[name, val] in scalingStrategies"
