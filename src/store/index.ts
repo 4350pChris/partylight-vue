@@ -1,9 +1,13 @@
 import Vue from 'vue';
 import Vuex, { StoreOptions } from 'vuex';
-import settings, { initSettings, State as SettingsState } from './settings';
-import scripts, { initScripts, State as ScriptsState } from './scripts';
+import settings, { State as SettingsState } from './settings';
+import scripts, { State as ScriptsState } from './scripts';
 import alert, { State as AlertState } from './alert';
 import audio, { State as AudioState } from './audio';
+
+export { initAudio } from './audio/reactivity';
+export { initScripts } from './scripts/reactivity';
+export { initSettings } from './settings/reactivity';
 
 Vue.use(Vuex);
 
@@ -15,11 +19,6 @@ export const storeOptions: StoreOptions<StoreState> = {
 };
 
 const store = new Vuex.Store(storeOptions);
-
-Promise.all([
-  initScripts(store),
-  initSettings(store)
-]);
 
 export interface StoreState {
   alert: AlertState;

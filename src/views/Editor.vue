@@ -30,14 +30,15 @@
 </template>
 
 <script lang="ts">
-import { Component, Vue } from 'vue-property-decorator';
+import { Component, Vue, Mixins } from 'vue-property-decorator';
 import { State, Action, Mutation, Getter } from 'vuex-class';
 import ScriptEditor from '@/components/ScriptEditor.vue';
 import ScriptList from '@/components/ScriptList.vue';
 import Script from '@/models/script';
 import { StoreState } from '@/store';
 import { Actions as ScriptActions, Getters, Mutations } from '@/store/scripts';
-import { Actions as AlertActions } from '@/store/alert';
+import { initScripts } from '@/store/scripts';
+import AlertMixin from '@/mixins/Alert.vue';
 
 @Component({
   components: {
@@ -45,7 +46,7 @@ import { Actions as AlertActions } from '@/store/alert';
     ScriptList
   }
 })
-export default class Editor extends Vue {
+export default class Editor extends Mixins(AlertMixin) {
   private editorScript: Script = { name: 'New Script', code: '' };
 
   @Getter(Getters.ActiveScript)
@@ -57,11 +58,6 @@ export default class Editor extends Vue {
   @Action(ScriptActions.SaveScript)
   private save!: (script: Script) => Promise<boolean>;
 
-  @Action(AlertActions.ShowAlert)
-  private showAlert!: (
-    payload: { type: string; duration?: number; message: string }
-  ) => void;
-
   @Action(ScriptActions.SetActiveScript)
   private setActive!: (script: Script) => Promise<boolean>;
 
@@ -70,8 +66,7 @@ export default class Editor extends Vue {
       this.showAlert({
         type: 'error',
         message: 'Error while setting active script<br>' + e
-      })
-    );
+      }));
   }
 
   private saveScript(script: Script) {
@@ -79,8 +74,7 @@ export default class Editor extends Vue {
       this.showAlert({
         type: 'error',
         message: 'Error while saving script<br>' + e
-      })
-    );
+      }));
   }
 
   private newScript() {
@@ -89,6 +83,13 @@ export default class Editor extends Vue {
 
   private scriptSelected(script: Script) {
     this.editorScript = { ...script };
+  }
+
+  private created() {
+    initScripts(this.$store).catch(e => this.showAlert({
+      type: 'error',
+      message: 'Failed getting script settings from server.<br>' + e
+    }));
   }
 }
 </script>
