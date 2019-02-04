@@ -5,6 +5,7 @@ import actions from './actions';
 
 export { Mutations } from './mutations';
 export { Actions } from './actions';
+export { initAudio } from './reactivity';
 
 export interface State {
   parameters: AudioParameters;
@@ -14,12 +15,12 @@ export interface State {
 
 export const state: State = {
   parameters: {
-    maximumAmplitude: 0,
+    maximumAmplitude: 255,
     minimumFrequency: 0,
-    maximumFrequency: 0,
-    numberOfChannels: 0,
-    useAverage: false,
-    scalingStrategy: ScalingStrategy.Decibel
+    maximumFrequency: 20000,
+    numberOfChannels: 1,
+    useAverage: true,
+    scalingStrategy: ScalingStrategy.Linear
   },
   buffer: [] as number[]
 };
