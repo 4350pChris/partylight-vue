@@ -6,7 +6,7 @@
       <v-tab-item>
         <v-layout row wrap>
           <v-flex v-for="(item, key) in settingsPanel" :key="key">
-            <v-card>
+            <v-card flat>
               <v-card-title primary-title>{{item.title}}</v-card-title>
               <v-card-text>
                 <slider-card
@@ -23,34 +23,24 @@
       <v-tab-item>
         <v-layout row wrap>
           <v-flex>
-            <v-card class="fill-height">
-              <v-card-title primary-title>
-                Use Average
-              </v-card-title>
-              <v-card-actions class="justify-content-center">
-                <v-switch v-model="useAverage"></v-switch>
-              </v-card-actions>
-            </v-card>
-          </v-flex>
-          <v-flex>
-            <v-card>
-              <v-card-title primary-title>
-                Scaling Strategy
-              </v-card-title>
+            <v-card flat>
               <v-card-actions>
-                <v-radio-group v-model="scaling">
-                  <v-radio
-                    v-for="[name, val] in scalingStrategies"
-                    :key="name"
-                    :label="val"
-                    :value="Number(name)"
-                  ></v-radio>
-                </v-radio-group>
+                <v-flex xs12>
+                  <v-radio-group v-model="scaling" label="Scaling Strategy">
+                    <v-radio
+                      v-for="[name, val] in scalingStrategies"
+                      :key="name"
+                      :label="val"
+                      :value="Number(name)"
+                    ></v-radio>
+                  </v-radio-group>
+                  <v-switch v-model="useAverage" label="Use Average"></v-switch>
+                </v-flex>
               </v-card-actions>
             </v-card>
           </v-flex>
           <v-flex v-for="(item, key) in audioPanel" :key="key">
-            <v-card>
+            <v-card height="100%" flat>
               <v-card-title primary-title>{{item.title}}</v-card-title>
               <v-card-text>
                 <slider-card
@@ -161,7 +151,7 @@ export default class SettingsList extends Mixins(AlertMixin) {
     this.saveParameters({ scalingStrategy: n });
   }
 
-  public get scalingStrategies(): [string, any][] {
+  public get scalingStrategies(): Array<[string, any]> {
     return Object.entries(ScalingStrategy).filter(([key, value]) => !isNaN(Number(key)));
   }
 
