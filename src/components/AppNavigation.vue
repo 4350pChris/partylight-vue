@@ -9,6 +9,11 @@
           <v-list-tile-title>{{route.name.toUpperCase()}}</v-list-tile-title>
         </v-list-tile-content>
       </v-list-tile>
+      <v-list-tile class="mt-4">
+        <v-list-tile-action>
+          <v-switch @change="$emit('dark-mode')" label="Toggle dark mode"></v-switch>
+        </v-list-tile-action>
+      </v-list-tile>
     </v-list>
     <v-img id="logo" pb-1 :src="require('@/assets/splash.png')" contain></v-img>
   </v-navigation-drawer>
@@ -30,8 +35,6 @@ export default class AppNavigation extends Vue {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  /* toolbar + 1, otherwise toolbar overlaps drawer on mobile */
-  z-index: 7;
 }
 
 #logo {

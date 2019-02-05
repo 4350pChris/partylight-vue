@@ -1,6 +1,6 @@
 <template>
-  <v-app>
-    <app-navigation :routes="routes"></app-navigation>
+  <v-app :dark="dark">
+    <app-navigation :routes="routes" @dark-mode="dark = !dark"></app-navigation>
     <v-content>
       <v-container fluid>
         <router-view/>
@@ -28,6 +28,8 @@ export default class App extends Vue {
     { icon: 'code', name: 'editor', link: '/editor' },
     { icon: 'contact_support', name: 'about', link: '/about' }
   ];
+
+  private dark: boolean = false;
 
   @State((state: StoreState) => state.alert.visible)
   private alertVisible!: boolean;
