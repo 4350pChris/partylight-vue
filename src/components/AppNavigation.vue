@@ -1,5 +1,11 @@
 <template>
-  <v-navigation-drawer id="navdrawer" v-model="drawer" fixed clipped app permanent>
+<div>
+  <v-navigation-drawer
+    id="navdrawer"
+    v-model="drawer"
+    :clipped="$vuetify.breakpoint.smAndDown"
+    fixed
+    app>
     <v-list dense>
       <v-list-tile v-for="route in routes" :key="route.name" :to="route.link" ripple>
         <v-list-tile-action>
@@ -17,6 +23,11 @@
     </v-list>
     <v-img id="logo" pb-1 :src="require('@/assets/splash.png')" contain></v-img>
   </v-navigation-drawer>
+  <v-toolbar app clipped-left dense v-if="$vuetify.breakpoint.mdAndDown">
+    <v-toolbar-side-icon @click.stop="drawer = !drawer">
+    </v-toolbar-side-icon>
+  </v-toolbar>
+</div>
 </template>
 
 <script lang="ts">
