@@ -19,13 +19,20 @@ const actions: ActionTree<State, {}> = {
     ]);
   },
 
-  [Actions.SaveSettings]({ commit }, payload: State) {
+  [Actions.SaveSettings]({ commit }, payload: Partial<State>) {
     commit(Mutations.SetSettings, payload);
-    return Promise.all([
-      service.setBrightness(payload.brightness),
-      service.setColor(payload.color),
-      service.setDelay(payload.delay)
-    ]);
+    const promises: Array<Promise<void>> = [];
+
+    if (payload.brightness) {
+      promises.push(service.setBrightness(payload.brightness));
+    }
+    if (payload.color) {
+      promises.push(service.setColor(payload.color));
+    }
+    if (payload.delay) {
+      promises.push(service.setDelay(payload.delay));
+    }
+    return Promise.all(promises);
   }
 };
 
