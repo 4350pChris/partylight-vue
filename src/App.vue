@@ -26,7 +26,6 @@ export default class App extends Vue {
   private routes = [
     { icon: 'home', name: 'home', link: '/' },
     { icon: 'code', name: 'editor', link: '/editor' },
-    { icon: 'contact_support', name: 'about', link: '/about' }
   ];
 
   private dark: boolean = false;
