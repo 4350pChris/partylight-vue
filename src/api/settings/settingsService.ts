@@ -15,6 +15,6 @@ export default class SettingsService extends BaseSocketService {
   public setColor = (color: number) => this.invoke<void>('SetColor', color);
 
   public onSettingChanged(cb: (prop: string, val: number) => void): void {
-    this.on('SettingChanged', cb);
+    this.on('PropertyChanged', cb);
   }
 }

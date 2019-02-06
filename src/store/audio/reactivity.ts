@@ -7,9 +7,6 @@ const audioService = ServiceFactory.get('audio') as AudioService;
 
 export async function initAudio(store: Store<any>) {
   await audioService.startConnection();
-  await Promise.all([
-      store.dispatch(Actions.FetchBuffer),
-      store.dispatch(Actions.FetchParameters)
-  ]);
+  await store.dispatch(Actions.FetchParameters);
   audioService.onChange((prop, value) => store.dispatch(Actions.SaveParameters, { [prop]: value }));
 }
