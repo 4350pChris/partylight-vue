@@ -10,7 +10,11 @@ export abstract class BaseSocketService {
     this.connection = new signalR.HubConnectionBuilder().withUrl(fullUrl).build();
   }
 
-  public startConnection = () => this.connection.start();
+  public async startConnection() {
+    if (this.connection.state !== signalR.HubConnectionState.Connected) {
+      return this.connection.start();
+    }
+  }
 
   protected invoke<T>(name: string, ...args: any[]) {
     return this.connection.invoke<T>(name, ...args);
