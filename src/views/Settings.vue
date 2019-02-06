@@ -6,17 +6,16 @@
       <v-tab-item>
         <v-layout row wrap>
           <v-flex v-for="(item, key) in settingsPanel" :key="key">
-            <v-card flat>
-              <v-card-title primary-title>{{item.title}}</v-card-title>
-              <v-card-text>
-                <slider-card
-                  :min="item.min"
-                  :max="item.max"
-                  @input="item.update($event)"
-                  :value="item.value"
-                ></slider-card>
-              </v-card-text>
-            </v-card>
+            <slider-card
+              :title="item.title"
+              :min="item.min"
+              :max="item.max"
+              @input="item.update($event)"
+              :value="item.value"
+            ></slider-card>
+          </v-flex>
+          <v-flex>
+            <color-picker v-model="colors"></color-picker>
           </v-flex>
         </v-layout>
       </v-tab-item>
@@ -40,17 +39,13 @@
             </v-card>
           </v-flex>
           <v-flex v-for="(item, key) in audioPanel" :key="key">
-            <v-card height="100%" flat>
-              <v-card-title primary-title>{{item.title}}</v-card-title>
-              <v-card-text>
-                <slider-card
-                  :min="item.min"
-                  :max="item.max"
-                  @input="item.update($event)"
-                  :value="item.value"
-                ></slider-card>
-              </v-card-text>
-            </v-card>
+            <slider-card
+              :title="item.title"
+              :min="item.min"
+              :max="item.max"
+              @input="item.update($event)"
+              :value="item.value"
+            ></slider-card>
           </v-flex>
         </v-layout>
       </v-tab-item>
@@ -61,13 +56,14 @@
 import { Component, Prop, Vue, Mixins } from 'vue-property-decorator';
 import { Action, State, Mutation } from 'vuex-class';
 import Settings from '@/models/settings';
+import AudioParameters, { ScalingStrategy } from '@/models/audioParameters';
 import SliderCard from '@/components/SliderCard.vue';
 import AlertMixin from '@/mixins/Alert.vue';
 import { StoreState } from '@/store';
 import { initSettings, Actions as SettingsActions } from '@/store/settings';
 import { initAudio, Actions as AudioActions } from '@/store/audio';
-import AudioParameters, { ScalingStrategy } from '@/models/audioParameters';
 import { debounce } from 'lodash';
+import { Chrome as ColorPicker } from 'vue-color';
 
 interface PanelProps {
   min?: number;
@@ -78,10 +74,12 @@ interface PanelProps {
 }
 
 @Component({
-  components: { SliderCard }
+  components: { ColorPicker, SliderCard }
 })
 export default class SettingsList extends Mixins(AlertMixin) {
   private tab = 0;
+
+  private colors = '#000000';
 
   @State((store: StoreState) => store.settings)
   private settings!: Settings;
@@ -186,6 +184,11 @@ export default class SettingsList extends Mixins(AlertMixin) {
       this.showAlert({
         type: 'error',
         message: 'Failed getting settings from server.<br>' + e
+      }));
+    initAudio(this.$store).catch(e =>
+      this.showAlert({
+        type: 'error',
+        message: 'Failed getting scripts from server.<br>' + e
       }));
   }
 }
