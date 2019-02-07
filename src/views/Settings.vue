@@ -189,12 +189,12 @@ export default class SettingsList extends Mixins(AlertMixin) {
     initSettings(this.$store).catch(e =>
       this.showAlert({
         type: 'error',
-        message: 'Failed getting settings from server.<br>' + e
+        message: 'Failed getting general settings from server.<br>' + e
       }));
     initAudio(this.$store).catch(e =>
       this.showAlert({
         type: 'error',
-        message: 'Failed getting scripts from server.<br>' + e
+        message: 'Failed getting audio settings from server.<br>' + e
       }));
   }
 }
