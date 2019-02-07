@@ -40,6 +40,7 @@ export default class ScriptEditor extends Vue {
       mode: 'text/x-csharp',
     });
     this.cm.on('change', () => this.$emit('input', this.cm.getValue()));
+    this.onThemeChanged();
   }
 }
 </script>
