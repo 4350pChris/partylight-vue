@@ -14,13 +14,16 @@
           </v-flex>
         </v-layout>
       </v-flex>
-      <v-flex md4>
+      <v-flex md4 text-xs-center>
         <script-list
+          v-if="!scriptsLoading"
           :scripts="scripts"
           :active="activeScript"
           @new="newScript()"
           @select="scriptSelected($event)"
         ></script-list>
+        <v-progress-circular v-else indeterminate :size="48">
+        </v-progress-circular>
       </v-flex>
     </v-layout>
 </template>
@@ -44,6 +47,8 @@ import AlertMixin from '@/mixins/Alert.vue';
 })
 export default class Editor extends Mixins(AlertMixin) {
   private editorScript: Script = { name: 'New Script', code: '' };
+
+  private scriptsLoading = true;
 
   @Getter(Getters.ActiveScript)
   private activeScript!: Script | null;
@@ -85,7 +90,7 @@ export default class Editor extends Mixins(AlertMixin) {
     initScripts(this.$store).catch(e => this.showAlert({
       type: 'error',
       message: 'Failed getting script settings from server.<br>' + e
-    }));
+    })).finally(() => this.scriptsLoading = false);
   }
 }
 </script>
