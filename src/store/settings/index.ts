@@ -1,6 +1,7 @@
 import { Module } from 'vuex';
 import actions from './actions';
 import mutations from './mutations';
+import { Color } from '../../models/settings';
 
 export { Mutations } from './mutations';
 export { Actions } from './actions';
@@ -8,8 +9,8 @@ export * from './reactivity';
 
 export const state: State = {
   brightness: 0,
-  delay: 0,
-  color: 0
+  color: { a: 0, r: 0, g: 0, b: 0},
+  delay: 0
 };
 
 const module: Module<State, any> = {
@@ -20,8 +21,8 @@ const module: Module<State, any> = {
 
 export interface State {
   brightness: number;
+  color: Color;
   delay: number;
-  color: number;
 }
 
 export default module;
