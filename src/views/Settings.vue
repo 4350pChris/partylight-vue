@@ -15,7 +15,7 @@
             ></slider-card>
           </v-flex>
           <v-flex>
-            <color-picker v-model="colors"></color-picker>
+            <color-picker v-model="color" style="width: 100%;"></color-picker>
           </v-flex>
         </v-layout>
       </v-tab-item>
@@ -55,7 +55,7 @@
 <script lang="ts">
 import { Component, Prop, Vue, Mixins } from 'vue-property-decorator';
 import { Action, State, Mutation } from 'vuex-class';
-import Settings from '@/models/settings';
+import Settings, { Color } from '@/models/settings';
 import AudioParameters, { ScalingStrategy } from '@/models/audioParameters';
 import SliderCard from '@/components/SliderCard.vue';
 import AlertMixin from '@/mixins/Alert.vue';
@@ -79,13 +79,19 @@ interface PanelProps {
 export default class SettingsList extends Mixins(AlertMixin) {
   private tab = 0;
 
-  private colors = '#000000';
-
   @State((store: StoreState) => store.settings)
   private settings!: Settings;
 
   @State((store: StoreState) => store.audio.parameters)
   private audioParameters!: AudioParameters;
+
+  private get color() {
+    return this.settings.color;
+  }
+
+  private set color(color: any) {
+    this.setSettings({ color: color.rgba });
+  }
 
   private get settingsPanel(): PanelProps[] {
     return [
