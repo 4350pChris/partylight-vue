@@ -24,7 +24,7 @@ export default class SettingsService extends BaseSocketService {
     if (n < 0) {
       n *= -1;
     }
-    // get two's complement by subtracting the inverse of n
+    // get two's complement by subtracting the inverse of n from 2 ^ 32 (because int is 32 bits)
     const twos = (2 ** 32 - n).toString(16);
     const nums: number[] = [];
     for (let i = 0; i <= 6; i += 2) {
@@ -42,7 +42,7 @@ export default class SettingsService extends BaseSocketService {
     a = Math.round(a * 255);
     // convert argb to hex values (as string)
     const hex = [a, r, g, b].map(v => v.toString(16).padStart(2, '0'));
-    // join hex values and make convert to number
+    // join hex values and convert to number
     const n = Number('0x' + hex.join(''));
     return 2 ** 32 - n;
   }
