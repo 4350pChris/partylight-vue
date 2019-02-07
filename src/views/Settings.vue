@@ -15,7 +15,10 @@
             ></slider-card>
           </v-flex>
           <v-flex>
-            <color-picker v-model="color" style="width: 100%;"></color-picker>
+            <color-picker
+              v-model="color"
+              :class="['elevation-0', 'v-card', { 'theme--dark': theme.isDark }]"
+            ></color-picker>
           </v-flex>
         </v-layout>
       </v-tab-item>
@@ -53,7 +56,7 @@
 </template>
 
 <script lang="ts">
-import { Component, Prop, Vue, Mixins } from 'vue-property-decorator';
+import { Component, Prop, Vue, Mixins, Inject } from 'vue-property-decorator';
 import { Action, State, Mutation } from 'vuex-class';
 import Settings, { Color } from '@/models/settings';
 import AudioParameters, { ScalingStrategy } from '@/models/audioParameters';
@@ -78,6 +81,8 @@ interface PanelProps {
 })
 export default class SettingsList extends Mixins(AlertMixin) {
   private tab = 0;
+
+  @Inject() private theme!: { isDark: boolean };
 
   @State((store: StoreState) => store.settings)
   private settings!: Settings;
@@ -199,3 +204,17 @@ export default class SettingsList extends Mixins(AlertMixin) {
   }
 }
 </script>
+
+<style>
+.vc-chrome-body {
+  background-color: inherit !important;
+}
+
+.vc-editable-input input, span {
+  color: inherit !important;
+}
+
+.vc-chrome.theme--dark path {
+  fill: white !important;
+}
+</style>
