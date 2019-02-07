@@ -18,17 +18,15 @@ import { RouteConfig } from 'vue-router';
 import AppNavigation from '@/components/AppNavigation.vue';
 import { State } from 'vuex-class';
 import { StoreState } from '@/store';
+import { routes as origRoutes } from './router';
 
 @Component({
   components: { AppNavigation }
 })
 export default class App extends Vue {
-  private routes = [
-    { icon: 'home', name: 'home', link: '/' },
-    { icon: 'code', name: 'editor', link: '/editor' },
-  ];
-
   private dark: boolean = false;
+
+  private routes = origRoutes.filter(r => r.name);
 
   @State((state: StoreState) => state.alert.visible)
   private alertVisible!: boolean;

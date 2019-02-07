@@ -7,9 +7,9 @@
     fixed
     app>
     <v-list dense>
-      <v-list-tile v-for="route in routes" :key="route.name" :to="route.link" ripple>
+      <v-list-tile v-for="route in routes" :key="route.name" :to="route.path" ripple>
         <v-list-tile-action>
-          <v-icon>{{route.icon}}</v-icon>
+          <v-icon>{{route.meta.icon}}</v-icon>
         </v-list-tile-action>
         <v-list-tile-content>
           <v-list-tile-title>{{route.name.toUpperCase()}}</v-list-tile-title>

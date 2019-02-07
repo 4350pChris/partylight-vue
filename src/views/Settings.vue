@@ -1,6 +1,6 @@
 <template>
     <v-tabs v-model="tab" class="elevation-2" centered fixed-tabs>
-      <v-tab v-for="(name, i) in ['Settings', 'Audio Parameters']" :key="i">
+      <v-tab v-for="(name, i) in ['Visual', 'Audio']" :key="i">
         {{name}}
       </v-tab>
       <v-tab-item>
