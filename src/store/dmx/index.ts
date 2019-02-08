@@ -12,7 +12,7 @@ export interface State {
 }
 
 export const state: State = {
-  samplingRate: 0,
+  samplingRate: 50,
   packetsPerSecond: 0
 };
 
