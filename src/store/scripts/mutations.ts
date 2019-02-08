@@ -2,6 +2,7 @@ import { MutationTree } from 'vuex';
 import { State } from '.';
 import Script from '@/models/script';
 import Vue from 'vue';
+import { maxBy } from 'lodash';
 
 export enum Mutations {
   SetScripts = 'setScripts',
@@ -29,9 +30,11 @@ const mutations: MutationTree<State> = {
 
   [Mutations.AddScript]({ scripts }, payload: Script) {
     if (payload.id === undefined) {
-      const maxId = scripts
-        .map(s => (s.id === undefined ? 0 : s.id))
-        .reduce((a, b) => (a > b ? a : b));
+      const maxIdScript = maxBy(scripts, 'id');
+      let maxId = -1;
+      if (maxIdScript) {
+        maxId = maxIdScript.id === undefined ? -1 : maxIdScript.id;
+      }
       payload.id = maxId + 1;
     }
     scripts.push(payload);
