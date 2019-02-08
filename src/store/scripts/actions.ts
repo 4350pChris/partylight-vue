@@ -19,7 +19,7 @@ const actions: ActionTree<typeof moduleState, {}> = {
   },
 
   [Actions.SaveScript]({ commit }, payload: Script) {
-    if (payload.id) {
+    if (payload.id !== undefined) {
       commit(Mutations.UpdateScript, payload);
       return scriptsService.replaceScript(payload);
     } else {
@@ -29,7 +29,7 @@ const actions: ActionTree<typeof moduleState, {}> = {
   },
 
   [Actions.SetActiveScript]({ commit }, payload: Script) {
-    if (payload.id) {
+    if (payload.id !== undefined) {
       commit(Mutations.SetActiveScript, payload);
       return scriptsService.setActiveScript(payload.id);
     }

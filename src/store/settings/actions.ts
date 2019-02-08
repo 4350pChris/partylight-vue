@@ -23,13 +23,13 @@ const actions: ActionTree<State, {}> = {
     commit(Mutations.SetSettings, payload);
     const promises: Array<Promise<void>> = [];
 
-    if (payload.brightness) {
+    if (payload.brightness !== undefined) {
       promises.push(service.setBrightness(payload.brightness));
     }
-    if (payload.color) {
+    if (payload.color !== undefined) {
       promises.push(service.setColor(payload.color));
     }
-    if (payload.delay) {
+    if (payload.delay !== undefined) {
       promises.push(service.setDelay(payload.delay));
     }
     return Promise.all(promises);
