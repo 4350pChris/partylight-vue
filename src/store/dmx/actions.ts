@@ -7,7 +7,7 @@ const dmxService = ServiceFactory.get('dmx') as DMXService;
 
 export enum Actions {
   FetchDMXSettings = 'fetchDMXSettings',
-  SaveDMXSettings = 'saveDMXSettings'
+  SaveSamplingRate = 'saveSamplingRate'
 }
 
 const actions: ActionTree<State, any> = {
@@ -20,7 +20,7 @@ const actions: ActionTree<State, any> = {
     commit(Mutations.SetSamplingRate, samplingRate);
   },
 
-  async [Actions.SaveDMXSettings]({ commit }, payload: number) {
+  async [Actions.SaveSamplingRate]({ commit }, payload: number) {
     commit(Mutations.SetSamplingRate, payload);
     dmxService.setSamplingRate(payload);
   }
