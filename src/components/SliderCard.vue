@@ -35,6 +35,8 @@
               :value="value"
               :min="min"
               :max="max"
+              :step="step"
+              :ticks="!!step"
               @end="$emit('input', $event)"
               thumb-label="always"
               thumb-size="40"
@@ -71,6 +73,7 @@ export default class SliderCard extends Vue {
   @Prop() private min!: number;
   @Prop() private max!: number;
   @Prop() private title!: string;
+  @Prop() private step!: number;
 
   private valid = true;
 
