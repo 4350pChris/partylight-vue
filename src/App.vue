@@ -3,7 +3,9 @@
     <app-navigation :routes="routes" @dark-mode="dark = !dark"></app-navigation>
     <v-content>
       <v-container fluid>
-        <router-view/>
+        <v-slide-y-transition mode="out-in">
+          <router-view/>
+        </v-slide-y-transition>
       </v-container>
     </v-content>
     <v-alert id="error-alert" :type="alertType" :value="alertVisible" transition="scale-transition">
