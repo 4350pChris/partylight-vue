@@ -6,8 +6,8 @@
             <v-text-field outline v-model="editorScript.name" hide-details label="Name"></v-text-field>
           </v-flex>
           <v-flex md6 text-xs-right>
-            <v-btn @click="saveScript(editorScript)" class="mb-0">Save</v-btn>
-            <v-btn @click="setActiveScript(editorScript)" class="mb-0 mr-0">Set Active</v-btn>
+            <v-btn @click="saveScript(editorScript)" class="mb-0" color="success">Save</v-btn>
+            <v-btn @click="setActiveScript(editorScript)" class="mb-0 mr-0" color="accent">Set Active</v-btn>
           </v-flex>
           <v-flex md12 mt-2>
             <script-editor id="editor" v-model="editorScript.code" class="elevation-4"/>
