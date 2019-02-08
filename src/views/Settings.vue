@@ -10,6 +10,7 @@
               :title="item.title"
               :min="item.min"
               :max="item.max"
+              :step="item.step"
               @input="item.update($event)"
               :value="item.value"
             ></slider-card>
@@ -63,14 +64,16 @@ import AudioParameters, { ScalingStrategy } from '@/models/audioParameters';
 import SliderCard from '@/components/SliderCard.vue';
 import AlertMixin from '@/mixins/Alert.vue';
 import { StoreState } from '@/store';
-import { initSettings, Actions as SettingsActions } from '@/store/settings';
+import { initSettings, Actions as SettingsActions, Actions } from '@/store/settings';
 import { initAudio, Actions as AudioActions } from '@/store/audio';
+import { initDMX, Actions as DMXActions } from '@/store/dmx';
 import { debounce } from 'lodash';
 import { Chrome as ColorPicker } from 'vue-color';
 
 interface PanelProps {
   min?: number;
   max?: number;
+  step?: number;
   update: (e: any) => any;
   title: string;
   value: any;
@@ -90,12 +93,15 @@ export default class SettingsList extends Mixins(AlertMixin) {
   @State((store: StoreState) => store.audio.parameters)
   private audioParameters!: AudioParameters;
 
+  @State((store: StoreState) => store.dmx.samplingRate)
+  private samplingRate!: number;
+
   private get color() {
     return this.settings.color;
   }
 
   private set color(color: any) {
-    this.setSettings({ color: color.rgba });
+    this.saveSettings({ color: color.rgba });
   }
 
   private get settingsPanel(): PanelProps[] {
@@ -103,16 +109,25 @@ export default class SettingsList extends Mixins(AlertMixin) {
       {
         min: 0,
         max: 100,
-        update: (e: number) => this.setSettings({ brightness: e }),
-        title: 'Brightness',
+        update: (e: number) => this.saveSettings({ brightness: e }),
+        title: 'Brightness (in %)',
         value: this.settings.brightness
       },
       {
         min: 0,
         max: 100,
-        update: (e: number) => this.setSettings({ delay: e }),
-        title: 'Delay',
+        step: 10,
+        update: (e: number) => this.saveSettings({ delay: e }),
+        title: 'Delay (in ms)',
         value: this.settings.delay
+      },
+      {
+        min: 50,
+        max: 1000,
+        step: 50,
+        update: (e: number) => this.saveSamplingRate(e),
+        title: 'Sampling Rate (in ms)',
+        value: this.samplingRate
       }
     ];
   }
@@ -124,7 +139,7 @@ export default class SettingsList extends Mixins(AlertMixin) {
         max: 20000,
         update: debounce((e: number[]) => this.saveParameters(
           { minimumFrequency: e[0], maximumFrequency: e[1] }), 350),
-        title: 'Frequency',
+        title: 'Frequency (in Hz)',
         value: [this.audioParameters.minimumFrequency, this.audioParameters.maximumFrequency]
       },
       {
@@ -164,16 +179,28 @@ export default class SettingsList extends Mixins(AlertMixin) {
     return Object.entries(ScalingStrategy).filter(([key, value]) => !isNaN(Number(key)));
   }
 
-  private async setSettings(
+  private savingFailed(e: any) {
+    this.showAlert({
+        type: 'error',
+        message: 'Failed saving settings.<br>' + e
+      });
+  }
+
+  private async saveSettings(
     settings: Partial<Record<keyof Settings, Settings[keyof Settings]>>
   ) {
     try {
       await this.$store.dispatch(SettingsActions.SaveSettings, settings);
     } catch (e) {
-      this.showAlert({
-        type: 'error',
-        message: 'Failed saving settings.<br>' + e
-      });
+      this.savingFailed(e);
+    }
+  }
+
+  private async saveSamplingRate(rate: number) {
+    try {
+      await this.$store.dispatch(DMXActions.SaveSamplingRate, rate);
+    } catch (e) {
+      this.savingFailed(e);
     }
   }
 
@@ -183,10 +210,7 @@ export default class SettingsList extends Mixins(AlertMixin) {
     try {
       await this.$store.dispatch(AudioActions.SaveParameters, params);
     } catch (e) {
-      this.showAlert({
-        type: 'error',
-        message: 'Failed saving audio parameters.<br>' + e
-      });
+      this.savingFailed(e);
     }
   }
 
