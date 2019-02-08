@@ -10,7 +10,7 @@ export enum Mutations {
   SetSettings = 'setSettings'
 }
 
-export default {
+const mutations: MutationTree<State> = {
   [Mutations.SetBrightness](state, payload: number) {
     state.brightness = payload;
   },
@@ -28,4 +28,6 @@ export default {
       Vue.set(state, key, payload[key]);
     }
   }
-} as MutationTree<State>;
+};
+
+export default mutations;
