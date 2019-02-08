@@ -24,8 +24,8 @@ const mutations: MutationTree<State> = {
   },
 
   [Mutations.SetSettings](state, payload: { [key: string]: number}) {
-    for (const key of Object.keys(payload)) {
-      Vue.set(state, key, payload[key]);
+    for (const [key, value] of Object.entries(payload)) {
+      Vue.set(state, key, value);
     }
   }
 };
