@@ -1,5 +1,6 @@
 import { BaseSocketService } from './baseSocketService';
 import AudioService from './audio/audioService';
+import DMXService from './dmx/dmxService';
 import SettingsService from './settings/settingsService';
 import ScriptsService from './scripts/scriptsService';
 
@@ -9,6 +10,7 @@ class ServiceFactory {
 
   private services: Services = {
     audio: new AudioService('/audio'),
+    dmx: new DMXService('dmx'),
     settings: new SettingsService('/settings'),
     scripts: new ScriptsService('/scripts'),
   };
@@ -22,6 +24,7 @@ export default new ServiceFactory();
 
 export interface Services {
   audio: AudioService;
+  dmx: DMXService;
   settings: SettingsService;
   scripts: ScriptsService;
 }
