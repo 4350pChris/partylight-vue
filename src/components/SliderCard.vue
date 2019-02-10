@@ -106,7 +106,7 @@ export default class SliderCard extends Vue {
 
   @Emit()
   private input(v: number[]) {
-    this.internalValue = v.map(n => Number(n));
+    this.internalValue = v.map(n => Number(n)).sort();
     this.$v.internalValue.$touch();
     return this.internalValue;
   }
