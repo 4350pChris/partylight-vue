@@ -9,37 +9,37 @@
           <v-layout row nowrap>
             <v-flex shrink style="width: 75px" mr-3>
               <v-text-field
-                :value="internalValue[0]"
+                :value="minValue"
                 hide-details
                 single-line
                 type="number"
                 @blur="isRange ?
-                  input([$event.target.value, internalValue[1]]) : input([$event.target.value])"
+                  update([$event.target.value, maxValue]) : update([$event.target.value])"
               ></v-text-field>
             </v-flex>
             <v-flex>
               <div
                 :is="isRange ? 'v-range-slider' : 'v-slider'"
-                :value="isRange ? internalValue : internalValue[0]"
+                :value="isRange ? internalValue : minValue"
                 :min="min"
                 :max="max"
                 :step="step"
                 :ticks="!!step"
                 :error-messages="errors"
-                @end="isRange ? input($event) : input([$event])"
+                @end="isRange ? update($event) : update([$event])"
                 thumb-label="always"
                 thumb-size="40"
               ></div>
             </v-flex>
             <v-flex v-if="isRange" shrink style="width: 75px" ml-3>
               <v-text-field
-                :value="internalValue[1]"
+                :value="maxValue"
                 hide-details
                 single-line
                 shrink
                 type="number"
                 @blur="isRange ?
-                  input([internalValue[0], $event.target.value]) : input([$event.target.value])"
+                  update([minValue, $event.target.value]) : update([$event.target.value])"
               ></v-text-field>
             </v-flex>
           </v-layout>
@@ -54,6 +54,7 @@ import { Component, Emit, Prop, Vue } from 'vue-property-decorator';
 import { CreateElement } from 'vue';
 import { Vuelidate } from '@/decorators';
 import { required, between } from 'vuelidate/lib/validators';
+import { min, max } from 'lodash';
 
 @Component
 export default class SliderCard extends Vue {
@@ -64,6 +65,14 @@ export default class SliderCard extends Vue {
   @Prop() private step!: number;
 
   private internalValue = this.value;
+
+  private get minValue(): number {
+    return min(this.internalValue) as number;
+  }
+
+  private get maxValue(): number {
+    return max(this.internalValue) as number;
+  }
 
   @Vuelidate
   private validations() {
@@ -104,11 +113,12 @@ export default class SliderCard extends Vue {
     return errors;
   }
 
-  @Emit()
-  private input(v: number[]) {
+  private update(v: number[]) {
     this.internalValue = v.map(n => Number(n)).sort();
     this.$v.internalValue.$touch();
-    return this.internalValue;
+    if (!this.$v.internalValue.$invalid) {
+      this.$emit('input', this.internalValue);
+    }
   }
 }
 </script>
