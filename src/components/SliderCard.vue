@@ -26,6 +26,7 @@
                 :step="step"
                 :ticks="!!step"
                 :error-messages="errors"
+                :always-dirty="min !== 0"
                 @end="isRange ? update($event) : update([$event])"
                 thumb-label="always"
                 thumb-size="40"
