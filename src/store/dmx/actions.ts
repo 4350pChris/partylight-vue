@@ -20,9 +20,9 @@ const actions: ActionTree<State, any> = {
     commit(Mutations.SetSamplingRate, samplingRate);
   },
 
-  async [Actions.SaveSamplingRate]({ commit }, payload: number) {
+  [Actions.SaveSamplingRate]({ commit }, payload: number) {
     commit(Mutations.SetSamplingRate, payload);
-    dmxService.setSamplingRate(payload);
+    return dmxService.setSamplingRate(payload);
   }
 };
 
