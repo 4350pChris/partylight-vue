@@ -18,7 +18,7 @@
               ></v-text-field>
             </v-flex>
             <v-flex>
-              <div
+              <component
                 :is="isRange ? 'v-range-slider' : 'v-slider'"
                 :value="isRange ? internalValue : minValue"
                 :min="min"
@@ -30,7 +30,7 @@
                 @end="isRange ? update($event) : update([$event])"
                 thumb-label="always"
                 thumb-size="40"
-              ></div>
+              ></component>
             </v-flex>
             <v-flex v-if="isRange" shrink style="width: 75px" ml-3>
               <v-text-field
@@ -56,8 +56,11 @@ import { CreateElement } from 'vue';
 import { Vuelidate } from '@/decorators';
 import { required, between } from 'vuelidate/lib/validators';
 import { min, max } from 'lodash';
+import { VRangeSlider, VSlider } from 'vuetify/lib';
 
-@Component
+@Component({
+  components: { VRangeSlider, VSlider }
+})
 export default class SliderCard extends Vue {
   @Prop() private value!: number[];
   @Prop() private min!: number;
