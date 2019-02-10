@@ -255,7 +255,7 @@ export default class SettingsList extends Mixins(AlertMixin) {
 }
 
 .vc-editable-input input,
-span {
+.vc-editable-input span {
   color: inherit !important;
 }
 
