@@ -12,6 +12,7 @@
     "codemirror": "^5.43.0",
     "lodash": "^4.17.11",
     "material-design-icons-iconfont": "^4.0.4",
+    "roboto-fontface": "^0.10.0",
     "vue": "^2.6.3",
     "vue-class-component": "^6.0.0",
     "vue-color": "^2.7.0",
