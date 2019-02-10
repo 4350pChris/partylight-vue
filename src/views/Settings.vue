@@ -1,59 +1,57 @@
 <template>
-    <v-tabs v-model="tab" class="elevation-2" centered fixed-tabs>
-      <v-tab v-for="(name, i) in ['Visual', 'Audio']" :key="i">
-        {{name}}
-      </v-tab>
-      <v-tab-item>
-        <v-layout row wrap>
-          <v-flex v-for="(item, key) in settingsPanel" :key="key">
-            <slider-card
-              :title="item.title"
-              :min="item.min"
-              :max="item.max"
-              :step="item.step"
-              @input="item.update($event)"
-              :value="item.value"
-            ></slider-card>
-          </v-flex>
-          <v-flex>
-            <color-picker
-              v-model="color"
-              :class="['elevation-0', 'v-card', { 'theme--dark': theme.isDark }]"
-            ></color-picker>
-          </v-flex>
-        </v-layout>
-      </v-tab-item>
-      <v-tab-item>
-        <v-layout row wrap>
-          <v-flex>
-            <v-card flat>
-              <v-card-actions>
-                <v-flex xs12 pl-2>
-                  <v-radio-group v-model="scaling" label="Scaling Strategy">
-                    <v-radio
-                      v-for="[name, val] in scalingStrategies"
-                      :key="name"
-                      :label="val"
-                      :value="Number(name)"
-                    ></v-radio>
-                  </v-radio-group>
-                  <v-switch v-model="useAverage" label="Use Average"></v-switch>
-                </v-flex>
-              </v-card-actions>
-            </v-card>
-          </v-flex>
-          <v-flex v-for="(item, key) in audioPanel" :key="key">
-            <slider-card
-              :title="item.title"
-              :min="item.min"
-              :max="item.max"
-              @input="item.update($event)"
-              :value="item.value"
-            ></slider-card>
-          </v-flex>
-        </v-layout>
-      </v-tab-item>
-    </v-tabs>
+  <v-tabs v-model="tab" class="elevation-2" centered fixed-tabs>
+    <v-tab v-for="(name, i) in ['Visual', 'Audio']" :key="i">{{name}}</v-tab>
+    <v-tab-item>
+      <v-layout row wrap>
+        <v-flex v-for="(item, key) in settingsPanel" :key="key">
+          <slider-card
+            :title="item.title"
+            :min="item.min"
+            :max="item.max"
+            :step="item.step"
+            @input="item.update($event)"
+            :value="item.value"
+          ></slider-card>
+        </v-flex>
+        <v-flex>
+          <color-picker
+            v-model="color"
+            :class="['elevation-0', 'v-card', { 'theme--dark': theme.isDark }]"
+          ></color-picker>
+        </v-flex>
+      </v-layout>
+    </v-tab-item>
+    <v-tab-item>
+      <v-layout row wrap>
+        <v-flex>
+          <v-card flat>
+            <v-card-actions>
+              <v-flex xs12 pl-2>
+                <v-radio-group v-model="scaling" label="Scaling Strategy">
+                  <v-radio
+                    v-for="[name, val] in scalingStrategies"
+                    :key="name"
+                    :label="val"
+                    :value="Number(name)"
+                  ></v-radio>
+                </v-radio-group>
+                <v-switch v-model="useAverage" label="Use Average"></v-switch>
+              </v-flex>
+            </v-card-actions>
+          </v-card>
+        </v-flex>
+        <v-flex v-for="(item, key) in audioPanel" :key="key">
+          <slider-card
+            :title="item.title"
+            :min="item.min"
+            :max="item.max"
+            @input="item.update($event)"
+            :value="item.value"
+          ></slider-card>
+        </v-flex>
+      </v-layout>
+    </v-tab-item>
+  </v-tabs>
 </template>
 
 <script lang="ts">
@@ -64,7 +62,11 @@ import AudioParameters, { ScalingStrategy } from '@/models/audioParameters';
 import SliderCard from '@/components/SliderCard.vue';
 import AlertMixin from '@/mixins/Alert.vue';
 import { StoreState } from '@/store';
-import { initSettings, Actions as SettingsActions, Actions } from '@/store/settings';
+import {
+  initSettings,
+  Actions as SettingsActions,
+  Actions
+} from '@/store/settings';
 import { initAudio, Actions as AudioActions } from '@/store/audio';
 import { initDMX, Actions as DMXActions } from '@/store/dmx';
 import { debounce } from 'lodash';
@@ -74,9 +76,9 @@ interface PanelProps {
   min?: number;
   max?: number;
   step?: number;
-  update: (e: any) => any;
+  update: (e: number[]) => void;
   title: string;
-  value: any;
+  value: number[];
 }
 
 @Component({
@@ -109,25 +111,26 @@ export default class SettingsList extends Mixins(AlertMixin) {
       {
         min: 0,
         max: 100,
-        update: (e: number) => this.saveSettings({ brightness: e }),
+        update: ([e, ...rest]: number[]) =>
+          this.saveSettings({ brightness: e }),
         title: 'Brightness (in %)',
-        value: this.settings.brightness
+        value: [this.settings.brightness]
       },
       {
         min: 0,
         max: 100,
         step: 10,
-        update: (e: number) => this.saveSettings({ delay: e }),
+        update: ([e, ...rest]: number[]) => this.saveSettings({ delay: e }),
         title: 'Delay (in ms)',
-        value: this.settings.delay
+        value: [this.settings.delay]
       },
       {
         min: 50,
         max: 1000,
         step: 50,
-        update: (e: number) => this.saveSamplingRate(e),
+        update: ([e, ...rest]: number[]) => this.saveSamplingRate(e),
         title: 'Sampling Rate (in ms)',
-        value: this.samplingRate
+        value: [this.samplingRate]
       }
     ];
   }
@@ -137,24 +140,35 @@ export default class SettingsList extends Mixins(AlertMixin) {
       {
         min: 0,
         max: 20000,
-        update: debounce((e: number[]) => this.saveParameters(
-          { minimumFrequency: e[0], maximumFrequency: e[1] }), 350),
+        update: debounce(
+          ([min, max]: number[]) =>
+            this.saveParameters({
+              minimumFrequency: min,
+              maximumFrequency: max
+            }),
+          350
+        ),
         title: 'Frequency (in Hz)',
-        value: [this.audioParameters.minimumFrequency, this.audioParameters.maximumFrequency]
+        value: [
+          this.audioParameters.minimumFrequency,
+          this.audioParameters.maximumFrequency
+        ]
       },
       {
         min: 1,
         max: 32,
-        update: (e: number) => this.saveParameters({ numberOfChannels: e }),
+        update: ([e, ...rest]: number[]) =>
+          this.saveParameters({ numberOfChannels: e }),
         title: 'Number of Channels',
-        value: this.audioParameters.numberOfChannels
+        value: [this.audioParameters.numberOfChannels]
       },
       {
         min: 0,
         max: 255,
-        update: (e: number) => this.saveParameters({ maximumAmplitude: e }),
+        update: ([e, ...rest]: number[]) =>
+          this.saveParameters({ maximumAmplitude: e }),
         title: 'Maximum Amplitude',
-        value: this.audioParameters.maximumAmplitude
+        value: [this.audioParameters.maximumAmplitude]
       }
     ];
   }
@@ -176,14 +190,16 @@ export default class SettingsList extends Mixins(AlertMixin) {
   }
 
   public get scalingStrategies(): Array<[string, any]> {
-    return Object.entries(ScalingStrategy).filter(([key, value]) => !isNaN(Number(key)));
+    return Object.entries(ScalingStrategy).filter(
+      ([key, value]) => !isNaN(Number(key))
+    );
   }
 
   private savingFailed(e: any) {
     this.showAlert({
-        type: 'error',
-        message: 'Failed saving settings.<br>' + e
-      });
+      type: 'error',
+      message: 'Failed saving settings.<br>' + e
+    });
   }
 
   private async saveSettings(
@@ -205,7 +221,9 @@ export default class SettingsList extends Mixins(AlertMixin) {
   }
 
   private async saveParameters(
-    params: Partial<Record<keyof AudioParameters, AudioParameters[keyof AudioParameters]>>
+    params: Partial<
+      Record<keyof AudioParameters, AudioParameters[keyof AudioParameters]>
+    >
   ) {
     try {
       await this.$store.dispatch(AudioActions.SaveParameters, params);
@@ -219,12 +237,14 @@ export default class SettingsList extends Mixins(AlertMixin) {
       this.showAlert({
         type: 'error',
         message: 'Failed getting general settings from server.<br>' + e
-      }));
+      })
+    );
     initAudio(this.$store).catch(e =>
       this.showAlert({
         type: 'error',
         message: 'Failed getting audio settings from server.<br>' + e
-      }));
+      })
+    );
   }
 }
 </script>
@@ -234,7 +254,8 @@ export default class SettingsList extends Mixins(AlertMixin) {
   background-color: inherit !important;
 }
 
-.vc-editable-input input, span {
+.vc-editable-input input,
+span {
   color: inherit !important;
 }
 
