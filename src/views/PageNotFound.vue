@@ -86,49 +86,49 @@
 </template>
 
 <style lang="scss" scoped>
-body{
-	background-color: #fffaea;
+body {
+  background-color: #fffaea;
 }
 
 .st0 {
   fill: #f9cf68;
 }
 
-.contain{
-	height: 400px;
-	width: 400px;
-	left: 50%;
-	top: 50%;
-	position: absolute;
-	transform: translatex(-50%) translatey(-50%);
-	svg{
-		vertical-align: top;
-		width: 100%;
-		.beer{
-			animation-name: empty;
-			animation-fill-mode: forwards;
-			animation-duration: 4s;
-			animation-timing-function: linear;
-			fill: #F9CF68;
-		}
-	}
+.contain {
+  height: 400px;
+  width: 400px;
+  left: 50%;
+  top: 50%;
+  position: absolute;
+  transform: translatex(-50%) translatey(-50%);
+  svg {
+    vertical-align: top;
+    width: 100%;
+    .beer {
+      animation-name: empty;
+      animation-fill-mode: forwards;
+      animation-duration: 4s;
+      animation-timing-function: linear;
+      fill: #f9cf68;
+    }
+  }
 }
-@keyframes empty{
-	0%{
-		clip-path: polygon(0 0, 100% 0, 100% 100%, 0% 100%);
-	} 
-	30%{
-		clip-path: polygon(0 16%, 100% 12%, 100% 100%, 0% 100%);
-	}
-	50%{
-		clip-path: polygon(0 40%, 100% 44%, 100% 100%, 0% 100%);
-	}
-	70%{
-		clip-path: polygon(0 69%, 100% 66%, 100% 100%, 0% 100%);
-	}
-	100%{
-		clip-path: polygon(0 100%, 100% 100%, 100% 100%, 0% 100%);
-	}
+@keyframes empty {
+  0% {
+    clip-path: polygon(0 0, 100% 0, 100% 100%, 0% 100%);
+  }
+  30% {
+    clip-path: polygon(0 16%, 100% 12%, 100% 100%, 0% 100%);
+  }
+  50% {
+    clip-path: polygon(0 40%, 100% 44%, 100% 100%, 0% 100%);
+  }
+  70% {
+    clip-path: polygon(0 69%, 100% 66%, 100% 100%, 0% 100%);
+  }
+  100% {
+    clip-path: polygon(0 100%, 100% 100%, 100% 100%, 0% 100%);
+  }
 }
 </style>
 
