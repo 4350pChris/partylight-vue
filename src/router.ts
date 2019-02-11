@@ -18,12 +18,6 @@ export const routes = [
     component: () => import(/* webpackChunkName: "editor" */ './views/Editor.vue'),
   },
   {
-    path: '/status',
-    name: 'status',
-    meta: { icon: 'show_chart' },
-    component: () => import(/* webpackChunkName: "status" */ './views/Status.vue')
-  },
-  {
     path: '*',
     component: () =>
       import(/* webpackChunkName: "pagenotfound" */ './views/PageNotFound.vue'),
