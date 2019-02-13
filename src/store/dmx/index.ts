@@ -9,11 +9,13 @@ export * from './reactivity';
 export interface State {
   samplingRate: number;
   packetsPerSecond: number;
+  lengthOfUniverse: number;
 }
 
 export const state: State = {
   samplingRate: 50,
-  packetsPerSecond: 0
+  packetsPerSecond: 0,
+  lengthOfUniverse: 16
 };
 
 const module: Module<State, any> = {

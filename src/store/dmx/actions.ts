@@ -7,22 +7,28 @@ const dmxService = ServiceFactory.get('dmx') as DMXService;
 
 export enum Actions {
   FetchDMXSettings = 'fetchDMXSettings',
-  SaveSamplingRate = 'saveSamplingRate'
+  SaveSamplingRate = 'saveSamplingRate',
+  SaveLengthOfUniverse = 'saveLengthOfUniverse'
 }
 
 const actions: ActionTree<State, any> = {
   async [Actions.FetchDMXSettings]({ commit }) {
-    const [pps, samplingRate] = await Promise.all([
+    const [pps, samplingRate, lengthOfUniverse] = await Promise.all([
       dmxService.getPacketsPerSecond(),
-      dmxService.getSamplingRate()
+      dmxService.getSamplingRate(),
+      dmxService.getLengthOfUniverse()
     ]);
-    commit(Mutations.SetPacketsPerSecond, pps);
-    commit(Mutations.SetSamplingRate, samplingRate);
+    commit(Mutations.SetDMXSettings, { pps, samplingRate, lengthOfUniverse });
   },
 
   [Actions.SaveSamplingRate]({ commit }, payload: number) {
     commit(Mutations.SetSamplingRate, payload);
     return dmxService.setSamplingRate(payload);
+  },
+
+  [Actions.SaveLengthOfUniverse]({ commit }, payload: number) {
+    commit(Mutations.SetLengthOfUniverse, payload);
+    return dmxService.setLengthOfUniverse(payload);
   }
 };
 

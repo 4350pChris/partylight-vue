@@ -5,7 +5,8 @@ import Vue from 'vue';
 export enum Mutations {
   SetDMXSettings = 'setDMXSettings',
   SetSamplingRate = 'setSamplingRate',
-  SetPacketsPerSecond = 'setPacketsPerSecond'
+  SetPacketsPerSecond = 'setPacketsPerSecond',
+  SetLengthOfUniverse = 'setLengthOfUniverse'
 }
 
 const mutations: MutationTree<State> = {
@@ -21,6 +22,10 @@ const mutations: MutationTree<State> = {
 
   [Mutations.SetPacketsPerSecond](state, payload: number) {
     state.packetsPerSecond = payload;
+  },
+
+  [Mutations.SetLengthOfUniverse](state, payload: number) {
+    state.lengthOfUniverse = payload;
   }
 };
 
