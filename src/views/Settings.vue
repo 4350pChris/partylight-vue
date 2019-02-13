@@ -68,7 +68,7 @@ import {
   Actions
 } from '@/store/settings';
 import { initAudio, Actions as AudioActions } from '@/store/audio';
-import { initDMX, Actions as DMXActions } from '@/store/dmx';
+import { initDMX, Actions as DMXActions, State as DMXState } from '@/store/dmx';
 import { debounce } from 'lodash';
 import { Chrome as ColorPicker } from 'vue-color';
 
@@ -97,6 +97,9 @@ export default class SettingsList extends Mixins(AlertMixin) {
 
   @State((store: StoreState) => store.dmx.samplingRate)
   private samplingRate!: number;
+
+  @State((store: StoreState) => store.dmx.lengthOfUniverse)
+  private lengthOfUniverse!: number;
 
   private get color() {
     return this.settings.color;
@@ -131,6 +134,13 @@ export default class SettingsList extends Mixins(AlertMixin) {
         update: ([e, ...rest]: number[]) => this.saveSamplingRate(e),
         title: 'Sampling Rate (in ms)',
         value: [this.samplingRate]
+      },
+      {
+        min: 1,
+        max: 255,
+        update: ([e, ...rest]: number[]) => 1,
+        title: 'Length of Universe',
+        value: [this.lengthOfUniverse]
       }
     ];
   }
@@ -212,19 +222,28 @@ export default class SettingsList extends Mixins(AlertMixin) {
     }
   }
 
-  private async saveSamplingRate(rate: number) {
+  @Action(DMXActions.SaveSamplingRate)
+  private saveSamplingRate!: (rate: number) => Promise<void>;
+
+  @Action(DMXActions.SaveLengthOfUniverse)
+  private saveLengthOfUniverse!: (rate: number) => Promise<void>;
+
+  private async saveDMXParameters({ lengthOfUniverse, samplingRate }: Partial<DMXState>) {
     try {
-      await this.$store.dispatch(DMXActions.SaveSamplingRate, rate);
+      const calls = [];
+      if (lengthOfUniverse !== undefined) {
+        calls.push(this.saveLengthOfUniverse);
+      }
+      if (samplingRate !== undefined) {
+        calls.push(this.$store.dispatch(DMXActions.SaveSamplingRate, samplingRate));
+      }
+      await Promise.all(calls);
     } catch (e) {
       this.savingFailed(e);
     }
   }
 
-  private async saveParameters(
-    params: Partial<
-      Record<keyof AudioParameters, AudioParameters[keyof AudioParameters]>
-    >
-  ) {
+  private async saveParameters(params: Partial<AudioParameters>) {
     try {
       await this.$store.dispatch(AudioActions.SaveParameters, params);
     } catch (e) {
