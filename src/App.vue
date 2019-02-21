@@ -8,9 +8,8 @@
         </v-slide-y-transition>
       </v-container>
     </v-content>
-    <v-alert id="error-alert" :type="alertType" :value="alertVisible" transition="scale-transition">
-      <span v-html="alertMessage"></span>
-    </v-alert>
+    <app-alert></app-alert>
+    <disconnected-snackbar></disconnected-snackbar>
   </v-app>
 </template>
 
@@ -18,32 +17,17 @@
 import { Component, Vue } from 'vue-property-decorator';
 import { RouteConfig } from 'vue-router';
 import AppNavigation from '@/components/AppNavigation.vue';
-import { State } from 'vuex-class';
-import { StoreState } from '@/store';
+import AppAlert from '@/components/AppAlert.vue';
+import DisconnectedSnackbar from '@/components/DisconnectedSnackbar.vue';
 import { routes as origRoutes } from './router';
 
+
 @Component({
-  components: { AppNavigation }
+  components: { AppNavigation, AppAlert, DisconnectedSnackbar }
 })
 export default class App extends Vue {
   private dark: boolean = false;
 
   private routes = origRoutes.filter(r => r.name);
-
-  @State((state: StoreState) => state.alert.visible)
-  private alertVisible!: boolean;
-
-  @State((state: StoreState) => state.alert.message)
-  private alertMessage!: string;
-
-  @State((state: StoreState) => state.alert.type)
-  private alertType!: string;
 }
 </script>
-
-<style scoped>
-#error-alert {
-  position: sticky;
-  bottom: 0;
-}
-</style>
