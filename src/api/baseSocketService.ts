@@ -1,7 +1,7 @@
 import * as signalR from '@aspnet/signalr';
 
 export abstract class BaseSocketService {
-  public static baseUrl: URL;
+  public static baseUrl: string;
 
   private readonly connection: signalR.HubConnection;
 

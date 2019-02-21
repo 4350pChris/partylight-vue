@@ -7,12 +7,11 @@ import ScriptsService from './scripts/scriptsService';
 BaseSocketService.baseUrl = process.env.VUE_APP_HUB_URL || '';
 
 class ServiceFactory {
-
   private services: Services = {
     audio: new AudioService('/audio'),
-    dmx: new DMXService('dmx'),
+    dmx: new DMXService('/dmx'),
     settings: new SettingsService('/settings'),
-    scripts: new ScriptsService('/scripts'),
+    scripts: new ScriptsService('/scripts')
   };
 
   public get(name: keyof Services): Services[keyof Services] {
@@ -20,7 +19,9 @@ class ServiceFactory {
   }
 }
 
-export default new ServiceFactory();
+const factory = new ServiceFactory();
+
+export default factory;
 
 export interface Services {
   audio: AudioService;
