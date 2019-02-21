@@ -1,5 +1,5 @@
 <template>
-  <v-snackbar bottom v-model="snackbar" :timeout="0">
+  <v-snackbar right v-model="snackbar" :timeout="0">
     Could not establish connection to back end.
     <v-btn
       color="accent"
