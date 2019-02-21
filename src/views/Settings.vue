@@ -101,6 +101,12 @@ export default class SettingsList extends Mixins(AlertMixin) {
   @State((store: StoreState) => store.dmx.lengthOfUniverse)
   private lengthOfUniverse!: number;
 
+  @Action(DMXActions.SaveSamplingRate)
+  private saveSamplingRate!: (rate: number) => Promise<void>;
+
+  @Action(DMXActions.SaveLengthOfUniverse)
+  private saveLengthOfUniverse!: (rate: number) => Promise<void>;
+
   private get color() {
     return this.settings.color;
   }
@@ -131,14 +137,14 @@ export default class SettingsList extends Mixins(AlertMixin) {
         min: 50,
         max: 1000,
         step: 50,
-        update: ([e, ...rest]: number[]) => this.saveSamplingRate(e),
+        update: ([e, ...rest]: number[]) => this.saveDMXParameters({ samplingRate: e }),
         title: 'Sampling Rate (in ms)',
         value: [this.samplingRate]
       },
       {
         min: 1,
         max: 255,
-        update: ([e, ...rest]: number[]) => 1,
+        update: ([e, ...rest]: number[]) => this.saveDMXParameters({ lengthOfUniverse: e }),
         title: 'Length of Universe',
         value: [this.lengthOfUniverse]
       }
@@ -221,12 +227,6 @@ export default class SettingsList extends Mixins(AlertMixin) {
       this.savingFailed(e);
     }
   }
-
-  @Action(DMXActions.SaveSamplingRate)
-  private saveSamplingRate!: (rate: number) => Promise<void>;
-
-  @Action(DMXActions.SaveLengthOfUniverse)
-  private saveLengthOfUniverse!: (rate: number) => Promise<void>;
 
   private async saveDMXParameters({ lengthOfUniverse, samplingRate }: Partial<DMXState>) {
     try {
