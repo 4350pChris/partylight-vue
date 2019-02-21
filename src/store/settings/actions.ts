@@ -1,9 +1,8 @@
 import { ActionTree } from 'vuex';
 import { State, Mutations } from '.';
-import ServiceFactory from '@/api';
-import SettingsService from '@/api/settings/settingsService';
+import services from '@/api';
 
-const service = ServiceFactory.get('settings') as SettingsService;
+const service = services.settings;
 
 export const Actions = {
   FetchSettings: 'fetchSettings',

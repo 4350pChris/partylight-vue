@@ -1,12 +1,13 @@
 import { Store } from 'vuex';
-import ServiceFactory from '../../api';
-import AudioService from '../../api/audio/audioService';
+import services from '@/api';
 import { Actions } from '.';
 
-const audioService = ServiceFactory.get('audio') as AudioService;
+const audioService = services.audio;
 
 export async function initAudio(store: Store<any>) {
   await audioService.startConnection();
   await store.dispatch(Actions.FetchParameters);
-  audioService.onChange((prop, value) => store.dispatch(Actions.SaveParameters, { [prop]: value }));
+  audioService.onChange((prop, value) =>
+    store.dispatch(Actions.SaveParameters, { [prop]: value })
+  );
 }

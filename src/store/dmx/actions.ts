@@ -1,9 +1,8 @@
 import { ActionTree } from 'vuex';
 import { State, Mutations } from '.';
-import ServiceFactory from '@/api';
-import DMXService from '../../api/dmx/dmxService';
+import services from '@/api';
 
-const dmxService = ServiceFactory.get('dmx') as DMXService;
+const dmxService = services.dmx;
 
 export enum Actions {
   FetchDMXSettings = 'fetchDMXSettings',

@@ -1,10 +1,9 @@
-import ServiceFactory from '@/api';
-import SettingsService from '@/api/settings/settingsService';
+import services from '@/api';
 import { Store } from 'vuex';
 import { Actions, Mutations } from '.';
 
 export async function initSettings(store: Store<any>) {
-  const settingsService = ServiceFactory.get('settings') as SettingsService;
+  const settingsService = services.settings;
 
   await settingsService.startConnection();
   // init state first

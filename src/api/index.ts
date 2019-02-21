@@ -6,22 +6,14 @@ import ScriptsService from './scripts/scriptsService';
 
 BaseSocketService.baseUrl = process.env.VUE_APP_HUB_URL || '';
 
-class ServiceFactory {
-  private services: Services = {
-    audio: new AudioService('/audio'),
-    dmx: new DMXService('/dmx'),
-    settings: new SettingsService('/settings'),
-    scripts: new ScriptsService('/scripts')
-  };
+const services: Services = {
+  audio: new AudioService('/audio'),
+  dmx: new DMXService('/dmx'),
+  settings: new SettingsService('/settings'),
+  scripts: new ScriptsService('/scripts')
+};
 
-  public get(name: keyof Services): Services[keyof Services] {
-    return this.services[name];
-  }
-}
-
-const factory = new ServiceFactory();
-
-export default factory;
+export default services;
 
 export interface Services {
   audio: AudioService;

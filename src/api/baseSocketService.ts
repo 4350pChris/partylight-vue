@@ -7,11 +7,17 @@ export abstract class BaseSocketService {
 
   constructor(hubUrl: string) {
     const fullUrl = BaseSocketService.baseUrl + hubUrl;
-    this.connection = new signalR.HubConnectionBuilder().withUrl(fullUrl).build();
+    this.connection = new signalR.HubConnectionBuilder()
+      .withUrl(fullUrl)
+      .build();
+  }
+
+  public get isConnected() {
+    return this.connection.state === signalR.HubConnectionState.Connected;
   }
 
   public async startConnection() {
-    if (this.connection.state !== signalR.HubConnectionState.Connected) {
+    if (!this.isConnected) {
       return this.connection.start();
     }
   }
@@ -20,6 +26,6 @@ export abstract class BaseSocketService {
     return this.connection.invoke<T>(name, ...args);
   }
 
-  protected on = (name: string, cb: (...args: any) => void) => this.connection.on(name, cb);
-
+  protected on = (name: string, cb: (...args: any) => void) =>
+    this.connection.on(name, cb)
 }

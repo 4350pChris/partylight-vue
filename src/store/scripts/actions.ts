@@ -1,10 +1,9 @@
 import { ActionTree } from 'vuex';
-import ServiceFactory from '@/api';
-import ScriptsService from '@/api/scripts/scriptsService';
+import services from '@/api';
 import { state as moduleState, Mutations } from '.';
 import Script from '@/models/script';
 
-const scriptsService = ServiceFactory.get('scripts') as ScriptsService;
+const scriptsService = services.scripts;
 
 export enum Actions {
   FetchScripts = 'fetchScripts',

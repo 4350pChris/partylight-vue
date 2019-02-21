@@ -1,9 +1,8 @@
 import { ActionTree } from 'vuex';
 import { State, Mutations } from '.';
-import ServiceFactory from '../../api';
-import AudioService from '../../api/audio/audioService';
+import services from '@/api';
 
-const audioService = ServiceFactory.get('audio') as AudioService;
+const audioService = services.audio;
 
 export enum Actions {
   FetchParameters = 'fetchParameters',
@@ -11,7 +10,6 @@ export enum Actions {
 }
 
 const actions: ActionTree<State, any> = {
-
   async [Actions.FetchParameters]({ commit }) {
     const parameters = await audioService.getAudioParameters();
     commit(Mutations.SetParameters, parameters);
