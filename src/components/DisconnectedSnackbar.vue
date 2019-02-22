@@ -12,19 +12,36 @@
 </template>
 
 <script lang="ts">
-import { Component, Vue } from 'vue-property-decorator';
+import { Component, Vue, Watch } from 'vue-property-decorator';
 import services from '@/api';
 import { BaseSocketService } from '@/api/baseSocketService';
+import { debounce } from 'lodash';
 
 @Component
 export default class DisconnectedSnackbar extends Vue {
   private reconnecting = false;
 
-  private get snackbar() {
-    return Object.values(services).every(
+  private services = services;
+
+  private snackbar = false;
+
+  private serviceChanged = debounce(() => {
+    this.snackbar = Object.values(this.services).every(
       (s: BaseSocketService) => !s.isConnected
     );
+  }, 2000);
+
+  @Watch('services', { deep: true })
+  private onServicesChanged() {
+    this.serviceChanged();
   }
+
+  // private get snackbar() {
+  //   Object.values(services).map(s => console.log(s.connection))
+  //   return Object.values(services).every(
+  //     (s: BaseSocketService) => !s.isConnected
+  //   );
+  // }
 
   private async reconnect() {
     this.reconnecting = true;
