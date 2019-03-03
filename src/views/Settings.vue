@@ -232,10 +232,10 @@ export default class SettingsList extends Mixins(AlertMixin) {
     try {
       const calls = [];
       if (lengthOfUniverse !== undefined) {
-        calls.push(this.saveLengthOfUniverse);
+        calls.push(this.saveLengthOfUniverse(lengthOfUniverse));
       }
       if (samplingRate !== undefined) {
-        calls.push(this.$store.dispatch(DMXActions.SaveSamplingRate, samplingRate));
+        calls.push(this.saveSamplingRate(samplingRate));
       }
       await Promise.all(calls);
     } catch (e) {
