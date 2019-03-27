@@ -60,7 +60,7 @@ export default class Editor extends Mixins(AlertMixin) {
   private save!: (script: Script) => Promise<boolean>;
 
   @Action(ScriptActions.SetActiveScript)
-  private setActive!: (script: Script) => Promise<boolean>;
+  private setActive!: (script: Script) => Promise<void>;
 
   private setActiveScript(script: Script) {
     return this.setActive(script).catch(e =>
