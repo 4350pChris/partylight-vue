@@ -40,8 +40,14 @@ const mutations: MutationTree<State> = {
     scripts.push(payload);
   },
 
-  [Mutations.SetActiveScript](state, payload: Script) {
-    state.activeScriptId = payload.id === undefined ? -1 : payload.id;
+  [Mutations.SetActiveScript](state, payload: Script | number) {
+    let pk: number;
+    if (typeof payload === 'object') {
+      pk = payload.id !== undefined ? payload.id : -1;
+    } else {
+      pk = payload;
+    }
+    state.activeScriptId = pk;
   }
 };
 

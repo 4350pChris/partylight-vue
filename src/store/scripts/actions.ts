@@ -27,10 +27,15 @@ const actions: ActionTree<typeof moduleState, {}> = {
     }
   },
 
-  [Actions.SetActiveScript]({ commit }, payload: Script) {
-    if (payload.id !== undefined) {
+  async [Actions.SetActiveScript]({ commit }, payload: Script | number) {
+    let result: boolean;
+    if (typeof payload === 'object') {
+      result = await scriptsService.setActiveScript(payload);
+    } else {
+      result = await scriptsService.setActiveScriptById(payload);
+    }
+    if (result) {
       commit(Mutations.SetActiveScript, payload);
-      return scriptsService.setActiveScript(payload.id);
     }
   }
 };

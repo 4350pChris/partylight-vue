@@ -12,7 +12,9 @@ export default class ScriptsService extends BaseSocketService {
 
     public deleteScript = (id: number) => this.invoke<boolean>('DeleteScriptById', id);
 
-    public setActiveScript = (id: number) => this.invoke<boolean>('SetScript', id);
+    public setActiveScript = (script: Script) => this.invoke<boolean>('SetScript', script);
+
+    public setActiveScriptById = (id: number) => this.invoke<boolean>('SetScriptById', id);
 
     public onScriptAdded = (cb: (script: Script) => void) => this.on('ScriptAdded', cb);
 
