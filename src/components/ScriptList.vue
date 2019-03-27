@@ -34,10 +34,7 @@ export default class ScriptList extends Vue {
   @Prop() private active!: Script | null;
 
   private isActiveScript(script: Script) {
-    if (this.active === null) {
-      return '';
-    }
-    return this.active.id === script.id;
+    return this.active !== null && this.active.id === script.id;
   }
 }
 </script>
