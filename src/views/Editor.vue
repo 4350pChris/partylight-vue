@@ -28,15 +28,15 @@
 </template>
 
 <script lang="ts">
-import { Component, Vue, Mixins } from "vue-property-decorator";
-import { State, Action, Mutation, Getter } from "vuex-class";
-import ScriptEditor from "@/components/ScriptEditor.vue";
-import ScriptList from "@/components/ScriptList.vue";
-import Script from "@/models/script";
-import { StoreState } from "@/store";
-import { Actions as ScriptActions, Getters, Mutations } from "@/store/scripts";
-import { initScripts } from "@/store/scripts";
-import AlertMixin from "@/mixins/Alert.vue";
+import { Component, Vue, Mixins } from 'vue-property-decorator';
+import { State, Action, Mutation, Getter } from 'vuex-class';
+import ScriptEditor from '@/components/ScriptEditor.vue';
+import ScriptList from '@/components/ScriptList.vue';
+import Script from '@/models/script';
+import { StoreState } from '@/store';
+import { Actions as ScriptActions, Getters, Mutations } from '@/store/scripts';
+import { initScripts } from '@/store/scripts';
+import AlertMixin from '@/mixins/Alert.vue';
 
 @Component({
   components: {
@@ -45,12 +45,12 @@ import AlertMixin from "@/mixins/Alert.vue";
   }
 })
 export default class Editor extends Mixins(AlertMixin) {
-  private editorScript: Script = { name: "New Script", code: "" };
+  private editorScript: Script = { name: 'New Script', code: '' };
 
   private scriptsLoading = true;
 
   private saveLoading = false;
-  
+
   private activeLoading = false;
 
   @Getter(Getters.ActiveScript)
@@ -69,8 +69,8 @@ export default class Editor extends Mixins(AlertMixin) {
     this.activeLoading = true;
     return this.setActive(script).catch(e =>
       this.showAlert({
-        type: "error",
-        message: "Error while setting active script<br>" + e
+        type: 'error',
+        message: 'Error while setting active script<br>' + e
       })
     ).finally(() => (this.activeLoading = false));
   }
@@ -79,14 +79,14 @@ export default class Editor extends Mixins(AlertMixin) {
     this.saveLoading = false;
     return this.save(script).catch(e =>
       this.showAlert({
-        type: "error",
-        message: "Error while saving script<br>" + e
+        type: 'error',
+        message: 'Error while saving script<br>' + e
       })
     ).finally(() => (this.saveLoading = false));
   }
 
   private newScript() {
-    this.editorScript = { name: "New Script", code: "" };
+    this.editorScript = { name: 'New Script', code: '' };
   }
 
   private scriptSelected(script: Script) {
@@ -97,8 +97,8 @@ export default class Editor extends Mixins(AlertMixin) {
     initScripts(this.$store)
       .catch(e =>
         this.showAlert({
-          type: "error",
-          message: "Failed getting script settings from server.<br>" + e
+          type: 'error',
+          message: 'Failed getting script settings from server.<br>' + e
         })
       )
       .finally(() => (this.scriptsLoading = false));

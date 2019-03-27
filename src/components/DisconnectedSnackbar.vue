@@ -25,7 +25,6 @@ export default class DisconnectedSnackbar extends Vue {
 
   private snackbar = false;
 
-  
   private serviceChanged = debounce(() => {
     this.snackbar = Object.values(this.services).every(
       (s: BaseSocketService) => !s.isConnected
