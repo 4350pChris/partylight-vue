@@ -18,7 +18,7 @@ const actions: ActionTree<State, {}> = {
     ]);
   },
 
-  [Actions.SaveSettings]({ commit }, payload: Partial<State>) {
+  [Actions.SaveSettings]({ commit }, payload: Partial<State>): Promise<void[]> {
     commit(Mutations.SetSettings, payload);
     const promises: Array<Promise<void>> = [];
 
