@@ -1,6 +1,6 @@
-import services from '@/api';
-import { Store } from 'vuex';
 import { Actions, Mutations } from '.';
+import { Store } from 'vuex';
+import services from '@/api';
 
 export async function initSettings(store: Store<any>) {
   const settingsService = services.settings;

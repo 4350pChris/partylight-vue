@@ -53,10 +53,10 @@
 <script lang="ts">
 import { Component, Emit, Prop, Vue } from 'vue-property-decorator';
 import { CreateElement } from 'vue';
-import { Vuelidate } from '@/decorators';
-import { required, between } from 'vuelidate/lib/validators';
 import { min, max } from 'lodash';
+import { required, between } from 'vuelidate/lib/validators';
 import { VRangeSlider, VSlider } from 'vuetify/lib';
+import { Vuelidate } from '@/decorators';
 
 @Component({
   components: { VRangeSlider, VSlider }

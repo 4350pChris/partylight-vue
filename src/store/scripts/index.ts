@@ -1,12 +1,12 @@
-import Script from '@/models/script';
 import { Module } from 'vuex';
 import actions from './actions';
-import mutations from './mutations';
 import getters from './getters';
+import mutations from './mutations';
+import Script from '@/models/script';
 
-export { Mutations } from './mutations';
-export { Getters } from './getters';
 export { Actions } from './actions';
+export { Getters } from './getters';
+export { Mutations } from './mutations';
 export * from './reactivity';
 
 export const state: State = {

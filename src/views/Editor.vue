@@ -28,14 +28,14 @@
 </template>
 
 <script lang="ts">
+import { Actions as AlertActions } from '@/store/alert';
+import { Actions as ScriptActions, Getters, Mutations, initScripts } from '@/store/scripts';
 import { Component, Vue } from 'vue-property-decorator';
 import { State, Action, Mutation, Getter } from 'vuex-class';
-import ScriptEditor from '@/components/ScriptEditor.vue';
-import ScriptList from '@/components/ScriptList.vue';
-import Script from '@/models/script';
 import { StoreState } from '@/store';
-import { Actions as ScriptActions, Getters, Mutations, initScripts } from '@/store/scripts';
-import { Actions as AlertActions } from '@/store/alert';
+import Script from '@/models/script';
+import ScriptEditor from '@/components/editor/ScriptEditor.vue';
+import ScriptList from '@/components/editor/ScriptList.vue';
 
 @Component({
   components: {

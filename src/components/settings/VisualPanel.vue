@@ -20,19 +20,15 @@
 </template>
 
 <script lang="ts">
-import { Component, Inject, Vue } from 'vue-property-decorator';
 import { Action, State, Mutation } from 'vuex-class';
+import { Actions as AlertActions } from '@/store/alert';
+import { Chrome as ColorPicker } from 'vue-color';
+import { Component, Inject, Vue } from 'vue-property-decorator';
+import { initDMX, Actions as DMXActions, State as DMXState } from '@/store/dmx';
+import { initSettings, Actions as SettingsActions, Actions } from '@/store/settings';
 import { StoreState } from '@/store';
 import Settings from '@/models/settings';
-import { initDMX, Actions as DMXActions, State as DMXState } from '@/store/dmx';
-import {
-  initSettings,
-  Actions as SettingsActions,
-  Actions
-} from '@/store/settings';
-import { Chrome as ColorPicker } from 'vue-color';
-import SliderCard from '@/components/SliderCard.vue';
-import { Actions as AlertActions } from '@/store/alert';
+import SliderCard from '@/components/shared/SliderCard.vue';
 
 @Component({
   components: { ColorPicker, SliderCard }

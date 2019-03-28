@@ -1,6 +1,6 @@
+import { Actions, Mutations } from '.';
 import { Store } from 'vuex';
 import services from '@/api';
-import { Actions, Mutations } from '.';
 
 export async function initDMX(store: Store<any>) {
   const dmxService = services.dmx;

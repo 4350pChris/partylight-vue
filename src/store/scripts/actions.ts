@@ -1,7 +1,7 @@
 import { ActionTree } from 'vuex';
-import services from '@/api';
 import { state as moduleState, Mutations } from '.';
 import Script from '@/models/script';
+import services from '@/api';
 
 const scriptsService = services.scripts;
 

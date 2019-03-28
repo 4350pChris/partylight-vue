@@ -30,14 +30,14 @@
 </template>
 
 <script lang="ts">
-import { Component, Vue } from 'vue-property-decorator';
-import SliderCard from '@/components/SliderCard.vue';
-import { StoreState } from '@/store';
-import { Actions as AudioActions, initAudio } from '@/store/audio';
 import { Action, State, Mutation } from 'vuex-class';
-import AudioParameters, { ScalingStrategy } from '@/models/audioParameters';
-import { debounce } from 'lodash';
 import { Actions as AlertActions } from '@/store/alert';
+import { Actions as AudioActions, initAudio } from '@/store/audio';
+import { Component, Vue } from 'vue-property-decorator';
+import { debounce } from 'lodash';
+import { StoreState } from '@/store';
+import AudioParameters, { ScalingStrategy } from '@/models/audioParameters';
+import SliderCard from '@/components/shared/SliderCard.vue';
 
 @Component({
   components: { SliderCard }

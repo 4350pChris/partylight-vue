@@ -12,10 +12,9 @@
 </template>
 
 <script lang="ts">
+import { BaseSocketService } from '@/api/baseSocketService';
 import { Component, Vue, Watch } from 'vue-property-decorator';
 import services from '@/api';
-import { BaseSocketService } from '@/api/baseSocketService';
-import { debounce } from 'lodash';
 
 @Component
 export default class DisconnectedSnackbar extends Vue {

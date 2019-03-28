@@ -16,10 +16,10 @@
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator';
 import { RouteConfig } from 'vue-router';
-import AppNavigation from '@/components/AppNavigation.vue';
-import AppAlert from '@/components/AppAlert.vue';
-import DisconnectedSnackbar from '@/components/DisconnectedSnackbar.vue';
 import { routes as origRoutes } from './router';
+import AppAlert from '@/components/app/AppAlert.vue';
+import AppNavigation from '@/components/app/AppNavigation.vue';
+import DisconnectedSnackbar from '@/components/app/DisconnectedSnackbar.vue';
 
 
 @Component({

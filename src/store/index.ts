@@ -1,15 +1,15 @@
-import Vue from 'vue';
-import Vuex, { StoreOptions } from 'vuex';
-import settings, { State as SettingsState } from './settings';
-import scripts, { State as ScriptsState } from './scripts';
 import alert, { State as AlertState } from './alert';
 import audio, { State as AudioState } from './audio';
 import dmx, { State as DMXState } from './dmx';
+import scripts, { State as ScriptsState } from './scripts';
+import settings, { State as SettingsState } from './settings';
+import Vue from 'vue';
+import Vuex, { StoreOptions } from 'vuex';
 
 export { initAudio } from './audio/reactivity';
+export { initDMX } from './dmx/reactivity';
 export { initScripts } from './scripts/reactivity';
 export { initSettings } from './settings/reactivity';
-export { initDMX } from './dmx/reactivity';
 
 Vue.use(Vuex);
 
@@ -26,8 +26,8 @@ export interface StoreState {
   alert: AlertState;
   audio: AudioState;
   dmx: DMXState;
-  settings: SettingsState;
   scripts: ScriptsState;
+  settings: SettingsState;
 }
 
 export default store;

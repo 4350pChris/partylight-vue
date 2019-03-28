@@ -1,9 +1,9 @@
 import { Module } from 'vuex';
-import mutations from './mutations';
 import actions from './actions';
+import mutations from './mutations';
 
-export { Mutations } from './mutations';
 export { Actions } from './actions';
+export { Mutations } from './mutations';
 
 export const state: State = {
   visible: false,

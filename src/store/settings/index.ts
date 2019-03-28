@@ -1,10 +1,10 @@
+import { Color } from '@/models/settings';
 import { Module } from 'vuex';
 import actions from './actions';
 import mutations from './mutations';
-import { Color } from '../../models/settings';
 
-export { Mutations } from './mutations';
 export { Actions } from './actions';
+export { Mutations } from './mutations';
 export * from './reactivity';
 
 export const state: State = {

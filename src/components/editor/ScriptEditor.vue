@@ -5,11 +5,11 @@
 </template>
 
 <script lang="ts">
-import CodeMirror from 'codemirror';
-import 'codemirror/mode/clike/clike.js';
 import 'codemirror/lib/codemirror.css';
+import 'codemirror/mode/clike/clike.js';
 import 'codemirror/theme/monokai.css';
 import { Component, Prop, Vue, Watch, Inject } from 'vue-property-decorator';
+import CodeMirror from 'codemirror';
 import Script from '@/models/script';
 
 @Component

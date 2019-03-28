@@ -1,11 +1,11 @@
-import AudioParameters, { ScalingStrategy } from '../../models/audioParameters';
 import { Module } from 'vuex';
-import mutations from './mutations';
 import actions from './actions';
+import AudioParameters, { ScalingStrategy } from '../../models/audioParameters';
+import mutations from './mutations';
 
-export { Mutations } from './mutations';
 export { Actions } from './actions';
 export { initAudio } from './reactivity';
+export { Mutations } from './mutations';
 
 export interface State {
   parameters: AudioParameters;

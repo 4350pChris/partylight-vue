@@ -1,7 +1,7 @@
 import { ActionTree } from 'vuex';
-import { State } from '.';
-import { Mutations } from '.';
 import { debounce } from 'lodash';
+import { Mutations } from '.';
+import { State } from '.';
 
 export enum Actions {
   ShowAlert = 'showAlert',

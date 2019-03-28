@@ -1,6 +1,6 @@
+import { Actions } from '.';
 import { Store } from 'vuex';
 import services from '@/api';
-import { Actions } from '.';
 
 const audioService = services.audio;
 

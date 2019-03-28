@@ -12,8 +12,8 @@
 
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator';
-import VisualPanel from '@/components/VisualPanel.vue';
-import AudioPanel from '@/components/AudioPanel.vue';
+import AudioPanel from '@/components/settings/AudioPanel.vue';
+import VisualPanel from '@/components/settings/VisualPanel.vue';
 
 @Component({
   components: { AudioPanel, VisualPanel }
