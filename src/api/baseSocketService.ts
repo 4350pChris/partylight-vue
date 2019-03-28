@@ -17,7 +17,7 @@ export abstract class BaseSocketService {
   }
 
   public async startConnection() {
-    if (!this.isConnected) {
+    if (this.connection.state === signalR.HubConnectionState.Disconnected) {
       return this.connection.start();
     }
   }
