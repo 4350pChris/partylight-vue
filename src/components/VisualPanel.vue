@@ -122,7 +122,10 @@ export default class VisualPanel extends Mixins(AlertMixin) {
   }
 
   private created() {
-    initSettings(this.$store).catch(e =>
+    Promise.all([
+      initDMX(this.$store),
+      initSettings(this.$store)
+    ]).catch(e =>
       this.showAlert({
         type: 'error',
         message: 'Failed getting visual settings from server.<br>' + e
