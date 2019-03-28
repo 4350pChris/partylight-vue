@@ -23,17 +23,10 @@ export default class DisconnectedSnackbar extends Vue {
 
   private services = services;
 
-  private snackbar = false;
-
-  private serviceChanged = debounce(() => {
-    this.snackbar = Object.values(this.services).every(
+  private get snackbar() {
+    return Object.values(this.services).some(
       (s: BaseSocketService) => !s.isConnected
     );
-  }, 2000);
-
-  @Watch('services', { deep: true })
-  private onServicesChanged() {
-    this.serviceChanged();
   }
 
   private async reconnect() {
