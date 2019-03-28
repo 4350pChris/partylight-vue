@@ -28,15 +28,14 @@
 </template>
 
 <script lang="ts">
-import { Component, Vue, Mixins } from 'vue-property-decorator';
+import { Component, Vue } from 'vue-property-decorator';
 import { State, Action, Mutation, Getter } from 'vuex-class';
 import ScriptEditor from '@/components/ScriptEditor.vue';
 import ScriptList from '@/components/ScriptList.vue';
 import Script from '@/models/script';
 import { StoreState } from '@/store';
-import { Actions as ScriptActions, Getters, Mutations } from '@/store/scripts';
-import { initScripts } from '@/store/scripts';
-import AlertMixin from '@/mixins/Alert.vue';
+import { Actions as ScriptActions, Getters, Mutations, initScripts } from '@/store/scripts';
+import { Actions as AlertActions } from '@/store/alert';
 
 @Component({
   components: {
@@ -44,7 +43,7 @@ import AlertMixin from '@/mixins/Alert.vue';
     ScriptList
   }
 })
-export default class Editor extends Mixins(AlertMixin) {
+export default class Editor extends Vue {
   private editorScript: Script = { name: 'New Script', code: '' };
 
   private scriptsLoading = true;
@@ -58,6 +57,11 @@ export default class Editor extends Mixins(AlertMixin) {
 
   @State((store: StoreState) => store.scripts.scripts)
   private scripts!: Script[];
+
+  @Action(AlertActions.ShowAlert)
+  private showAlert!: (
+    payload: { type: string; duration?: number; message: string }
+  ) => void;
 
   @Action(ScriptActions.SaveScript)
   private save!: (script: Script) => Promise<boolean>;

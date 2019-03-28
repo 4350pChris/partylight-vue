@@ -30,21 +30,26 @@
 </template>
 
 <script lang="ts">
-import { Component, Mixins, Vue } from 'vue-property-decorator';
-import AlertMixin from '@/mixins/Alert.vue';
+import { Component, Vue } from 'vue-property-decorator';
 import SliderCard from '@/components/SliderCard.vue';
 import { StoreState } from '@/store';
-import { initAudio, Actions as AudioActions } from '@/store/audio';
+import { Actions as AudioActions, initAudio } from '@/store/audio';
 import { Action, State, Mutation } from 'vuex-class';
 import AudioParameters, { ScalingStrategy } from '@/models/audioParameters';
 import { debounce } from 'lodash';
+import { Actions as AlertActions } from '@/store/alert';
 
 @Component({
   components: { SliderCard }
 })
-export default class AudioPanel extends Mixins(AlertMixin) {
-@State((store: StoreState) => store.audio.parameters)
+export default class AudioPanel extends Vue {
+  @State((store: StoreState) => store.audio.parameters)
   private audioParameters!: AudioParameters;
+
+  @Action(AlertActions.ShowAlert)
+  private showAlert!: (
+    payload: { type: string; duration?: number; message: string }
+  ) => void;
 
   private get audioPanel() {
     return [

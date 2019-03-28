@@ -20,11 +20,10 @@
 </template>
 
 <script lang="ts">
-import { Component, Inject, Vue, Mixins} from 'vue-property-decorator';
+import { Component, Inject, Vue } from 'vue-property-decorator';
 import { Action, State, Mutation } from 'vuex-class';
 import { StoreState } from '@/store';
 import Settings from '@/models/settings';
-import AlertMixin from '@/mixins/Alert.vue';
 import { initDMX, Actions as DMXActions, State as DMXState } from '@/store/dmx';
 import {
   initSettings,
@@ -33,11 +32,12 @@ import {
 } from '@/store/settings';
 import { Chrome as ColorPicker } from 'vue-color';
 import SliderCard from '@/components/SliderCard.vue';
+import { Actions as AlertActions } from '@/store/alert';
 
 @Component({
   components: { ColorPicker, SliderCard }
 })
-export default class VisualPanel extends Mixins(AlertMixin) {
+export default class VisualPanel extends Vue {
   @Inject() private theme!: { isDark: boolean };
 
   @State((store: StoreState) => store.settings)
@@ -54,6 +54,11 @@ export default class VisualPanel extends Mixins(AlertMixin) {
 
   @Action(DMXActions.SaveLengthOfUniverse)
   private saveLengthOfUniverse!: (rate: number) => Promise<void>;
+
+  @Action(AlertActions.ShowAlert)
+  private showAlert!: (
+    payload: { type: string; duration?: number; message: string }
+  ) => void;
 
   private get color() {
     return this.settings.color;
@@ -123,8 +128,8 @@ export default class VisualPanel extends Mixins(AlertMixin) {
 
   private created() {
     Promise.all([
-      initDMX(this.$store),
-      initSettings(this.$store)
+      initSettings(this.$store),
+      initDMX(this.$store)
     ]).catch(e =>
       this.showAlert({
         type: 'error',
