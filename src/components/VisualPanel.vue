@@ -125,7 +125,7 @@ export default class VisualPanel extends Mixins(AlertMixin) {
     initSettings(this.$store).catch(e =>
       this.showAlert({
         type: 'error',
-        message: 'Failed getting general settings from server.<br>' + e
+        message: 'Failed getting visual settings from server.<br>' + e
       })
     );
   }
