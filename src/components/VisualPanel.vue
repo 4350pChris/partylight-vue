@@ -1,22 +1,22 @@
 <template>
   <v-layout row wrap>
-        <v-flex v-for="(item, key) in settingsPanel" :key="key">
-          <slider-card
-            :title="item.title"
-            :min="item.min"
-            :max="item.max"
-            :step="item.step"
-            @input="item.update($event)"
-            :value="item.value"
-          ></slider-card>
-        </v-flex>
-        <v-flex>
-          <color-picker
-            v-model="color"
-            :class="['elevation-0', 'v-card', { 'theme--dark': theme.isDark }]"
-          ></color-picker>
-        </v-flex>
-      </v-layout>
+    <v-flex v-for="(item, key) in settingsPanel" :key="key">
+      <slider-card
+        :title="item.title"
+        :min="item.min"
+        :max="item.max"
+        :step="item.step"
+        @input="item.update($event)"
+        :value="item.value"
+      ></slider-card>
+    </v-flex>
+    <v-flex>
+      <color-picker
+        v-model="color"
+        :class="['elevation-0', 'v-card', { 'theme--dark': theme.isDark }]"
+      ></color-picker>
+    </v-flex>
+  </v-layout>
 </template>
 
 <script lang="ts">
