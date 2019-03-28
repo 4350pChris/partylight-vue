@@ -22,7 +22,10 @@ export abstract class BaseSocketService {
     }
   }
 
-  protected invoke<T>(name: string, ...args: any[]) {
+  protected async invoke<T>(name: string, ...args: any[]): Promise<T> {
+    if (!this.isConnected) {
+      await this.startConnection();
+    }
     return this.connection.invoke<T>(name, ...args);
   }
 
