@@ -9,9 +9,10 @@
   },
   "dependencies": {
     "@aspnet/signalr": "^1.1.0",
-    "codemirror": "^5.43.0",
     "lodash": "^4.17.11",
     "material-design-icons-iconfont": "^4.0.4",
+    "monaco-editor": "^0.16.2",
+    "monaco-editor-webpack-plugin": "^1.7.0",
     "roboto-fontface": "^0.10.0",
     "vue": "^2.6.3",
     "vue-class-component": "^6.0.0",
@@ -24,7 +25,6 @@
     "vuex-class": "^0.3.1"
   },
   "devDependencies": {
-    "@types/codemirror": "0.0.70",
     "@types/lodash": "^4.14.120",
     "@types/node": "^11.9.4",
     "@types/vue-color": "^2.4.1",

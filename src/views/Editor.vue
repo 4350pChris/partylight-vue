@@ -1,16 +1,16 @@
 <template>
-  <v-layout row>
-    <v-flex md8 mr-3>
-      <v-layout row wrap justify-space-between align-end>
-        <v-flex md5>
+  <v-layout row fill-height>
+    <v-flex md8 mr-3 fill-height>
+      <v-layout column justify-space-around fill-height>
+        <v-flex>
           <v-text-field outline v-model="editorScript.name" hide-details label="Name"></v-text-field>
         </v-flex>
-        <v-flex md6 text-xs-right>
+        <v-flex text-xs-right>
           <v-btn @click="saveScript(editorScript)" class="mb-0" color="success" :loading="saveLoading">Save</v-btn>
           <v-btn @click="setActiveScript(editorScript)" class="mb-0 mr-0" color="accent" :loading="activeLoading">Set Active</v-btn>
         </v-flex>
-        <v-flex md12 mt-2>
-          <script-editor id="editor" v-model="editorScript.code" class="elevation-4"/>
+        <v-flex mt-2 class="editor" fill-height>
+          <script-editor v-model="editorScript.code" class="elevation-4" fill-height/>
         </v-flex>
       </v-layout>
     </v-flex>
@@ -44,7 +44,10 @@ import ScriptList from '@/components/editor/ScriptList.vue';
   }
 })
 export default class Editor extends Vue {
-  private editorScript: Script = { name: 'New Script', code: '' };
+  private editorScript: Script = {
+    name: 'New Script',
+    code: 'public void setup() {\n\n}\n\npublic void loop() {\n\n}\n'
+  };
 
   private scriptsLoading = true;
 
@@ -90,7 +93,10 @@ export default class Editor extends Vue {
   }
 
   private newScript() {
-    this.editorScript = { name: 'New Script', code: '' };
+    this.editorScript = {
+      name: 'New Script',
+      code: 'public void setup() {\n\n}\n\npublic void loop() {\n\n}\n'
+    };
   }
 
   private scriptSelected(script: Script) {
@@ -109,10 +115,4 @@ export default class Editor extends Vue {
   }
 }
 </script>
-
-<style scoped>
-#editor {
-  height: 100%;
-}
-</style>
 

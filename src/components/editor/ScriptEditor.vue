@@ -1,56 +1,45 @@
 <template>
-  <div id='editorwrapper'>
-    <textarea ref="editor"></textarea>
-  </div>
+  <!-- <monaco-editor class="editor" v-model="code" language="csharp" ref="editor"></monaco-editor> -->
+  <div id="editor"></div>
 </template>
 
 <script lang="ts">
-import 'codemirror/lib/codemirror.css';
-import 'codemirror/mode/clike/clike.js';
-import 'codemirror/theme/monokai.css';
-import { Component, Prop, Vue, Watch, Inject } from 'vue-property-decorator';
-import CodeMirror from 'codemirror';
-import Script from '@/models/script';
+import { Component, Prop, Watch, Vue } from 'vue-property-decorator';
+import * as monaco from 'monaco-editor/esm/vs/editor/editor.api';
+import { IPosition, editor, languages } from 'monaco-editor';
+import services from '@/api';
 
 @Component
 export default class ScriptEditor extends Vue {
-  private cm!: CodeMirror.Editor;
+  @Prop()
+  private value!: string;
 
-  @Prop() private value!: string;
-
-  @Inject() private theme!: { isDark: boolean };
+  private code: string = this.value || '';
 
   @Watch('value')
-  private onCodeChanged() {
-    if (this.cm === null || this.value === null || this.value === this.cm.getValue()) {
-      return;
-    }
-    this.cm.setValue(this.value);
-  }
-
-  @Watch('theme', { deep: true })
-  private onThemeChanged() {
-    const dark = this.theme.isDark;
-    this.cm.setOption('theme', dark ? 'monokai' : 'default');
+  private onValueChanged() {
+    this.code = this.value;
   }
 
   private mounted() {
-    this.cm = CodeMirror.fromTextArea(this.$refs.editor as HTMLTextAreaElement, {
-      lineNumbers: true,
-      mode: 'text/x-csharp',
+    monaco.languages.registerCompletionItemProvider('csharp', {
+      provideCompletionItems: async (model, position) => {
+        const source = model.getValue();
+        const pos = model.getOffsetAt(position);
+        const suggestions  = await services.scripts.getCompletionItems(model.getValue(), pos);
+        return { suggestions } as languages.CompletionList;
+      }
     });
-    this.cm.on('change', () => this.$emit('input', this.cm.getValue()));
-    this.onThemeChanged();
+    monaco.editor.create(document.getElementById('editor') as HTMLElement, {
+        value: this.code,
+        language: 'csharp'
+    });
   }
 }
 </script>
 
-<style>
-#editorwrapper {
-  height: 100%;
-}
-
-.CodeMirror {
+<style scoped>
+#editor {
   height: 100%;
 }
 </style>

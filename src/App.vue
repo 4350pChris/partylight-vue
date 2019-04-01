@@ -2,7 +2,7 @@
   <v-app :dark="dark">
     <app-navigation :routes="routes" @dark-mode="dark = !dark"></app-navigation>
     <v-content>
-      <v-container fluid>
+      <v-container fluid fill-height>
         <v-slide-y-transition mode="out-in">
           <router-view/>
         </v-slide-y-transition>
