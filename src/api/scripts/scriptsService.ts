@@ -1,14 +1,13 @@
 import { BaseSocketService } from '../baseSocketService';
 import Script from '@/models/script';
-import { languages } from 'monaco-editor';
-
+import Completion from '@/models/completion';
 export default class ScriptsService extends BaseSocketService {
     public getScripts = () => this.invoke<Script[]>('GetScripts');
 
     public getScriptById = (id: number) => this.invoke<Script>('GetScriptById', id);
 
     public getCompletionItems = (code: string, position: number) =>
-        this.invoke<Array<Partial<languages.CompletionItem>>>('GetCompletions', code, position)
+        this.invoke<Completion[]>('GetCompletions', code, position)
 
     public addScript = (script: Script) => this.invoke<boolean>('AddScript', script);
 
