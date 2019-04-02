@@ -1,20 +1,38 @@
 <template>
   <v-layout row fill-height>
-    <v-flex md8 mr-3 fill-height>
+    <v-flex md8 fill-height>
       <v-layout column justify-space-around fill-height>
         <v-flex>
           <v-text-field outline v-model="editorScript.name" hide-details label="Name"></v-text-field>
         </v-flex>
-        <v-flex text-xs-right>
-          <v-btn @click="saveScript(editorScript)" class="mb-0" color="success" :loading="saveLoading">Save</v-btn>
-          <v-btn @click="setActiveScript(editorScript)" class="mb-0 mr-0" color="accent" :loading="activeLoading">Set Active</v-btn>
+        <v-flex>
+          <v-layout row nowrap justify-space-around>
+            <v-flex v-if="$vuetify.breakpoint.smAndDown">
+              <v-menu>
+                <template v-slot:activator="{ on }">
+                  <v-btn class="ml-0" color="secondary" v-on="on">scripts</v-btn>
+                </template>
+                <script-list
+                  v-if="!scriptsLoading"
+                  :scripts="scripts"
+                  :active="activeScript"
+                  @new="newScript()"
+                  @select="scriptSelected($event)"
+                ></script-list>
+              </v-menu>
+            </v-flex>
+            <v-flex text-xs-right>
+              <v-btn @click="saveScript(editorScript)" color="success" :loading="saveLoading">Save</v-btn>
+              <v-btn @click="setActiveScript(editorScript)" class="mr-0" color="accent" :loading="activeLoading">Set Active</v-btn>
+            </v-flex>
+          </v-layout>
         </v-flex>
-        <v-flex mt-2 class="editor" fill-height>
+        <v-flex mt-2 fill-height>
           <script-editor v-model="editorScript.code" class="elevation-4" fill-height/>
         </v-flex>
       </v-layout>
     </v-flex>
-    <v-flex md4 text-xs-center>
+    <v-flex md4 ml-3 text-xs-center v-if="$vuetify.breakpoint.mdAndUp">
       <script-list
         v-if="!scriptsLoading"
         :scripts="scripts"
