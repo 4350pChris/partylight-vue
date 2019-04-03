@@ -17,7 +17,7 @@ export abstract class BaseSocketService {
   }
 
   public async startConnection() {
-    if (this.connection.state === signalR.HubConnectionState.Disconnected) {
+    if (!this.isConnected) {
       return this.connection.start();
     }
   }
@@ -29,6 +29,7 @@ export abstract class BaseSocketService {
     return this.connection.invoke<T>(name, ...args);
   }
 
-  protected on = (name: string, cb: (...args: any) => void) =>
-    this.connection.on(name, cb)
+  protected on(name: string, cb: (...args: any) => void) {
+    this.connection.on(name, cb);
+  }
 }
