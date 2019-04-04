@@ -1,5 +1,5 @@
 import { ActionTree } from 'vuex';
-import { state as moduleState, Mutations } from '.';
+import { State, Mutations } from '.';
 import Script from '@/models/script';
 import services from '@/api';
 
@@ -11,7 +11,7 @@ export enum Actions {
   SetActiveScript = 'setActiveScript'
 }
 
-const actions: ActionTree<typeof moduleState, {}> = {
+const actions: ActionTree<State, {}> = {
   async [Actions.FetchScripts]({ commit }) {
     const scripts = await scriptsService.getScripts();
     commit(Mutations.SetScripts, scripts);

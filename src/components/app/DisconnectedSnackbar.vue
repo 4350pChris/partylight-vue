@@ -14,25 +14,29 @@
 <script lang="ts">
 import { BaseSocketService } from '@/api/baseSocketService';
 import { Component, Vue, Watch } from 'vue-property-decorator';
-import services from '@/api';
+import { Action, Getter } from 'vuex-class';
+import { StoreState, InitFunction, InitFunctions } from '@/store';
+import { Getters } from '@/store/getters';
+import { Actions } from '@/store/actions';
 
 @Component
 export default class DisconnectedSnackbar extends Vue {
   private reconnecting = false;
 
-  private services = services;
+  @Getter(Getters.FailedInitModules)
+  private failedInitModules!: Array<keyof InitFunctions>;
 
   private get snackbar() {
-    return Object.values(this.services).some(
-      (s: BaseSocketService) => !s.isConnected
-    );
+    return this.failedInitModules.length > 0;
   }
+
+  @Action(Actions.InitModule)
+  private initModule!: (payload: keyof InitFunctions) => Promise<any>;
 
   private async reconnect() {
     this.reconnecting = true;
-    Promise.all(
-      Object.values(services).map((s: BaseSocketService) => s.startConnection())
-    ).finally(() => (this.reconnecting = false));
+    await Promise.all(this.failedInitModules.map(mod => this.initModule(mod)));
+    this.reconnecting = false;
   }
 }
 </script>
