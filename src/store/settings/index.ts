@@ -5,7 +5,7 @@ import mutations from './mutations';
 
 export { Actions } from './actions';
 export { Mutations } from './mutations';
-export * from './reactivity';
+export { initSettings } from './reactivity';
 
 export const state: State = {
   brightness: 0,

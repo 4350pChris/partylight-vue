@@ -4,7 +4,7 @@ import actions from './actions';
 
 export { Mutations } from './mutations';
 export { Actions } from './actions';
-export * from './reactivity';
+export { initDMX } from './reactivity';
 
 export interface State {
   samplingRate: number;

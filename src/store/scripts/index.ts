@@ -7,7 +7,7 @@ import Script from '@/models/script';
 export { Actions } from './actions';
 export { Getters } from './getters';
 export { Mutations } from './mutations';
-export * from './reactivity';
+export { initScripts } from './reactivity';
 
 export const state: State = {
   scripts: [],
