@@ -47,13 +47,15 @@
 
 <script lang="ts">
 import { Actions as AlertActions } from '@/store/alert';
-import { Actions as ScriptActions, Getters, Mutations, initScripts } from '@/store/scripts';
-import { Component, Vue } from 'vue-property-decorator';
+import { Actions as ScriptActions, Getters, Mutations } from '@/store/scripts';
+import { Component, Mixins, Vue } from 'vue-property-decorator';
 import { State, Action, Mutation, Getter } from 'vuex-class';
-import { StoreState } from '@/store';
+import { StoreState, Actions as RootActions, InitFunctions } from '@/store';
 import Script from '@/models/script';
 import ScriptEditor from '@/components/editor/ScriptEditor.vue';
 import ScriptList from '@/components/editor/ScriptList.vue';
+import { Constructor } from 'vue/types/options';
+import InitModule from '@/mixins/initModule';
 
 @Component({
   components: {
@@ -61,11 +63,8 @@ import ScriptList from '@/components/editor/ScriptList.vue';
     ScriptList
   }
 })
-export default class Editor extends Vue {
-  private editorScript: Script = {
-    name: 'New Script',
-    code: 'public void setup() {\n\n}\n\npublic void loop() {\n\n}\n'
-  };
+export default class Editor extends Mixins(InitModule) {
+  private editorScript: Script | null = null;
 
   private scriptsLoading = true;
 
@@ -90,24 +89,32 @@ export default class Editor extends Vue {
   @Action(ScriptActions.SetActiveScript)
   private setActive!: (script: Script) => Promise<void>;
 
-  private setActiveScript(script: Script) {
+  private async setActiveScript(script: Script) {
     this.activeLoading = true;
-    return this.setActive(script).catch(e =>
+    try {
+      await this.setActive(script);
+    } catch (error) {
       this.showAlert({
         type: 'error',
-        message: 'Error while setting active script<br>' + e
-      })
-    ).finally(() => (this.activeLoading = false));
+        message: 'Error while setting active script<br>' + error
+      });
+    } finally {
+      this.activeLoading = false;
+    }
   }
 
   private saveScript(script: Script) {
-    this.saveLoading = false;
-    return this.save(script).catch(e =>
+    this.saveLoading = true;
+    try {
+      this.save(script);
+    } catch (error) {
       this.showAlert({
         type: 'error',
-        message: 'Error while saving script<br>' + e
-      })
-    ).finally(() => (this.saveLoading = false));
+        message: 'Error while saving script<br>' + error
+      });
+    } finally {
+      this.saveLoading = false;
+    }
   }
 
   private newScript() {
@@ -122,9 +129,9 @@ export default class Editor extends Vue {
   }
 
   private created() {
-    initScripts(this.$store)
-      .catch(e =>
-        this.showAlert({
+    this.newScript();
+    this.initModule('scripts')
+      .catch((e: any) => this.showAlert({
           type: 'error',
           message: 'Failed getting script settings from server.<br>' + e
         })

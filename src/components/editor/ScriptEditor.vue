@@ -18,10 +18,10 @@ export default class ScriptEditor extends Vue {
     return this.theme.isDark ? 'vs-dark' : 'vs';
   }
 
+  private editor?: editor.IStandaloneCodeEditor;
+
   @Prop()
   private value!: string;
-
-  private code: string = this.value || '';
 
   @Watch('theme', { deep: true })
   private onThemeChanged() {
@@ -29,11 +29,13 @@ export default class ScriptEditor extends Vue {
   }
 
   @Watch('value')
-  private onValueChanged() {
-    this.code = this.value;
+  private onValueChanged(val: string, oldVal: string) {
+    if (this.editor !== undefined && val !== this.editor.getValue()) {
+      this.editor.setValue(val);
+    }
   }
 
-  private mounted() {
+  private registerCompletion() {
     monaco.languages.registerCompletionItemProvider('csharp', {
       provideCompletionItems: async (model, position) => {
         const source = model.getValue();
@@ -68,13 +70,31 @@ export default class ScriptEditor extends Vue {
         return { suggestions } as languages.CompletionList;
       }
     });
-    monaco.editor.create(document.getElementById('editor') as HTMLElement, {
-        value: this.code,
+  }
+
+  private createEditor() {
+    this.editor = monaco.editor.create(document.getElementById('editor') as HTMLElement, {
+        value: this.value,
         language: 'csharp',
         theme: this.editorTheme,
         scrollBeyondLastLine: false,
         automaticLayout: true
     });
+  }
+
+  private registerInputListener() {
+    if (this.editor !== undefined) {
+      const e = this.editor;
+      e.onDidChangeModelContent(() => {
+        this.$emit('input', e.getValue());
+      });
+    }
+  }
+
+  private mounted() {
+    this.registerCompletion();
+    this.createEditor();
+    this.registerInputListener();
   }
 }
 </script>
