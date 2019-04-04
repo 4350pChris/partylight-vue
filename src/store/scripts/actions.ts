@@ -6,12 +6,20 @@ import services from '@/api';
 const scriptsService = services.scripts;
 
 export enum Actions {
+  DeleteScript = 'deleteScript',
   FetchScripts = 'fetchScripts',
   SaveScript = 'saveScript',
   SetActiveScript = 'setActiveScript'
 }
 
 const actions: ActionTree<State, {}> = {
+  async [Actions.DeleteScript]({ commit }, payload: number) {
+    const result = await scriptsService.deleteScript(payload);
+    if (result) {
+      commit(Mutations.DeleteScript, payload);
+    }
+  },
+
   async [Actions.FetchScripts]({ commit }) {
     const scripts = await scriptsService.getScripts();
     commit(Mutations.SetScripts, scripts);

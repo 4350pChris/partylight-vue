@@ -24,8 +24,8 @@ const mutations: MutationTree<State> = {
     }
   },
 
-  [Mutations.DeleteScript]({ scripts }, payload: Script) {
-    scripts = scripts.filter(s => s.id !== payload.id);
+  [Mutations.DeleteScript]({ scripts }, payload: number) {
+    scripts = scripts.filter(s => s.id !== payload);
   },
 
   [Mutations.AddScript]({ scripts }, payload: Script) {

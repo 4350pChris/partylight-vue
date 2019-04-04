@@ -12,7 +12,7 @@ export async function initScripts(store: Store<any>) {
     store.commit(Mutations.AddScript, script)
   );
   scriptsService.onScriptDeleted(script =>
-    store.commit(Mutations.DeleteScript, script)
+    store.commit(Mutations.DeleteScript, script.id as number)
   );
   scriptsService.onScriptUpdated(script =>
     store.commit(Mutations.UpdateScript, script)
