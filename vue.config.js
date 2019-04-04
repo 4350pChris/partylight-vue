@@ -4,6 +4,7 @@ const MonacoWebpackPlugin = require('monaco-editor-webpack-plugin');
 
 module.exports = {
     configureWebpack: {
+        devtool: 'source-map',
         plugins: [
             new CompressionWebpackPlugin({
                 algorithm: 'gzip',
