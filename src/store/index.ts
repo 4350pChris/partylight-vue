@@ -10,6 +10,10 @@ import getters from './getters';
 import mutations from './mutations';
 import actions from './actions';
 
+export { Actions } from './actions';
+export { Getters } from './getters';
+export { Mutations } from './mutations';
+
 Vue.use(Vuex);
 
 const debug = process.env.NODE_ENV !== 'production';
