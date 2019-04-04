@@ -23,17 +23,18 @@
 import { Action, State, Mutation } from 'vuex-class';
 import { Actions as AlertActions } from '@/store/alert';
 import { Chrome as ColorPicker } from 'vue-color';
-import { Component, Inject, Vue } from 'vue-property-decorator';
-import { initDMX, Actions as DMXActions, State as DMXState } from '@/store/dmx';
-import { initSettings, Actions as SettingsActions, Actions } from '@/store/settings';
+import { Component, Inject, Mixins, Vue } from 'vue-property-decorator';
+import { Actions as DMXActions, State as DMXState } from '@/store/dmx';
+import { Actions as SettingsActions, Actions } from '@/store/settings';
 import { StoreState } from '@/store';
 import Settings from '@/models/settings';
 import SliderCard from '@/components/shared/SliderCard.vue';
+import InitModule from '@/mixins/initModule';
 
 @Component({
   components: { ColorPicker, SliderCard }
 })
-export default class VisualPanel extends Vue {
+export default class VisualPanel extends Mixins(InitModule) {
   @Inject() private theme!: { isDark: boolean };
 
   @State((store: StoreState) => store.settings)
@@ -124,9 +125,9 @@ export default class VisualPanel extends Vue {
 
   private created() {
     Promise.all([
-      initSettings(this.$store),
-      initDMX(this.$store)
-    ]).catch(e =>
+      this.initModule('settings'),
+      this.initModule('dmx')
+    ]).catch((e: any) =>
       this.showAlert({
         type: 'error',
         message: 'Failed getting visual settings from server.<br>' + e

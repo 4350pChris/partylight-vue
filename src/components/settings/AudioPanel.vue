@@ -32,17 +32,18 @@
 <script lang="ts">
 import { Action, State, Mutation } from 'vuex-class';
 import { Actions as AlertActions } from '@/store/alert';
-import { Actions as AudioActions, initAudio } from '@/store/audio';
-import { Component, Vue } from 'vue-property-decorator';
+import { Actions as AudioActions } from '@/store/audio';
+import { Component, Mixins, Vue } from 'vue-property-decorator';
 import { debounce } from 'lodash';
-import { StoreState } from '@/store';
+import { StoreState, Actions as RootActions, InitFunctions } from '@/store';
 import AudioParameters, { ScalingStrategy } from '@/models/audioParameters';
 import SliderCard from '@/components/shared/SliderCard.vue';
+import InitModule from '@/mixins/initModule';
 
 @Component({
   components: { SliderCard }
 })
-export default class AudioPanel extends Vue {
+export default class AudioPanel extends Mixins(InitModule) {
   @State((store: StoreState) => store.audio.parameters)
   private audioParameters!: AudioParameters;
 
@@ -51,6 +52,9 @@ export default class AudioPanel extends Vue {
     payload: { type: string; duration?: number; message: string }
   ) => void;
 
+  @Action(AudioActions.SaveParameters)
+  private saveParameters!: (params: Partial<AudioParameters>) => Promise<void>;
+
   private get audioPanel() {
     return [
       {
@@ -58,7 +62,7 @@ export default class AudioPanel extends Vue {
         max: 20000,
         update: debounce(
           ([min, max]: number[]) =>
-            this.saveParameters({
+            this.save({
               minimumFrequency: min,
               maximumFrequency: max
             }),
@@ -74,7 +78,7 @@ export default class AudioPanel extends Vue {
         min: 1,
         max: 32,
         update: ([e, ...rest]: number[]) =>
-          this.saveParameters({ numberOfChannels: e }),
+          this.save({ numberOfChannels: e }),
         title: 'Number of Channels',
         value: [this.audioParameters.numberOfChannels]
       },
@@ -82,7 +86,7 @@ export default class AudioPanel extends Vue {
         min: 0,
         max: 255,
         update: ([e, ...rest]: number[]) =>
-          this.saveParameters({ maximumAmplitude: e }),
+          this.save({ maximumAmplitude: e }),
         title: 'Maximum Amplitude',
         value: [this.audioParameters.maximumAmplitude]
       }
@@ -94,7 +98,7 @@ export default class AudioPanel extends Vue {
   }
 
   private set useAverage(avg: boolean) {
-    this.saveParameters({ useAverage: avg });
+    this.save({ useAverage: avg });
   }
 
   private get scaling(): number {
@@ -102,7 +106,7 @@ export default class AudioPanel extends Vue {
   }
 
   private set scaling(n: number) {
-    this.saveParameters({ scalingStrategy: n });
+    this.save({ scalingStrategy: n });
   }
 
   public get scalingStrategies(): Array<[string, any]> {
@@ -118,14 +122,12 @@ export default class AudioPanel extends Vue {
     });
   }
 
-  private saveParameters(params: Partial<AudioParameters>) {
-    this.$store.dispatch(AudioActions.SaveParameters, params)
-      .catch(e => (this.savingFailed(e)));
+  private save(params: Partial<AudioParameters>) {
+    this.saveParameters(params).catch((e: any) => this.savingFailed(e));
   }
 
   private created() {
-    initAudio(this.$store).catch(e =>
-      this.showAlert({
+    this.initModule('audio').catch((e: any) => this.showAlert({
         type: 'error',
         message: 'Failed getting audio settings from server.<br>' + e
       })
