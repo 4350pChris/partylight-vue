@@ -7,7 +7,7 @@ export enum Actions {
 }
 
 const actions: ActionTree<State, any> = {
-  async [Actions.InitModule]({ commit, state }, payload: keyof InitFunctions) {
+  async [Actions.InitModule]({ commit, state }, payload: keyof InitFunctions): Promise<void> {
     let initialized = true;
     try {
       await state.initFunctions[payload].fn(this);
