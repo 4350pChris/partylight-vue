@@ -9,9 +9,7 @@
           <v-layout row nowrap justify-space-around>
             <v-flex v-if="$vuetify.breakpoint.smAndDown">
               <v-menu>
-                <template v-slot:activator="{ on }">
-                  <v-btn class="ml-0" color="secondary" v-on="on">scripts</v-btn>
-                </template>
+                <v-btn class="ml-0" color="secondary" slot="activator">scripts</v-btn>
                 <script-list
                   v-if="!scriptsLoading"
                   :scripts="scripts"
@@ -22,12 +20,24 @@
               </v-menu>
             </v-flex>
             <v-flex text-xs-right>
-              <v-btn @click="saveScript(editorScript)" color="success" :loading="saveLoading">Save</v-btn>
-              <v-btn @click="setActiveScript(editorScript)" class="mr-0" color="accent" :loading="activeLoading">Set Active</v-btn>
+              <v-dialog v-show="deleteEnabled" v-model="deleteDialog" max-width="290">
+                <v-btn class="mr-5 lighten-1" color="error" slot="activator">Delete</v-btn>
+                <v-card>
+                  <v-card-title class="headline">Confirm Deletion</v-card-title>
+                  <v-card-text>Are you sure you would like to delete {{ editorScript.name }}</v-card-text>
+                  <v-card-actions>
+                    <v-spacer></v-spacer>
+                    <v-btn color="primary" flat @click.native="deleteDialog = false">Cancel</v-btn>
+                    <v-btn color="primary" flat @click.native="closeDelete(editorScript)">Delete</v-btn>
+                  </v-card-actions>
+                </v-card>
+              </v-dialog>
+              <v-btn @click="setActiveScript(editorScript)" color="accent" :loading="activeLoading">Set Active</v-btn>
+              <v-btn @click="saveScript(editorScript)" color="success" class="mr-0" :loading="saveLoading">Save</v-btn>
             </v-flex>
           </v-layout>
         </v-flex>
-        <v-flex mt-2 fill-height>
+        <v-flex fill-height>
           <script-editor v-model="editorScript.code" class="elevation-4" fill-height/>
         </v-flex>
       </v-layout>
@@ -72,6 +82,12 @@ export default class Editor extends Mixins(InitModule) {
 
   private activeLoading = false;
 
+  private deleteDialog = false;
+
+  private get deleteEnabled() {
+    return this.editorScript !== null && this.editorScript.id !== undefined;
+  }
+
   @Getter(Getters.ActiveScript)
   private activeScript!: Script | null;
 
@@ -88,6 +104,9 @@ export default class Editor extends Mixins(InitModule) {
 
   @Action(ScriptActions.SetActiveScript)
   private setActive!: (script: Script) => Promise<void>;
+
+  @Action(ScriptActions.DeleteScript)
+  private deleteScript!: (id: number) => Promise<boolean>;
 
   private async setActiveScript(script: Script) {
     this.activeLoading = true;
@@ -126,6 +145,14 @@ export default class Editor extends Mixins(InitModule) {
 
   private scriptSelected(script: Script) {
     this.editorScript = { ...script };
+  }
+
+  private closeDelete(script: Script) {
+    this.deleteDialog = false;
+    if (script.id === undefined) {
+      return;
+    }
+    this.deleteScript(script.id);
   }
 
   private created() {
