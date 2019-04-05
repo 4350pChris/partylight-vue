@@ -13,11 +13,9 @@ export enum Actions {
 }
 
 const actions: ActionTree<State, {}> = {
-  async [Actions.DeleteScript]({ commit }, payload: number) {
-    const result = await scriptsService.deleteScript(payload);
-    if (result) {
-      commit(Mutations.DeleteScript, payload);
-    }
+  [Actions.DeleteScript]({ commit }, payload: number) {
+    commit(Mutations.DeleteScript, payload);
+    return scriptsService.deleteScript(payload);
   },
 
   async [Actions.FetchScripts]({ commit }) {
