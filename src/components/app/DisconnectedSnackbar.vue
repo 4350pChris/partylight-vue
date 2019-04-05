@@ -1,5 +1,5 @@
 <template>
-  <v-snackbar right v-model="snackbar" :timeout="0">
+  <v-snackbar v-model="snackbar" :timeout="0" :multi-line="$vuetify.breakpoint.xs">
     Could not establish connection to back end.
     <v-btn
       color="accent"
