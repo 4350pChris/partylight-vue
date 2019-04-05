@@ -19,10 +19,8 @@ export default class LoadingButton extends Vue {
 
   private async click() {
     this.loading = true;
-    let result: any;
     try {
-      result = await this.clickHandler();
-      return result;
+      return this.clickHandler();
     } catch (e) {
       throw e;
     } finally {
