@@ -160,6 +160,7 @@ export default class Editor extends Mixins(Alert, InitModule) {
     } catch (e) {
       error = e;
     } finally {
+      this.newScript();
       if (!success || error) {
         this.showAlert({
           type: 'error',
