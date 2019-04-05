@@ -41,7 +41,7 @@
                   :scripts="scripts"
                   :active="activeScript"
                   @new="newScript()"
-                  @select="scriptSelected($event)"
+                  @select="editorScript = { ...$event }"
                 ></script-list>
               </v-menu>
             </v-flex>
@@ -58,7 +58,7 @@
         :scripts="scripts"
         :active="activeScript"
         @new="newScript()"
-        @select="scriptSelected($event)"
+        @select="editorScript = { ...$event }"
       ></script-list>
       <v-progress-circular v-else indeterminate :size="48"></v-progress-circular>
     </v-flex>
@@ -137,6 +137,7 @@ export default class Editor extends Mixins(Alert, InitModule) {
       error = e;
     }
     this.saveLoading = false;
+    this.editorScript = { ...script };
     if (!success || error) {
       this.showAlert({
         type: 'error',
@@ -164,10 +165,6 @@ export default class Editor extends Mixins(Alert, InitModule) {
         });
       }
     }
-  }
-
-  private scriptSelected(script: Script) {
-    this.editorScript = { ...script };
   }
 
   private newScript() {
