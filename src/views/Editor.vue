@@ -1,31 +1,7 @@
 <template>
   <v-layout row fill-height>
-    <v-flex md8 fill-height>
+    <v-flex sm9 md8 fill-height>
       <v-layout column justify-space-around fill-height>
-        <v-flex>
-          <v-layout row nowrap align-end>
-            <v-flex>
-              <v-text-field
-                v-model="editorScript.name"
-                label="Name"
-                outline
-                hide-details>
-              </v-text-field>
-            </v-flex>
-            <v-flex shrink v-if="$vuetify.breakpoint.xs">
-              <v-menu>
-                <v-btn class="mr-0" color="secondary" slot="activator">scripts</v-btn>
-                <script-list
-                  v-if="!scriptsLoading"
-                  :scripts="scripts"
-                  :active="activeScript"
-                  @new="newScript()"
-                  @select="scriptSelected($event)"
-                ></script-list>
-              </v-menu>
-            </v-flex>
-          </v-layout>
-        </v-flex>
         <v-flex>
           <v-layout row nowrap>
             <v-flex>
@@ -48,12 +24,35 @@
             </v-flex>
           </v-layout>
         </v-flex>
+        <v-flex class="mb-2">
+          <v-layout row nowrap align-end>
+            <v-flex>
+              <v-text-field
+                v-model="editorScript.name"
+                label="Name"
+                hide-details>
+              </v-text-field>
+            </v-flex>
+            <v-flex shrink hidden-sm-and-up>
+              <v-menu>
+                <v-btn class="mr-0 mb-0" color="secondary" slot="activator">scripts</v-btn>
+                <script-list
+                  v-if="!scriptsLoading"
+                  :scripts="scripts"
+                  :active="activeScript"
+                  @new="newScript()"
+                  @select="scriptSelected($event)"
+                ></script-list>
+              </v-menu>
+            </v-flex>
+          </v-layout>
+        </v-flex>
         <v-flex fill-height>
           <script-editor v-model="editorScript.code" class="elevation-4" fill-height/>
         </v-flex>
       </v-layout>
     </v-flex>
-    <v-flex md4 ml-3 text-xs-center v-if="$vuetify.breakpoint.smAndUp">
+    <v-flex ml-3 text-xs-center hidden-xs-only>
       <script-list
         v-if="!scriptsLoading"
         :scripts="scripts"
