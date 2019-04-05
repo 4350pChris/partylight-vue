@@ -13,15 +13,26 @@
                   <v-card-actions>
                     <v-spacer></v-spacer>
                     <v-btn color="primary" flat @click.native="deleteDialog = false">Cancel</v-btn>
-                    <v-btn color="primary" flat @click.native="closeDelete(editorScript)">Delete</v-btn>
+                    <loading-button
+                      :button-options="{ color: 'primary', flat: true }"
+                      :click-handler="closeDeleteHandler(editorScript)"
+                    >Delete</loading-button>
                   </v-card-actions>
                 </v-card>
               </v-dialog>
             </v-flex>
             <v-spacer></v-spacer>
             <v-flex shrink>
-              <v-btn @click="setActiveScript(editorScript)" color="accent" :loading="activeLoading">activate</v-btn>
-              <v-btn @click="saveScript(editorScript)" color="success" class="mr-0" :loading="saveLoading">Save</v-btn>
+              <loading-button
+                :click-handler="setActiveScriptHandler(editorScript)"
+                :button-options="{ color: 'accent' }"
+                :loading="activeLoading"
+              >activate</loading-button>
+              <loading-button
+                class="mr-0"
+                :click-handler="saveScriptHandler(editorScript)"
+                :button-options="{ color: 'success'}"
+              >Save</loading-button>
             </v-flex>
           </v-layout>
         </v-flex>
@@ -71,12 +82,14 @@ import { StoreState, Actions as RootActions, InitFunctions } from '@/store';
 import Script from '@/models/script';
 import ScriptEditor from '@/components/editor/ScriptEditor.vue';
 import ScriptList from '@/components/editor/ScriptList.vue';
+import LoadingButton from '@/components/shared/LoadingButton.vue';
 import { Constructor } from 'vue/types/options';
 import InitModule from '@/mixins/initModule';
 import Alert from '@/mixins/alert';
 
 @Component({
   components: {
+    LoadingButton,
     ScriptEditor,
     ScriptList
   }
@@ -85,10 +98,6 @@ export default class Editor extends Mixins(Alert, InitModule) {
   private editorScript: Script | null = null;
 
   private scriptsLoading = true;
-
-  private saveLoading = false;
-
-  private activeLoading = false;
 
   private deleteDialog = false;
 
@@ -103,67 +112,38 @@ export default class Editor extends Mixins(Alert, InitModule) {
   private scripts!: Script[];
 
   @Action(ScriptActions.SaveScript)
-  private save!: (script: Script) => Promise<boolean>;
+  private save!: (script: Script) => Promise<void>;
 
   @Action(ScriptActions.SetActiveScript)
   private setActive!: (script: Script) => Promise<void>;
 
   @Action(ScriptActions.DeleteScript)
-  private deleteScript!: (id: number) => Promise<boolean>;
+  private deleteScript!: (id: number) => Promise<void>;
 
-  private async setActiveScript(script: Script) {
-    this.activeLoading = true;
-    try {
-      await this.setActive(script);
-    } catch (error) {
-      this.showAlert({
-        type: 'error',
-        message: 'Error while setting active script<br>' + error
-      });
-    } finally {
-      this.activeLoading = false;
-    }
+  private setActiveScriptHandler(script: Script): CallableFunction {
+    return () => this.setActive(script).catch((e: any) => this.showAlert({
+      type: 'error',
+      message: 'Error while setting active script<br>' + e
+    }));
   }
 
-  private async saveScript(script: Script) {
-    this.saveLoading = true;
-    let success: boolean = false;
-    let error: any;
-    try {
-      success = await this.save(script);
-    } catch (e) {
-      error = e;
-    }
-    this.saveLoading = false;
-    this.editorScript = { ...script };
-    if (!success || error) {
-      this.showAlert({
+  private saveScriptHandler(script: Script): CallableFunction {
+    return () => this.save(script).catch((e: any) => this.showAlert({
         type: 'error',
-        message: 'Error while saving script<br>' + error
-      });
-    }
+        message: 'Error while saving script<br>' + e
+    })).finally(() => this.editorScript = { ...script });
   }
 
-  private async closeDelete(script: Script) {
-    this.deleteDialog = false;
-    if (script.id === undefined) {
-      return;
-    }
-    let success: boolean = false;
-    let error: any;
-    try {
-      success = await this.deleteScript(script.id);
-    } catch (e) {
-      error = e;
-    } finally {
-      this.newScript();
-      if (!success || error) {
-        this.showAlert({
-          type: 'error',
-          message: 'Failed deleting script on server.<br>' + error
-        });
-      }
-    }
+  private closeDeleteHandler(script: Script): CallableFunction {
+    return () => script.id === undefined || this.deleteScript(script.id)
+      .catch((e: any) => this.showAlert({
+        type: 'error',
+        message: 'Failed deleting script on server.<br>' + e
+      }))
+      .finally(() => {
+        this.newScript();
+        this.deleteDialog = false;
+      });
   }
 
   private newScript() {
