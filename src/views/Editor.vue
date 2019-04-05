@@ -9,7 +9,7 @@
                 <v-btn class="ml-0 lighten-1" color="error" slot="activator">Delete</v-btn>
                 <v-card>
                   <v-card-title class="headline">Confirm Deletion</v-card-title>
-                  <v-card-text>Are you sure you would like to delete {{ editorScript.name }}</v-card-text>
+                  <v-card-text>Are you sure you would like to delete {{ editorScript.name }}?</v-card-text>
                   <v-card-actions>
                     <v-spacer></v-spacer>
                     <v-btn color="primary" flat @click.native="deleteDialog = false">Cancel</v-btn>
@@ -18,7 +18,8 @@
                 </v-card>
               </v-dialog>
             </v-flex>
-            <v-flex text-xs-right>
+            <v-spacer></v-spacer>
+            <v-flex shrink>
               <v-btn @click="setActiveScript(editorScript)" color="accent" :loading="activeLoading">activate</v-btn>
               <v-btn @click="saveScript(editorScript)" color="success" class="mr-0" :loading="saveLoading">Save</v-btn>
             </v-flex>
@@ -33,6 +34,7 @@
                 hide-details>
               </v-text-field>
             </v-flex>
+            <v-spacer></v-spacer>
             <v-flex shrink hidden-sm-and-up>
               <v-menu>
                 <v-btn class="mr-0 mb-0" color="secondary" slot="activator">scripts</v-btn>
