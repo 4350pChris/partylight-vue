@@ -40,8 +40,6 @@
                 <v-btn class="mr-0 mb-0" color="secondary" slot="activator">scripts</v-btn>
                 <script-list
                   v-if="!scriptsLoading"
-                  :scripts="scripts"
-                  :active="activeScript"
                   @new="newScript()"
                   @select="editorScript = { ...$event }"
                 ></script-list>
@@ -57,8 +55,6 @@
     <v-flex ml-3 text-xs-center hidden-xs-only>
       <script-list
         v-if="!scriptsLoading"
-        :scripts="scripts"
-        :active="activeScript"
         @new="newScript()"
         @select="editorScript = { ...$event }"
       ></script-list>

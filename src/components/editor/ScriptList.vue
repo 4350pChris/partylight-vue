@@ -24,13 +24,19 @@
 </template>
 
 <script lang="ts">
-import { Component, Prop, Vue } from 'vue-property-decorator';
+import { Component, Vue } from 'vue-property-decorator';
 import Script from '@/models/script';
+import { StoreState } from '@/store';
+import { Actions, Getters } from '@/store/scripts';
+import { Action, Getter, State } from 'vuex-class';
 
 @Component
 export default class ScriptList extends Vue {
-  @Prop() private scripts!: Script[];
-  @Prop() private active!: Script | null;
+  @State((store: StoreState) => store.scripts.scripts)
+  private scripts!: Script[];
+
+  @Getter(Getters.ActiveScript)
+  private active!: Script | null;
 
   private isActiveScript(script: Script) {
     return this.active !== null && this.active.id === script.id;
