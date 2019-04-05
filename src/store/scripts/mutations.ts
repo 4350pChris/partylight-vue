@@ -1,7 +1,6 @@
 import { MutationTree } from 'vuex';
 import { State } from '.';
 import Script from '@/models/script';
-import Vue from 'vue';
 import { maxBy } from 'lodash';
 
 export enum Mutations {
@@ -20,7 +19,7 @@ const mutations: MutationTree<State> = {
   [Mutations.UpdateScript]({ scripts }, payload: Script) {
     const i = scripts.findIndex(s => s.id === payload.id);
     if (i > -1) {
-      Vue.set(scripts, i, payload);
+      scripts = scripts.splice(i, 1, payload);
     }
   },
 

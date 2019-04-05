@@ -67,7 +67,6 @@
 </template>
 
 <script lang="ts">
-import { Actions as AlertActions } from '@/store/alert';
 import { Actions as ScriptActions, Getters, Mutations } from '@/store/scripts';
 import { Component, Mixins, Vue } from 'vue-property-decorator';
 import { State, Action, Mutation, Getter } from 'vuex-class';
@@ -77,6 +76,7 @@ import ScriptEditor from '@/components/editor/ScriptEditor.vue';
 import ScriptList from '@/components/editor/ScriptList.vue';
 import { Constructor } from 'vue/types/options';
 import InitModule from '@/mixins/initModule';
+import Alert from '@/mixins/alert';
 
 @Component({
   components: {
@@ -84,7 +84,7 @@ import InitModule from '@/mixins/initModule';
     ScriptList
   }
 })
-export default class Editor extends Mixins(InitModule) {
+export default class Editor extends Mixins(Alert, InitModule) {
   private editorScript: Script | null = null;
 
   private scriptsLoading = true;
@@ -104,11 +104,6 @@ export default class Editor extends Mixins(InitModule) {
 
   @State((store: StoreState) => store.scripts.scripts)
   private scripts!: Script[];
-
-  @Action(AlertActions.ShowAlert)
-  private showAlert!: (
-    payload: { type: string; duration?: number; message: string }
-  ) => void;
 
   @Action(ScriptActions.SaveScript)
   private save!: (script: Script) => Promise<boolean>;

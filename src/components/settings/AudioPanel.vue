@@ -31,7 +31,6 @@
 
 <script lang="ts">
 import { Action, State, Mutation } from 'vuex-class';
-import { Actions as AlertActions } from '@/store/alert';
 import { Actions as AudioActions } from '@/store/audio';
 import { Component, Mixins, Vue } from 'vue-property-decorator';
 import { debounce } from 'lodash';
@@ -39,18 +38,14 @@ import { StoreState, Actions as RootActions, InitFunctions } from '@/store';
 import AudioParameters, { ScalingStrategy } from '@/models/audioParameters';
 import SliderCard from '@/components/shared/SliderCard.vue';
 import InitModule from '@/mixins/initModule';
+import Alert from '@/mixins/alert';
 
 @Component({
   components: { SliderCard }
 })
-export default class AudioPanel extends Mixins(InitModule) {
+export default class AudioPanel extends Mixins(Alert, InitModule) {
   @State((store: StoreState) => store.audio.parameters)
   private audioParameters!: AudioParameters;
-
-  @Action(AlertActions.ShowAlert)
-  private showAlert!: (
-    payload: { type: string; duration?: number; message: string }
-  ) => void;
 
   @Action(AudioActions.SaveParameters)
   private saveParameters!: (params: Partial<AudioParameters>) => Promise<void>;

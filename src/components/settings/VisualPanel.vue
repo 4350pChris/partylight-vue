@@ -21,7 +21,6 @@
 
 <script lang="ts">
 import { Action, State, Mutation } from 'vuex-class';
-import { Actions as AlertActions } from '@/store/alert';
 import { Chrome as ColorPicker } from 'vue-color';
 import { Component, Inject, Mixins, Vue } from 'vue-property-decorator';
 import { Actions as DMXActions, State as DMXState } from '@/store/dmx';
@@ -30,11 +29,12 @@ import { StoreState } from '@/store';
 import Settings from '@/models/settings';
 import SliderCard from '@/components/shared/SliderCard.vue';
 import InitModule from '@/mixins/initModule';
+import Alert from '@/mixins/alert';
 
 @Component({
   components: { ColorPicker, SliderCard }
 })
-export default class VisualPanel extends Mixins(InitModule) {
+export default class VisualPanel extends Mixins(Alert, InitModule) {
   @Inject() private theme!: { isDark: boolean };
 
   @State((store: StoreState) => store.settings)
@@ -51,11 +51,6 @@ export default class VisualPanel extends Mixins(InitModule) {
 
   @Action(DMXActions.SaveLengthOfUniverse)
   private saveLengthOfUniverse!: (rate: number) => Promise<void>;
-
-  @Action(AlertActions.ShowAlert)
-  private showAlert!: (
-    payload: { type: string; duration?: number; message: string }
-  ) => void;
 
   private get color() {
     return this.settings.color;
