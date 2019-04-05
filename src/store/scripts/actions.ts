@@ -22,27 +22,46 @@ const actions: ActionTree<State, {}> = {
     const scripts = await scriptsService.getScripts();
     commit(Mutations.SetScripts, scripts);
   },
-
-  [Actions.SaveScript]({ commit }, payload: Script) {
+  /**
+   * Saves the script to the store first, then tries saving it on the server.
+   * @async
+   * @throws {Error} When saving goes wrong
+   * @param {*} { commit }
+   * @param {Script} payload
+   * @returns {Promise<void>}
+   */
+  async [Actions.SaveScript]({ commit }, payload: Script): Promise<void> {
+    let success: boolean;
     if (payload.id !== undefined) {
       commit(Mutations.UpdateScript, payload);
-      return scriptsService.replaceScript(payload);
+      success = await scriptsService.replaceScript(payload);
     } else {
       commit(Mutations.AddScript, payload);
-      return scriptsService.addScript(payload);
+      success = await scriptsService.addScript(payload);
+    }
+    if (!success) {
+      throw new Error('Failed saving script on server.');
     }
   },
-
-  async [Actions.SetActiveScript]({ commit }, payload: Script | number) {
-    let result: boolean;
+  /**
+   * Sets the active script on the server, then commits result to store.
+   * @async
+   * @throws {Error} If saving to server goes wrong
+   * @param {*} { commit }
+   * @param {(Script | number)} payload
+   * @returns {Promise<void>}
+   */
+  async [Actions.SetActiveScript]({ commit }, payload: Script | number): Promise<void> {
+    let success: boolean;
     if (typeof payload === 'object') {
-      result = await scriptsService.setActiveScript(payload);
+      success = await scriptsService.setActiveScript(payload);
     } else {
-      result = await scriptsService.setActiveScriptById(payload);
+      success = await scriptsService.setActiveScriptById(payload);
     }
-    if (result) {
-      commit(Mutations.SetActiveScript, payload);
+    if (!success) {
+      throw new Error('Failed setting active script on server.');
     }
+    commit(Mutations.SetActiveScript, payload);
   }
 };
 
