@@ -3,13 +3,18 @@
     <v-flex md8 fill-height>
       <v-layout column justify-space-around fill-height>
         <v-flex>
-          <v-text-field outline v-model="editorScript.name" hide-details label="Name"></v-text-field>
-        </v-flex>
-        <v-flex>
-          <v-layout row nowrap justify-space-around>
-            <v-flex v-if="$vuetify.breakpoint.smAndDown">
+          <v-layout row nowrap align-end>
+            <v-flex>
+              <v-text-field
+                v-model="editorScript.name"
+                label="Name"
+                outline
+                hide-details>
+              </v-text-field>
+            </v-flex>
+            <v-flex shrink v-if="$vuetify.breakpoint.xs">
               <v-menu>
-                <v-btn class="ml-0" color="secondary" slot="activator">scripts</v-btn>
+                <v-btn class="mr-0" color="secondary" slot="activator">scripts</v-btn>
                 <script-list
                   v-if="!scriptsLoading"
                   :scripts="scripts"
@@ -19,9 +24,13 @@
                 ></script-list>
               </v-menu>
             </v-flex>
-            <v-flex text-xs-right>
+          </v-layout>
+        </v-flex>
+        <v-flex>
+          <v-layout row nowrap>
+            <v-flex>
               <v-dialog v-show="deleteEnabled" v-model="deleteDialog" max-width="290">
-                <v-btn class="mr-5 lighten-1" color="error" slot="activator">Delete</v-btn>
+                <v-btn class="ml-0 lighten-1" color="error" slot="activator">Delete</v-btn>
                 <v-card>
                   <v-card-title class="headline">Confirm Deletion</v-card-title>
                   <v-card-text>Are you sure you would like to delete {{ editorScript.name }}</v-card-text>
@@ -32,7 +41,9 @@
                   </v-card-actions>
                 </v-card>
               </v-dialog>
-              <v-btn @click="setActiveScript(editorScript)" color="accent" :loading="activeLoading">Set Active</v-btn>
+            </v-flex>
+            <v-flex text-xs-right>
+              <v-btn @click="setActiveScript(editorScript)" color="accent" :loading="activeLoading">activate</v-btn>
               <v-btn @click="saveScript(editorScript)" color="success" class="mr-0" :loading="saveLoading">Save</v-btn>
             </v-flex>
           </v-layout>
@@ -42,7 +53,7 @@
         </v-flex>
       </v-layout>
     </v-flex>
-    <v-flex md4 ml-3 text-xs-center v-if="$vuetify.breakpoint.mdAndUp">
+    <v-flex md4 ml-3 text-xs-center v-if="$vuetify.breakpoint.smAndUp">
       <script-list
         v-if="!scriptsLoading"
         :scripts="scripts"
@@ -84,7 +95,7 @@ export default class Editor extends Mixins(InitModule) {
 
   private deleteDialog = false;
 
-  private get deleteEnabled() {
+  private get deleteEnabled(): boolean {
     return this.editorScript !== null && this.editorScript.id !== undefined;
   }
 
@@ -122,18 +133,47 @@ export default class Editor extends Mixins(InitModule) {
     }
   }
 
-  private saveScript(script: Script) {
+  private async saveScript(script: Script) {
     this.saveLoading = true;
+    let success: boolean = false;
+    let error: any;
     try {
-      this.save(script);
-    } catch (error) {
+      success = await this.save(script);
+    } catch (e) {
+      error = e;
+    }
+    this.saveLoading = false;
+    if (!success || error) {
       this.showAlert({
         type: 'error',
         message: 'Error while saving script<br>' + error
       });
-    } finally {
-      this.saveLoading = false;
     }
+  }
+
+  private async closeDelete(script: Script) {
+    this.deleteDialog = false;
+    if (script.id === undefined) {
+      return;
+    }
+    let success: boolean = false;
+    let error: any;
+    try {
+      success = await this.deleteScript(script.id);
+    } catch (e) {
+      error = e;
+    } finally {
+      if (!success || error) {
+        this.showAlert({
+          type: 'error',
+          message: 'Failed deleting script on server.<br>' + error
+        });
+      }
+    }
+  }
+
+  private scriptSelected(script: Script) {
+    this.editorScript = { ...script };
   }
 
   private newScript() {
@@ -141,18 +181,6 @@ export default class Editor extends Mixins(InitModule) {
       name: 'New Script',
       code: 'public void setup() {\n\n}\n\npublic void loop() {\n\n}\n'
     };
-  }
-
-  private scriptSelected(script: Script) {
-    this.editorScript = { ...script };
-  }
-
-  private closeDelete(script: Script) {
-    this.deleteDialog = false;
-    if (script.id === undefined) {
-      return;
-    }
-    this.deleteScript(script.id);
   }
 
   private created() {
