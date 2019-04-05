@@ -12,7 +12,8 @@
     </v-flex>
     <v-flex>
       <color-picker
-        v-model="color"
+        :value="color"
+        @input="color = $event.rgba"
         :class="['elevation-0', 'v-card', { 'theme--dark': theme.isDark }]"
       ></color-picker>
     </v-flex>
@@ -26,7 +27,7 @@ import { Component, Inject, Mixins, Vue } from 'vue-property-decorator';
 import { Actions as DMXActions, State as DMXState } from '@/store/dmx';
 import { Actions as SettingsActions, Actions } from '@/store/settings';
 import { StoreState } from '@/store';
-import Settings from '@/models/settings';
+import Settings, { Color } from '@/models/settings';
 import SliderCard from '@/components/shared/SliderCard.vue';
 import InitModule from '@/mixins/initModule';
 import Alert from '@/mixins/alert';
@@ -52,12 +53,12 @@ export default class VisualPanel extends Mixins(Alert, InitModule) {
   @Action(DMXActions.SaveLengthOfUniverse)
   private saveLengthOfUniverse!: (rate: number) => Promise<void>;
 
-  private get color() {
+  private get color(): Color {
     return this.settings.color;
   }
 
-  private set color(color: any) {
-    this.saveSettings({ color: color.rgba });
+  private set color(color: Color) {
+    this.saveSettings({ color });
   }
 
   private get settingsPanel() {
