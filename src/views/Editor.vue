@@ -14,23 +14,22 @@
                     <v-spacer/>
                     <v-btn color="primary" flat @click.native="deleteDialog = false">Cancel</v-btn>
                     <LoadingButton
-                      :button-options="{ color: 'primary', flat: true }"
+                      class="primary"
                       :click-handler="closeDeleteHandler(editorScript)"
                     >Delete</LoadingButton>
                   </v-card-actions>
                 </v-card>
               </v-dialog>
             </v-flex>
-            <v-spacer></v-spacer>
+            <v-spacer/>
             <v-flex shrink>
               <LoadingButton
+                class="accent"
                 :click-handler="setActiveScriptHandler(editorScript)"
-                :button-options="{ color: 'accent' }"
               >activate</LoadingButton>
               <LoadingButton
-                class="mr-0"
+                class="mr-0 success"
                 :click-handler="saveScriptHandler(editorScript)"
-                :button-options="{ color: 'success'}"
               >Save</LoadingButton>
             </v-flex>
           </v-layout>
