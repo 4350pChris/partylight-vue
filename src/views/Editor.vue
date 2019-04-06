@@ -11,27 +11,27 @@
                   <v-card-title class="headline">Confirm Deletion</v-card-title>
                   <v-card-text>Are you sure you would like to delete {{ editorScript.name }}?</v-card-text>
                   <v-card-actions>
-                    <v-spacer></v-spacer>
+                    <v-spacer/>
                     <v-btn color="primary" flat @click.native="deleteDialog = false">Cancel</v-btn>
-                    <loading-button
+                    <LoadingButton
                       :button-options="{ color: 'primary', flat: true }"
                       :click-handler="closeDeleteHandler(editorScript)"
-                    >Delete</loading-button>
+                    >Delete</LoadingButton>
                   </v-card-actions>
                 </v-card>
               </v-dialog>
             </v-flex>
             <v-spacer></v-spacer>
             <v-flex shrink>
-              <loading-button
+              <LoadingButton
                 :click-handler="setActiveScriptHandler(editorScript)"
                 :button-options="{ color: 'accent' }"
-              >activate</loading-button>
-              <loading-button
+              >activate</LoadingButton>
+              <LoadingButton
                 class="mr-0"
                 :click-handler="saveScriptHandler(editorScript)"
                 :button-options="{ color: 'success'}"
-              >Save</loading-button>
+              >Save</LoadingButton>
             </v-flex>
           </v-layout>
         </v-flex>
@@ -41,23 +41,20 @@
               <v-text-field
                 v-model="editorScript.name"
                 label="Name"
-                hide-details>
-              </v-text-field>
+                hide-details
+              />
             </v-flex>
-            <v-spacer></v-spacer>
+            <v-spacer/>
             <v-flex shrink hidden-sm-and-up>
               <v-menu>
                 <v-btn class="mr-0 mb-0" color="secondary" slot="activator">scripts</v-btn>
-                <script-list
-                  v-if="!scriptsLoading"
-                  @select="editorScript = { ...$event }"
-                ></script-list>
+                <ScriptList v-if="!scriptsLoading" @select="editorScript = { ...$event }"/>
               </v-menu>
             </v-flex>
           </v-layout>
         </v-flex>
         <v-flex fill-height>
-          <script-editor v-model="editorScript.code" class="elevation-4" fill-height/>
+          <ScriptEditor v-model="editorScript.code" class="elevation-4" fill-height/>
         </v-flex>
       </v-layout>
     </v-flex>
@@ -67,11 +64,8 @@
           <v-btn flat block color="primary" @click="newScript()">new script</v-btn>
         </v-card-actions>
       </v-card>
-      <script-list
-        v-if="!scriptsLoading"
-        @select="editorScript = { ...$event }"
-      ></script-list>
-      <v-progress-circular v-else indeterminate :size="48"></v-progress-circular>
+      <ScriptList v-if="!scriptsLoading" @select="editorScript = { ...$event }"></ScriptList>
+      <v-progress-circular v-else indeterminate :size="48"/>
     </v-flex>
   </v-layout>
 </template>
