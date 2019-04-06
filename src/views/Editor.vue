@@ -1,61 +1,50 @@
 <template>
   <v-layout row fill-height>
     <v-flex sm9 md8 fill-height>
-      <v-layout column justify-space-around fill-height>
+      <v-layout column fill-height>
+        <v-card tile>
+          <v-card-title primary-title>
+            <v-text-field
+              v-model="editorScript.name"
+              label="Name"
+              hide-details
+            />
+            <v-menu class="hidden-sm-and-up">
+              <v-btn color="secondary" slot="activator">scripts</v-btn>
+              <ScriptList v-if="!scriptsLoading" @select="editorScript = { ...$event }"/>
+            </v-menu>
+          </v-card-title>
+          <v-card-actions>
+            <v-dialog v-show="deleteEnabled" v-model="deleteDialog" max-width="290">
+              <v-btn class="ml-0 lighten-1" color="error" slot="activator">Delete</v-btn>
+              <v-card>
+                <v-card-title class="headline">Confirm Deletion</v-card-title>
+                <v-card-text>Are you sure you would like to delete {{ editorScript.name }}?</v-card-text>
+                <v-card-actions>
+                  <v-spacer/>
+                  <v-btn color="primary" flat @click.native="deleteDialog = false">Cancel</v-btn>
+                  <LoadingButton
+                    :button-options="{ color: 'primary', flat: true }"
+                    :click-handler="closeDeleteHandler(editorScript)"
+                  >Delete</LoadingButton>
+                </v-card-actions>
+              </v-card>
+            </v-dialog>
+            <v-spacer/>
+            <LoadingButton
+              :button-options="{ color: 'accent' }"
+              :click-handler="setActiveScriptHandler(editorScript)"
+            >activate</LoadingButton>
+            <LoadingButton
+              :button-options="{ color: 'success' }"
+              :click-handler="saveScriptHandler(editorScript)"
+            >save</LoadingButton>
+          </v-card-actions>
+        </v-card>
         <v-flex>
-          <v-layout row nowrap>
-            <v-flex>
-              <v-dialog v-show="deleteEnabled" v-model="deleteDialog" max-width="290">
-                <v-btn class="ml-0 lighten-1" color="error" slot="activator">Delete</v-btn>
-                <v-card>
-                  <v-card-title class="headline">Confirm Deletion</v-card-title>
-                  <v-card-text>Are you sure you would like to delete {{ editorScript.name }}?</v-card-text>
-                  <v-card-actions>
-                    <v-spacer/>
-                    <v-btn color="primary" flat @click.native="deleteDialog = false">Cancel</v-btn>
-                    <LoadingButton
-                      class="primary"
-                      :click-handler="closeDeleteHandler(editorScript)"
-                    >Delete</LoadingButton>
-                  </v-card-actions>
-                </v-card>
-              </v-dialog>
-            </v-flex>
-            <v-spacer/>
-            <v-flex shrink>
-              <LoadingButton
-                class="accent"
-                :click-handler="setActiveScriptHandler(editorScript)"
-              >activate</LoadingButton>
-              <LoadingButton
-                class="mr-0 success"
-                :click-handler="saveScriptHandler(editorScript)"
-              >Save</LoadingButton>
-            </v-flex>
-          </v-layout>
+          <ScriptEditor class="elevation-2" v-model="editorScript.code" fill-height/>
         </v-flex>
-        <v-flex class="mb-2">
-          <v-layout row nowrap align-end>
-            <v-flex>
-              <v-text-field
-                v-model="editorScript.name"
-                label="Name"
-                hide-details
-              />
-            </v-flex>
-            <v-spacer/>
-            <v-flex shrink hidden-sm-and-up>
-              <v-menu>
-                <v-btn class="mr-0 mb-0" color="secondary" slot="activator">scripts</v-btn>
-                <ScriptList v-if="!scriptsLoading" @select="editorScript = { ...$event }"/>
-              </v-menu>
-            </v-flex>
-          </v-layout>
-        </v-flex>
-        <v-flex fill-height>
-          <ScriptEditor v-model="editorScript.code" class="elevation-4" fill-height/>
-        </v-flex>
-      </v-layout>
+      </v-layout>            
     </v-flex>
     <v-flex ml-3 text-xs-center hidden-xs-only>
       <v-card tile>

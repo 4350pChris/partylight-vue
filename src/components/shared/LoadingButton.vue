@@ -1,5 +1,5 @@
 <template>
-  <v-btn @click="click()" :loading="loading">
+  <v-btn @click="click()" :loading="loading" v-bind="buttonOptions">
     <slot></slot>
   </v-btn>
 </template>
@@ -14,6 +14,9 @@ export default class LoadingButton extends Vue {
   @Prop()
   private clickHandler!: CallableFunction;
 
+  @Prop()
+  private buttonOptions!: { [prop: string]: any };
+
   private async click() {
     this.loading = true;
     try {
@@ -26,4 +29,3 @@ export default class LoadingButton extends Vue {
   }
 }
 </script>
-
