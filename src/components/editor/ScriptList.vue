@@ -1,9 +1,5 @@
 <template>
   <v-card>
-    <v-card-actions>
-      <v-btn flat block color="accent" @click="$emit('new')">new script</v-btn>
-    </v-card-actions>
-    <v-divider></v-divider>
     <v-slide-y-transition class="py-0" group tag="v-list">
       <v-list-tile
         v-for="script in scripts"

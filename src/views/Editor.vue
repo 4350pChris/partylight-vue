@@ -26,7 +26,6 @@
               <loading-button
                 :click-handler="setActiveScriptHandler(editorScript)"
                 :button-options="{ color: 'accent' }"
-                :loading="activeLoading"
               >activate</loading-button>
               <loading-button
                 class="mr-0"
@@ -51,7 +50,6 @@
                 <v-btn class="mr-0 mb-0" color="secondary" slot="activator">scripts</v-btn>
                 <script-list
                   v-if="!scriptsLoading"
-                  @new="newScript()"
                   @select="editorScript = { ...$event }"
                 ></script-list>
               </v-menu>
@@ -64,9 +62,13 @@
       </v-layout>
     </v-flex>
     <v-flex ml-3 text-xs-center hidden-xs-only>
+      <v-card tile>
+        <v-card-actions>
+          <v-btn flat block color="primary" @click="newScript()">new script</v-btn>
+        </v-card-actions>
+      </v-card>
       <script-list
         v-if="!scriptsLoading"
-        @new="newScript()"
         @select="editorScript = { ...$event }"
       ></script-list>
       <v-progress-circular v-else indeterminate :size="48"></v-progress-circular>
