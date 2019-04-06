@@ -122,7 +122,7 @@ export default class Editor extends Mixins(Alert, InitModule) {
     return () => script.id === undefined || this.deleteScript(script.id)
       .catch((e: any) => this.showAlert({
         type: 'error',
-        message: 'Failed deleting script on server.<br>' + e
+        message: 'Deleting script on server failed.<br>' + e
       }))
       .finally(() => {
         this.newScript();
@@ -142,7 +142,7 @@ export default class Editor extends Mixins(Alert, InitModule) {
     this.initModule('scripts')
       .catch((e: any) => this.showAlert({
           type: 'error',
-          message: 'Failed getting script settings from server.<br>' + e
+          message: 'Getting script settings from server failed.<br>' + e
         })
       )
       .finally(() => (this.scriptsLoading = false));

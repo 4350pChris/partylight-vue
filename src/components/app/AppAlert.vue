@@ -1,7 +1,7 @@
 <template>
-  <v-alert id="error-alert" :type="alertType" :value="alertVisible" transition="scale-transition">
+  <v-snackbar top :value="alertVisible" :color="alertType">
     <span v-html="alertMessage"></span>
-  </v-alert>
+  </v-snackbar>
 </template>
 
 <script lang="ts">
@@ -23,8 +23,7 @@ export default class AppAlert extends Vue {
 </script>
 
 <style scoped>
-#error-alert {
-  position: sticky;
-  bottom: 0;
+#alertBar {
+  z-index: 4;
 }
 </style>
