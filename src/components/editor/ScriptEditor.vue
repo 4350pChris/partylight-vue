@@ -3,7 +3,7 @@
 </template>
 
 <script lang="ts">
-import { Component, Inject, Prop, Watch, Vue } from 'vue-property-decorator';
+import { Component, Prop, Watch, Vue } from 'vue-property-decorator';
 import * as monaco from 'monaco-editor/esm/vs/editor/editor.api';
 import { IPosition, editor, languages } from 'monaco-editor';
 import services from '@/api';
@@ -11,21 +11,18 @@ import Completion from '@/models/completion';
 
 @Component
 export default class ScriptEditor extends Vue {
-  @Inject()
-  private theme!: { isDark: boolean };
-
-  private get editorTheme() {
-    return this.theme.isDark ? 'vs-dark' : 'vs';
-  }
-
   private editor?: editor.IStandaloneCodeEditor;
+
+  @Prop({ type: Boolean, default: false })
+  private dark!: boolean;
 
   @Prop()
   private value!: string;
 
-  @Watch('theme', { deep: true })
-  private onThemeChanged() {
-    monaco.editor.setTheme(this.editorTheme);
+  @Watch('dark')
+  private onDarkChanged(val: boolean) {
+    const theme = this.dark ? 'vs-dark' : 'vs';
+    monaco.editor.setTheme(theme);
   }
 
   @Watch('value')
@@ -73,13 +70,18 @@ export default class ScriptEditor extends Vue {
   }
 
   private createEditor() {
-    this.editor = monaco.editor.create(document.getElementById('editor') as HTMLElement, {
-        value: this.value,
-        language: 'csharp',
-        theme: this.editorTheme,
-        scrollBeyondLastLine: false,
-        automaticLayout: true
-    });
+    const options: monaco.editor.IEditorConstructionOptions = {
+      value: this.value,
+      language: 'csharp',
+      theme: this.dark ? 'vs-dark' : 'vs',
+      scrollBeyondLastLine: false,
+      automaticLayout: true,
+      minimap: { enabled: false }
+    };
+    this.editor = monaco.editor.create(
+      document.getElementById('editor') as HTMLElement,
+      options
+    );
   }
 
   private registerInputListener() {
