@@ -2,7 +2,7 @@
   <v-layout row fill-height>
     <v-flex sm9 md8 fill-height>
       <v-layout column fill-height>
-        <v-card tile>
+        <v-card class="pb-3" :color="theme.isDark ? '#1e1e1e' : ''">
           <v-card-title primary-title>
             <v-text-field
               v-model="editorScript.name"
@@ -14,9 +14,9 @@
               <ScriptList v-if="!scriptsLoading" @select="editorScript = { ...$event }"/>
             </v-menu>
           </v-card-title>
-          <v-card-actions>
+          <v-card-actions class="mx-2">
             <v-dialog v-show="deleteEnabled" v-model="deleteDialog" max-width="290">
-              <v-btn class="ml-0 lighten-1" color="error" slot="activator">Delete</v-btn>
+              <v-btn class="lighten-1" color="error" :outline="theme.isDark" slot="activator">Delete</v-btn>
               <v-card>
                 <v-card-title class="headline">Confirm Deletion</v-card-title>
                 <v-card-text>Are you sure you would like to delete {{ editorScript.name }}?</v-card-text>
@@ -32,17 +32,17 @@
             </v-dialog>
             <v-spacer/>
             <LoadingButton
-              :button-options="{ color: 'accent' }"
+              :button-options="{ color: 'accent', outline: theme.isDark }"
               :click-handler="setActiveScriptHandler(editorScript)"
             >activate</LoadingButton>
             <LoadingButton
-              :button-options="{ color: 'success' }"
+              :button-options="{ color: 'success', outline: theme.isDark }"
               :click-handler="saveScriptHandler(editorScript)"
             >save</LoadingButton>
           </v-card-actions>
         </v-card>
         <v-flex>
-          <ScriptEditor class="elevation-2" v-model="editorScript.code" fill-height/>
+          <ScriptEditor :dark="theme.isDark" class="elevation-2" v-model="editorScript.code" fill-height/>
         </v-flex>
       </v-layout>            
     </v-flex>
@@ -52,7 +52,7 @@
           <v-btn flat block color="primary" @click="newScript()">new script</v-btn>
         </v-card-actions>
       </v-card>
-      <ScriptList v-if="!scriptsLoading" @select="editorScript = { ...$event }"></ScriptList>
+      <ScriptList v-if="!scriptsLoading" @select="editorScript = { ...$event }"/>
       <v-progress-circular v-else indeterminate :size="48"/>
     </v-flex>
   </v-layout>
@@ -60,7 +60,7 @@
 
 <script lang="ts">
 import { Actions as ScriptActions, Getters, Mutations } from '@/store/scripts';
-import { Component, Mixins, Vue } from 'vue-property-decorator';
+import { Component, Inject, Mixins, Vue } from 'vue-property-decorator';
 import { State, Action, Mutation, Getter } from 'vuex-class';
 import { StoreState, Actions as RootActions, InitFunctions } from '@/store';
 import Script from '@/models/script';
@@ -84,6 +84,9 @@ export default class Editor extends Mixins(Alert, InitModule) {
   private scriptsLoading = true;
 
   private deleteDialog = false;
+
+  @Inject()
+  private theme!: { isDark: boolean };
 
   private get deleteEnabled(): boolean {
     return this.editorScript !== null && this.editorScript.id !== undefined;
