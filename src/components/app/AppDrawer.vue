@@ -1,8 +1,8 @@
 <template>
-<div>
   <v-navigation-drawer
     id="navdrawer"
-    v-model="drawer"
+    :value="value"
+    @input="$emit('input', $event)"
     :clipped="$vuetify.breakpoint.smAndDown"
     fixed
     app>
@@ -21,23 +21,21 @@
         </v-list-tile-action>
       </v-list-tile>
     </v-list>
-    <v-img id="logo" pb-1 :src="require('@/assets/splash.png')" contain></v-img>
+    <slot name="list-append"></slot>
   </v-navigation-drawer>
-  <v-toolbar app clipped-left dense v-if="$vuetify.breakpoint.mdAndDown">
-    <v-toolbar-side-icon @click.stop="drawer = !drawer">
-    </v-toolbar-side-icon>
-  </v-toolbar>
-</div>
 </template>
 
 <script lang="ts">
-import { Component, Vue, Prop } from 'vue-property-decorator';
+import { Component, Vue, Prop, Watch } from 'vue-property-decorator';
 import { Route } from 'vue-router';
 
 @Component
-export default class AppNavigation extends Vue {
-  @Prop() private routes!: Route[];
-  private drawer = null;
+export default class AppDrawer extends Vue {
+  @Prop({ default: null })
+  private value!: boolean | null;
+
+  @Prop()
+  private routes!: Route[];
 }
 </script>
 
@@ -46,9 +44,5 @@ export default class AppNavigation extends Vue {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-}
-
-#logo {
-  flex: inherit;
 }
 </style>
