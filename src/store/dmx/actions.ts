@@ -12,23 +12,24 @@ export enum Actions {
 
 const actions: ActionTree<State, any> = {
   async [Actions.FetchDMXSettings]({ commit }) {
-    const [pps, samplingRate, lengthOfUniverse] = await Promise.all([
+    const [packetsPerSecond, samplingRate, lengthOfUniverse, usedFrequency] = await Promise.all([
       dmxService.getPacketsPerSecond(),
       dmxService.getSamplingRate(),
-      dmxService.getLengthOfUniverse()
+      dmxService.getLengthOfUniverse(),
+      dmxService.getUsedFrequency(),
     ]);
-    commit(Mutations.SetDMXSettings, { pps, samplingRate, lengthOfUniverse });
+    commit(Mutations.SetDMXSettings, { packetsPerSecond, samplingRate, lengthOfUniverse, usedFrequency });
   },
 
-  [Actions.SaveSamplingRate]({ commit }, payload: number) {
-    commit(Mutations.SetSamplingRate, payload);
-    return dmxService.setSamplingRate(payload);
+  [Actions.SaveSamplingRate]({ commit }, samplingRate: number) {
+    commit(Mutations.SetDMXSettings, { samplingRate });
+    return dmxService.setSamplingRate(samplingRate);
   },
 
-  [Actions.SaveLengthOfUniverse]({ commit }, payload: number) {
-    commit(Mutations.SetLengthOfUniverse, payload);
-    return dmxService.setLengthOfUniverse(payload);
-  }
+  [Actions.SaveLengthOfUniverse]({ commit }, lengthOfUniverse: number) {
+    commit(Mutations.SetDMXSettings, { lengthOfUniverse });
+    return dmxService.setLengthOfUniverse(lengthOfUniverse);
+  },
 };
 
 export default actions;
