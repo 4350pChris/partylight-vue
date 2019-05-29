@@ -10,12 +10,16 @@ export interface State {
   samplingRate: number;
   packetsPerSecond: number;
   lengthOfUniverse: number;
+  maximumFrequency: number;
+  usedFrequency: number;
 }
 
 export const state: State = {
   samplingRate: 50,
   packetsPerSecond: 0,
-  lengthOfUniverse: 16
+  lengthOfUniverse: 16,
+  maximumFrequency: 0,
+  usedFrequency: 0
 };
 
 const module: Module<State, any> = {
