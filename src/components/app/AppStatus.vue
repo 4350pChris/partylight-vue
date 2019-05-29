@@ -1,5 +1,5 @@
 <template>
-  <v-system-bar status color="info" app window>
+  <v-system-bar status app window color="info" :class="[theme.isDark ? 'darken-2' : 'lighten-1']">
     <v-container class="pa-0">
       <v-layout justify-space-between>
         <v-flex>Sampling Rate - {{ samplingRate }}</v-flex>
@@ -12,13 +12,15 @@
 </template>
 
 <script lang="ts">
-import { Component, Vue, Prop, Watch } from 'vue-property-decorator';
+import { Component, Inject, Vue, Prop, Watch } from 'vue-property-decorator';
 import { Route } from 'vue-router';
 import { State } from 'vuex-class';
 import { StoreState } from '@/store';
 
 @Component
 export default class AppStatus extends Vue {
+  @Inject() private theme!: { isDark: boolean };
+
   @State((store: StoreState) => store.dmx.samplingRate)
   private samplingRate!: number;
 
