@@ -24,7 +24,7 @@
                   <v-spacer/>
                   <v-btn color="primary" flat @click.native="deleteDialog = false">Cancel</v-btn>
                   <LoadingButton
-                    :button-options="{ color: 'primary', flat: true }"
+                    :button-options="{ color: 'error', flat: true }"
                     :click-handler="closeDeleteHandler(editorScript)"
                   >Delete</LoadingButton>
                 </v-card-actions>
