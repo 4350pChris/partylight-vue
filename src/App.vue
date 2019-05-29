@@ -17,6 +17,7 @@
     </v-content>
     <AppAlert/>
     <DisconnectedSnackbar/>
+    <AppStatus />
   </v-app>
 </template>
 
@@ -27,10 +28,11 @@ import { routes as origRoutes } from './router';
 import AppAlert from '@/components/app/AppAlert.vue';
 import AppDrawer from '@/components/app/AppDrawer.vue';
 import DisconnectedSnackbar from '@/components/app/DisconnectedSnackbar.vue';
+import AppStatus from '@/components/app/AppStatus.vue';
 
 
 @Component({
-  components: { AppDrawer, AppAlert, DisconnectedSnackbar }
+  components: { AppDrawer, AppAlert, DisconnectedSnackbar, AppStatus }
 })
 export default class App extends Vue {
   private dark: boolean = false;
