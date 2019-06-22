@@ -5,37 +5,36 @@
     @input="$emit('input', $event)"
     :clipped="$vuetify.breakpoint.smAndDown"
     fixed
-    app>
-    <v-list dense>
-      <v-list-tile v-for="route in routes" :key="route.name" :to="route.path" ripple>
-        <v-list-tile-action>
-          <v-icon>{{route.meta.icon}}</v-icon>
-        </v-list-tile-action>
-        <v-list-tile-content>
-          <v-list-tile-title>{{route.name.toUpperCase()}}</v-list-tile-title>
-        </v-list-tile-content>
-      </v-list-tile>
-      <v-list-tile class="mt-4">
-        <v-list-tile-action>
+    app
+  >
+    <v-container fluid class="pa-0" fill-height>
+      <v-layout column>
+        <NavList :routes="routes"/>
+        <v-flex px-3>
           <v-switch @change="$emit('dark-mode')" label="Toggle dark mode"></v-switch>
-        </v-list-tile-action>
-      </v-list-tile>
-    </v-list>
-    <slot name="list-append"></slot>
+        </v-flex>
+        <slot name="list-append"></slot>
+        <v-spacer/>
+        <v-flex shrink>
+          <v-img id="logo" pb-1 :src="require('@/assets/splash.png')" />
+        </v-flex>
+      </v-layout>
+    </v-container>
   </v-navigation-drawer>
 </template>
 
 <script lang="ts">
-import { Component, Vue, Prop, Watch } from 'vue-property-decorator';
+import { Component, Vue, Prop } from 'vue-property-decorator';
 import { Route } from 'vue-router';
+import { routes as origRoutes } from '@/router';
+import NavList from './NavList.vue';
 
-@Component
+@Component({ components: { NavList }})
 export default class AppDrawer extends Vue {
   @Prop({ default: null })
   private value!: boolean | null;
 
-  @Prop()
-  private routes!: Route[];
+  private routes = origRoutes.filter(r => r.name);
 }
 </script>
 

@@ -1,32 +1,29 @@
 <template>
-  <v-layout row wrap>
-    <v-flex>
-      <v-card flat>
-        <v-card-actions>
-          <v-flex xs12 pl-2>
-            <v-radio-group v-model="scaling" label="Scaling Strategy">
-              <v-radio
-                v-for="[name, val] in scalingStrategies"
-                :key="name"
-                :label="val"
-                :value="Number(name)"
-              ></v-radio>
-            </v-radio-group>
-            <v-switch v-model="useAverage" label="Use Average"></v-switch>
-          </v-flex>
-        </v-card-actions>
-      </v-card>
-    </v-flex>
-    <v-flex v-for="(item, key) in audioPanel" :key="key">
-      <slider-card
-        :title="item.title"
-        :min="item.min"
-        :max="item.max"
-        @input="item.update($event)"
-        :value="item.value"
-      ></slider-card>
-    </v-flex>
-  </v-layout>
+  <v-container fluid grid-list-xs>
+    <v-layout row wrap>
+      <v-flex>
+        <v-radio-group v-model="scaling" label="Scaling Strategy">
+          <v-radio
+            v-for="[name, val] in scalingStrategies"
+            :key="name"
+            :label="val"
+            :value="Number(name)"
+          ></v-radio>
+        </v-radio-group>
+        <v-switch v-model="useAverage" label="Use Average"></v-switch>
+      </v-flex>
+      <v-flex v-for="(item, key) in audioPanel" :key="key" xs12 md6>
+        <div class="subtitle-1 text-xs-center mb-1">{{ item.title }}</div>
+        <slider-card
+          :name="`${item.title}-slider`"
+          :min="item.min"
+          :max="item.max"
+          @input="item.update($event)"
+          :value="item.value"
+        ></slider-card>
+      </v-flex>
+    </v-layout>
+  </v-container>
 </template>
 
 <script lang="ts">

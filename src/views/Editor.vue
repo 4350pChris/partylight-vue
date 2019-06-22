@@ -9,22 +9,26 @@
               label="Name"
               hide-details
             />
-            <v-menu class="hidden-sm-and-up">
-              <v-btn color="secondary" slot="activator">scripts</v-btn>
+            <v-menu>
+              <template #activator="{ on }">
+                <v-btn class="hidden-sm-and-up" color="secondary" v-on="on">scripts</v-btn>
+              </template>
               <ScriptList v-if="!scriptsLoading" @select="editorScript = { ...$event }"/>
             </v-menu>
           </v-card-title>
           <v-card-actions class="mx-2">
             <v-dialog v-show="deleteEnabled" v-model="deleteDialog" max-width="290">
-              <v-btn class="lighten-1" color="error" :outline="theme.isDark" slot="activator">Delete</v-btn>
+              <template #activator="{ on }">
+                <v-btn class="lighten-1" color="error" :outlined="theme.isDark" v-on="on">Delete</v-btn>
+              </template>
               <v-card>
                 <v-card-title class="headline">Confirm Deletion</v-card-title>
                 <v-card-text>Are you sure you would like to delete {{ editorScript.name }}?</v-card-text>
                 <v-card-actions>
                   <v-spacer/>
-                  <v-btn color="primary" flat @click.native="deleteDialog = false">Cancel</v-btn>
+                  <v-btn color="primary" text @click.native="deleteDialog = false">Cancel</v-btn>
                   <LoadingButton
-                    :button-options="{ color: 'error', flat: true }"
+                    :button-options="{ color: 'error', text: true }"
                     :click-handler="closeDeleteHandler(editorScript)"
                   >Delete</LoadingButton>
                 </v-card-actions>
@@ -32,11 +36,11 @@
             </v-dialog>
             <v-spacer/>
             <LoadingButton
-              :button-options="{ color: 'accent', outline: theme.isDark }"
+              :button-options="{ color: 'accent', outlined: theme.isDark }"
               :click-handler="setActiveScriptHandler(editorScript)"
             >activate</LoadingButton>
             <LoadingButton
-              :button-options="{ color: 'success', outline: theme.isDark }"
+              :button-options="{ color: 'success', outlined: theme.isDark }"
               :click-handler="saveScriptHandler(editorScript)"
             >save</LoadingButton>
           </v-card-actions>
@@ -49,7 +53,7 @@
     <v-flex ml-3 text-xs-center hidden-xs-only>
       <v-card tile>
         <v-card-actions>
-          <v-btn flat block color="primary" @click="newScript()">new script</v-btn>
+          <v-btn block text color="primary" @click="newScript()">new script</v-btn>
         </v-card-actions>
       </v-card>
       <ScriptList v-if="!scriptsLoading" @select="editorScript = { ...$event }"/>

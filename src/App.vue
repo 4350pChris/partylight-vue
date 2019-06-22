@@ -1,13 +1,16 @@
 <template>
   <v-app :dark="dark">
-    <v-toolbar app clipped-left dense v-if="$vuetify.breakpoint.mdAndDown">
-      <v-toolbar-side-icon @click.stop="drawer = !drawer"/>
-    </v-toolbar>
-    <AppDrawer :routes="routes" @dark-mode="dark = !dark" v-model="drawer">
+    <v-app-bar app clipped-left dense v-if="$vuetify.breakpoint.mdAndDown">
+      <v-app-bar-nav-icon @click.stop="drawer = !drawer"/>
+    </v-app-bar>
+    <AppDrawer @dark-mode="dark = !dark" v-model="drawer">
       <template #list-append>
-        <v-img id="logo" pb-1 :src="require('@/assets/splash.png')" contain />
+        <AppStatus v-if="$vuetify.breakpoint.smAndDown"/>
       </template>
     </AppDrawer>
+    <v-system-bar v-if="$vuetify.breakpoint.mdAndUp" app color="info" :class="[dark ? 'darken-2' : 'lighten-1']">
+      <AppStatus class="pa-0" />
+    </v-system-bar>
     <v-content>
       <v-container fluid fill-height>
         <v-slide-y-transition mode="out-in">
@@ -17,14 +20,12 @@
     </v-content>
     <AppAlert/>
     <DisconnectedSnackbar/>
-    <AppStatus />
   </v-app>
 </template>
 
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator';
 import { RouteConfig } from 'vue-router';
-import { routes as origRoutes } from './router';
 import AppAlert from '@/components/app/AppAlert.vue';
 import AppDrawer from '@/components/app/AppDrawer.vue';
 import DisconnectedSnackbar from '@/components/app/DisconnectedSnackbar.vue';
@@ -36,10 +37,7 @@ import AppStatus from '@/components/app/AppStatus.vue';
 })
 export default class App extends Vue {
   private dark: boolean = false;
-
   private drawer: boolean | null = null;
-
-  private routes = origRoutes.filter(r => r.name);
 }
 </script>
 

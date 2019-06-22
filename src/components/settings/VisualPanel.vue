@@ -1,23 +1,26 @@
 <template>
-  <v-layout row wrap>
-    <v-flex v-for="(item, key) in settingsPanel" :key="key">
-      <slider-card
-        :title="item.title"
-        :min="item.min"
-        :max="item.max"
-        :step="item.step"
-        @input="item.update($event)"
-        :value="item.value"
-      ></slider-card>
-    </v-flex>
-    <v-flex>
-      <color-picker
-        :value="color"
-        @input="color = $event.rgba"
-        :class="['elevation-0', 'v-card', { 'theme--dark': theme.isDark }]"
-      ></color-picker>
-    </v-flex>
-  </v-layout>
+  <v-container fluid grid-list-xs>
+    <v-layout row wrap>
+      <v-flex v-for="(item, key) in settingsPanel" :key="key" xs12 md6>
+        <div class="subtitle-1 text-xs-center mb-1">{{ item.title }}</div>        
+        <slider-card
+          :name="`${item.title}-slider`"
+          :min="item.min"
+          :max="item.max"
+          :step="item.step"
+          @input="item.update($event)"
+          :value="item.value"
+        ></slider-card>
+      </v-flex>
+      <v-flex>
+        <color-picker
+          :value="color"
+          @input="color = $event.rgba"
+          :class="['elevation-0', { 'theme--dark': theme.isDark }]"
+        ></color-picker>
+      </v-flex>
+    </v-layout>
+  </v-container>
 </template>
 
 <script lang="ts">
@@ -133,18 +136,20 @@ export default class VisualPanel extends Mixins(Alert, InitModule) {
 }
 </script>
 
-<style>
-.vc-chrome-body {
-  background-color: inherit !important;
+<style lang="scss">
+.vc-chrome.theme--dark {
+  .vc-chrome-body {
+    background-color: #303030 !important;
+  }
+
+  path {
+    fill: white !important;
+  }
 }
 
-.vc-editable-input input,
-.vc-editable-input span {
-  color: inherit !important;
-}
-
-.vc-chrome.theme--dark path {
-  fill: white !important;
+.vc-editable-input {
+  input, span {
+    color: inherit !important;
+  }
 }
 </style>
-

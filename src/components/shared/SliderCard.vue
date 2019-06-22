@@ -1,53 +1,44 @@
 <template>
-  <v-card flat height="100%">
-    <v-card-title primary-title class="justify-center">
-      <v-label>{{title}}</v-label>
-    </v-card-title>
-    <v-card-text>
-      <form>
-        <v-container text-xs-center>
-          <v-layout row nowrap>
-            <v-flex shrink style="width: 75px" mr-3>
-              <v-text-field
-                :value="minValue"
-                hide-details
-                single-line
-                type="number"
-                @blur="isRange ?
-                  update([$event.target.value, maxValue]) : update([$event.target.value])"
-              ></v-text-field>
-            </v-flex>
-            <v-flex>
-              <component
-                :is="isRange ? 'v-range-slider' : 'v-slider'"
-                :value="isRange ? internalValue : minValue"
-                :min="min"
-                :max="max"
-                :step="step"
-                :ticks="!!step"
-                :error-messages="errors"
-                :always-dirty="min !== 0"
-                @end="isRange ? update($event) : update([$event])"
-                thumb-label="always"
-                thumb-size="40"
-              ></component>
-            </v-flex>
-            <v-flex v-if="isRange" shrink style="width: 75px" ml-3>
-              <v-text-field
-                :value="maxValue"
-                hide-details
-                single-line
-                shrink
-                type="number"
-                @blur="isRange ?
-                  update([minValue, $event.target.value]) : update([$event.target.value])"
-              ></v-text-field>
-            </v-flex>
-          </v-layout>
-        </v-container>
-      </form>
-    </v-card-text>
-  </v-card>
+  <v-container fluid>
+    <v-layout row wrap>
+      <v-flex shrink style="width: 75px">
+        <v-text-field
+          :value="minValue"
+          hide-details
+          single-line
+          type="number"
+          @blur="isRange ?
+            update([$event.target.value, maxValue]) : update([$event.target.value])"
+        ></v-text-field>
+      </v-flex>
+      <v-flex class="pt-3">
+        <component
+          :is="isRange ? 'v-range-slider' : 'v-slider'"
+          :value="isRange ? internalValue : minValue"
+          :min="min"
+          :max="max"
+          :step="step"
+          :ticks="!!step"
+          :error-messages="errors"
+          :always-dirty="min !== 0"
+          @end="isRange ? update($event) : update([$event])"
+          thumb-label="always"
+          thumb-size="40"
+        ></component>
+      </v-flex>
+      <v-flex v-if="isRange" shrink style="width: 75px">
+        <v-text-field
+          :value="maxValue"
+          hide-details
+          single-line
+          shrink
+          type="number"
+          @blur="isRange ?
+            update([minValue, $event.target.value]) : update([$event.target.value])"
+        ></v-text-field>
+      </v-flex>
+    </v-layout>
+  </v-container>
 </template>
 
 <script lang="ts">
@@ -62,11 +53,10 @@ import { Vuelidate } from '@/decorators';
   components: { VRangeSlider, VSlider }
 })
 export default class SliderCard extends Vue {
-  @Prop() private value!: number[];
-  @Prop() private min!: number;
-  @Prop() private max!: number;
-  @Prop() private title!: string;
-  @Prop() private step!: number;
+  @Prop({ required: true, type: Array }) private value!: number[];
+  @Prop({ required: true, type: Number }) private min!: number;
+  @Prop({ required: true, type: Number }) private max!: number;
+  @Prop({ required: false, type: Number }) private step!: number;
 
   private internalValue = this.value;
 

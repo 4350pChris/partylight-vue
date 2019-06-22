@@ -3,7 +3,7 @@
     Could not establish connection to back end.
     <v-btn
       color="accent"
-      flat
+      text
       :loading="reconnecting"
       @click="reconnect">
       reconnect
