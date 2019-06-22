@@ -1,20 +1,10 @@
 <template>
   <v-layout row fill-height>
-    <v-flex sm9 md8 fill-height>
+    <v-flex xs12 fill-height>
       <v-layout column fill-height>
         <v-card class="pb-3" :color="theme.isDark ? '#1e1e1e' : ''">
           <v-card-title primary-title>
-            <v-text-field
-              v-model="editorScript.name"
-              label="Name"
-              hide-details
-            />
-            <v-menu>
-              <template #activator="{ on }">
-                <v-btn class="hidden-sm-and-up" color="secondary" v-on="on">scripts</v-btn>
-              </template>
-              <ScriptList v-if="!scriptsLoading" @select="editorScript = { ...$event }"/>
-            </v-menu>
+            <v-text-field v-model="editorScript.name" label="Name" hide-details/>
           </v-card-title>
           <v-card-actions class="mx-2">
             <v-dialog v-show="deleteEnabled" v-model="deleteDialog" max-width="290">
@@ -35,6 +25,9 @@
               </v-card>
             </v-dialog>
             <v-spacer/>
+            <ScriptList v-if="!scriptsLoading" @select="editorScript = { ...$event }"/>
+            <v-progress-circular v-else indeterminate :size="48"/>
+            <v-spacer/>
             <LoadingButton
               :button-options="{ color: 'accent', outlined: theme.isDark }"
               :click-handler="setActiveScriptHandler(editorScript)"
@@ -49,15 +42,6 @@
           <ScriptEditor :dark="theme.isDark" class="elevation-2" v-model="editorScript.code" fill-height/>
         </v-flex>
       </v-layout>            
-    </v-flex>
-    <v-flex ml-3 text-xs-center hidden-xs-only>
-      <v-card tile>
-        <v-card-actions>
-          <v-btn block text color="primary" @click="newScript()">new script</v-btn>
-        </v-card-actions>
-      </v-card>
-      <ScriptList v-if="!scriptsLoading" @select="editorScript = { ...$event }"/>
-      <v-progress-circular v-else indeterminate :size="48"/>
     </v-flex>
   </v-layout>
 </template>
