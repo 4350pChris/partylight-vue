@@ -1,11 +1,11 @@
 <template>
-  <v-list dense nav>
-      <v-list-item v-for="route in routes" :key="route.name" :to="route.path" ripple>
+  <v-list flat nav shaped>
+      <v-list-item v-for="route in routes" :key="route.name" :to="route.path">
         <v-list-item-avatar>
           <v-icon>{{route.meta.icon}}</v-icon>
         </v-list-item-avatar>
         <v-list-item-content>
-          <v-list-item-title>{{route.name.toUpperCase()}}</v-list-item-title>
+          <v-list-item-title class="text-uppercase">{{ route.name }}</v-list-item-title>
         </v-list-item-content>
       </v-list-item>
     </v-list>
