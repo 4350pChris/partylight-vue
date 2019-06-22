@@ -1,7 +1,7 @@
 <template>
   <v-container fluid>
-    <v-layout row wrap>
-      <v-flex shrink style="width: 75px">
+    <v-layout row wrap justify-space-between>
+      <v-flex shrink style="width: 75px" :class="[isRange ? 'order-xs2 order-md1' : '']">
         <v-text-field
           :value="minValue"
           hide-details
@@ -11,7 +11,7 @@
             update([$event.target.value, maxValue]) : update([$event.target.value])"
         ></v-text-field>
       </v-flex>
-      <v-flex class="pt-3">
+      <v-flex :class="['pt-4', isRange ? 'xs12 md8 order-xs1 order-md2' : '']">
         <component
           :is="isRange ? 'v-range-slider' : 'v-slider'"
           :value="isRange ? internalValue : minValue"
@@ -26,7 +26,7 @@
           thumb-size="40"
         ></component>
       </v-flex>
-      <v-flex v-if="isRange" shrink style="width: 75px">
+      <v-flex v-if="isRange" shrink style="width: 75px" order-xs3>
         <v-text-field
           :value="maxValue"
           hide-details

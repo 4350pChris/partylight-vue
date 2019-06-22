@@ -2,15 +2,20 @@
   <v-container fluid grid-list-xs>
     <v-layout row wrap>
       <v-flex>
-        <v-radio-group v-model="scaling" label="Scaling Strategy">
-          <v-radio
-            v-for="[name, val] in scalingStrategies"
-            :key="name"
-            :label="val"
-            :value="Number(name)"
-          ></v-radio>
-        </v-radio-group>
-        <v-switch v-model="useAverage" label="Use Average"></v-switch>
+        <v-layout row wrap justify-space-around>
+          <v-flex xs12>
+            <div class="subtitle-1 text-xs-center mb-1">Scaling Strategy</div>
+          </v-flex>
+          <v-radio-group v-model="scaling" column>
+            <v-radio
+              v-for="[name, val] in scalingStrategies"
+              :key="name"
+              :label="val"
+              :value="Number(name)"
+            ></v-radio>
+          </v-radio-group>
+          <v-switch v-model="useAverage" label="Use Average"></v-switch>
+        </v-layout>
       </v-flex>
       <v-flex v-for="(item, key) in audioPanel" :key="key" xs12 md6>
         <div class="subtitle-1 text-xs-center mb-1">{{ item.title }}</div>

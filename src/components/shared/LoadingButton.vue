@@ -1,5 +1,5 @@
 <template>
-  <v-btn @click="click()" :loading="loading" v-bind="buttonOptions">
+  <v-btn @click="click" :loading="loading" v-bind="buttonOptions">
     <slot></slot>
   </v-btn>
 </template>
