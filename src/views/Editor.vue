@@ -1,142 +1,94 @@
 <template>
-  <v-layout row fill-height>
-    <v-flex xs12 fill-height>
+  <v-layout row fill-height justify-center align-center>
+    <v-flex xs12 fill-height v-if="!scriptsLoading">
       <v-layout column fill-height>
         <v-card class="pb-3" :color="theme.isDark ? '#1e1e1e' : ''">
-          <v-card-title primary-title>
-            <v-text-field v-model="editorScript.name" label="Name" hide-details/>
-          </v-card-title>
-          <v-card-actions class="mx-2">
-            <v-dialog v-show="deleteEnabled" v-model="deleteDialog" max-width="290">
-              <template #activator="{ on }">
-                <v-btn class="lighten-1" color="error" :outlined="theme.isDark" v-on="on">Delete</v-btn>
-              </template>
-              <v-card>
-                <v-card-title class="headline">Confirm Deletion</v-card-title>
-                <v-card-text>Are you sure you would like to delete {{ editorScript.name }}?</v-card-text>
-                <v-card-actions>
-                  <v-spacer/>
-                  <v-btn color="primary" text @click.native="deleteDialog = false">Cancel</v-btn>
-                  <LoadingButton
-                    :button-options="{ color: 'error', text: true }"
-                    :click-handler="closeDeleteHandler(editorScript)"
-                  >Delete</LoadingButton>
-                </v-card-actions>
-              </v-card>
-            </v-dialog>
-            <v-spacer/>
-            <ScriptList v-if="!scriptsLoading" @select="editorScript = { ...$event }"/>
-            <v-progress-circular v-else indeterminate :size="48"/>
-            <v-spacer/>
-            <LoadingButton
-              :button-options="{ color: 'accent', outlined: theme.isDark }"
-              :click-handler="setActiveScriptHandler(editorScript)"
-            >activate</LoadingButton>
-            <LoadingButton
-              :button-options="{ color: 'success', outlined: theme.isDark }"
-              :click-handler="saveScriptHandler(editorScript)"
-            >save</LoadingButton>
-          </v-card-actions>
+          <v-container fluid grid-list-lg>
+            <v-layout align-end>
+              <v-flex xs12 lg3>
+                <v-text-field v-model="editorScript.name" label="Name" hide-details/>
+              </v-flex>
+              <v-flex xs12 lg4 xl3>
+                <ScriptList/>
+              </v-flex>
+              <v-spacer/>
+              <v-flex class="text-xs-right">
+                <v-btn @click="newScript">New Script</v-btn>
+                <ScriptDeleteButton :script="editorScript" />
+                <ScriptActivateButton :script="editorScript" />
+                <ScriptSaveButton :script="editorScript" />
+              </v-flex>
+            </v-layout>
+          </v-container>
         </v-card>
         <v-flex>
-          <ScriptEditor :dark="theme.isDark" class="elevation-2" v-model="editorScript.code" fill-height/>
+          <ScriptEditor class="elevation-2" v-model="editorScript.code" fill-height/>
         </v-flex>
       </v-layout>            
     </v-flex>
+    <v-progress-circular size="80" width="8" indeterminate v-else />
   </v-layout>
 </template>
 
 <script lang="ts">
-import { Actions as ScriptActions, Getters, Mutations } from '@/store/scripts';
-import { Component, Inject, Mixins, Vue } from 'vue-property-decorator';
-import { State, Action, Mutation, Getter } from 'vuex-class';
-import { StoreState, Actions as RootActions, InitFunctions } from '@/store';
+import { Component, Mixins } from 'vue-property-decorator';
+import { State, Mutation, Getter } from 'vuex-class';
+import { Getters, Mutations } from '@/store/scripts';
+import { StoreState, InitFunctions } from '@/store';
 import Script from '@/models/script';
 import ScriptEditor from '@/components/editor/ScriptEditor.vue';
 import ScriptList from '@/components/editor/ScriptList.vue';
-import LoadingButton from '@/components/shared/LoadingButton.vue';
-import { Constructor } from 'vue/types/options';
 import InitModule from '@/mixins/initModule';
 import Alert from '@/mixins/alert';
+import ThemeMixin from '@/mixins/theme';
+import ScriptActivateButton from '@/components/editor/buttons/ScriptActivateButton.vue';
+import ScriptDeleteButton from '@/components/editor/buttons/ScriptDeleteButton.vue';
+import ScriptSaveButton from '@/components/editor/buttons/ScriptSaveButton.vue';
 
 @Component({
   components: {
-    LoadingButton,
     ScriptEditor,
-    ScriptList
+    ScriptList,
+    ScriptActivateButton,
+    ScriptDeleteButton,
+    ScriptSaveButton,
   }
 })
-export default class Editor extends Mixins(Alert, InitModule) {
-  private editorScript: Script | null = null;
+export default class Editor extends Mixins(Alert, ThemeMixin, InitModule) {
+  scriptsLoading = true;
 
-  private scriptsLoading = true;
+  @State((store: StoreState) => store.scripts.selectedScriptId)
+  selectedScriptId!: number | null;
 
-  private deleteDialog = false;
+  @Getter(Getters.ScriptById)
+  scriptById!: (id: number) => Script | null;
 
-  @Inject()
-  private theme!: { isDark: boolean };
+  @Getter(Getters.EmptyScript)
+  emptyScript!: Script;
 
-  private get deleteEnabled(): boolean {
-    return this.editorScript !== null && this.editorScript.id !== undefined;
+  @Mutation(Mutations.SetSelectedScript)
+  setSelectedScript!: (id: number | null) => void;
+
+  get editorScript(): Script {
+    let script: Script | null = null;
+    if (this.selectedScriptId !== null) {
+      script = this.scriptById(this.selectedScriptId);
+    }
+    return script === null ? this.emptyScript : { ...script };
   }
 
-  @Getter(Getters.ActiveScript)
-  private activeScript!: Script | null;
-
-  @State((store: StoreState) => store.scripts.scripts)
-  private scripts!: Script[];
-
-  @Action(ScriptActions.SaveScript)
-  private save!: (script: Script) => Promise<void>;
-
-  @Action(ScriptActions.SetActiveScript)
-  private setActive!: (script: Script) => Promise<void>;
-
-  @Action(ScriptActions.DeleteScript)
-  private deleteScript!: (id: number) => Promise<void>;
-
-  private setActiveScriptHandler(script: Script): CallableFunction {
-    return () => this.setActive(script).catch((e: any) => this.showAlert({
-      type: 'error',
-      message: 'Error while setting active script<br>' + e
-    }));
+  newScript() {
+    this.setSelectedScript(null);
   }
 
-  private saveScriptHandler(script: Script): CallableFunction {
-    return () => this.save(script).catch((e: any) => this.showAlert({
-        type: 'error',
-        message: 'Error while saving script<br>' + e
-    })).finally(() => this.editorScript = { ...script });
-  }
-
-  private closeDeleteHandler(script: Script): CallableFunction {
-    return () => script.id === undefined || this.deleteScript(script.id)
-      .catch((e: any) => this.showAlert({
-        type: 'error',
-        message: 'Deleting script on server failed.<br>' + e
-      }))
-      .finally(() => {
-        this.newScript();
-        this.deleteDialog = false;
-      });
-  }
-
-  private newScript() {
-    this.editorScript = {
-      name: 'New Script',
-      code: 'public void setup() {\n\n}\n\npublic void loop() {\n\n}\n'
-    };
-  }
-
-  private created() {
-    this.newScript();
+  created() {
     this.initModule('scripts')
       .catch((e: any) => this.showAlert({
           type: 'error',
           message: 'Getting script settings from server failed.<br>' + e
         })
       )
-      .finally(() => (this.scriptsLoading = false));
+      .finally(() => this.scriptsLoading = false);
   }
 }
 </script>

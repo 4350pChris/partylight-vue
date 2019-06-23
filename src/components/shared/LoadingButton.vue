@@ -1,5 +1,5 @@
 <template>
-  <v-btn @click="click" :loading="loading" v-bind="buttonOptions">
+  <v-btn :loading="loading" v-bind="$attrs" v-on="$listeners" @click="click">
     <slot></slot>
   </v-btn>
 </template>
@@ -7,22 +7,17 @@
 <script lang="ts">
 import { Component, Prop, Vue } from 'vue-property-decorator';
 
-@Component
+@Component({ inheritAttrs: false })
 export default class LoadingButton extends Vue {
-  private loading: boolean = false;
+  loading: boolean = false;
 
-  @Prop()
-  private clickHandler!: CallableFunction;
+  @Prop({ type: Function, required: true })
+  load!: () => void | Promise<void>;
 
-  @Prop()
-  private buttonOptions!: { [prop: string]: any };
-
-  private async click() {
+  async click() {
     this.loading = true;
     try {
-      return this.clickHandler();
-    } catch (e) {
-      throw e;
+      await this.load();
     } finally {
       this.loading = false;
     }

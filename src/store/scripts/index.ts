@@ -9,9 +9,16 @@ export { Getters } from './getters';
 export { Mutations } from './mutations';
 export { initScripts } from './reactivity';
 
+export interface State {
+  scripts: Script[];
+  activeScriptId: number | null;
+  selectedScriptId: number | null;
+}
+
 export const state: State = {
   scripts: [],
-  activeScriptId: -1
+  activeScriptId: null,
+  selectedScriptId: null,
 };
 
 const module: Module<State, any> = {
@@ -20,11 +27,5 @@ const module: Module<State, any> = {
   getters,
   actions
 };
-
-export interface State {
-  scripts: Script[];
-
-  activeScriptId: number;
-}
 
 export default module;

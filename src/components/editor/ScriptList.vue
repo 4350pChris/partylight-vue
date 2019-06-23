@@ -1,21 +1,20 @@
 <template>
-  <v-select @change="$emit('select', $event)" :items="scripts" item-text="name" item-value="id" return-object :value="value">
-    <template #prepend-item>
-      <v-list-item @click.stop="newScript">
-        <v-list-item-content>
-          <v-list-item-title>New Script</v-list-item-title>          
-        </v-list-item-content>
-      </v-list-item>
+  <v-select
+    v-model="value"
+    :items="scripts"
+    :item-avatar="false"
+    item-text="name"
+    item-value="id"
+    solo
+    rounded
+    hide-details
+    label="Select a script"
+  >
+    <template #item="{ item }">
+      <ScriptItem :active="isActiveScript(item)" :value="item" />
     </template>
-    <template #item="{ item: script }">
-        <v-list-item ripple>
-          <v-list-item-content>
-            <v-list-item-title>{{ script.name }}</v-list-item-title>
-          </v-list-item-content>
-          <v-scroll-x-transition>
-            <v-icon v-if="isActiveScript(script)" color="success">check_circle</v-icon>
-          </v-scroll-x-transition>
-        </v-list-item>
+    <template #selection="{ item }">
+      <ScriptItem :active="isActiveScript(item)" :value="item" />
     </template>
   </v-select>
 </template>
@@ -24,30 +23,41 @@
 import { Component, Prop, Vue } from 'vue-property-decorator';
 import Script from '@/models/script';
 import { StoreState } from '@/store';
-import { Actions, Getters } from '@/store/scripts';
-import { Action, Getter, State } from 'vuex-class';
-import { VList } from 'vuetify/lib';
+import { Actions, Getters, Mutations } from '@/store/scripts';
+import { Action, Getter, Mutation, State } from 'vuex-class';
+import ScriptItem from './ScriptItem.vue';
 
-@Component({ components: { VList }})
+@Component({ components: { ScriptItem }})
 export default class ScriptList extends Vue {
   @State((store: StoreState) => store.scripts.scripts)
-  private scripts!: Script[];
+  scripts!: Script[];
 
-  @Getter(Getters.ActiveScript)
-  private active!: Script | null;
+  @State((store: StoreState) => store.scripts.selectedScriptId)
+  selectedScriptId!: number;
 
-  @Prop({ required: false, type: Number, default: -1 })
-  private value!: number;
+  @State((store: StoreState) => store.scripts.activeScriptId)
+  activeScriptId!: number;
 
-  private isActiveScript(script: Script) {
-    return this.active !== null && this.active.id === script.id;
+  @Getter(Getters.ScriptById)
+  scriptById!: (id: number) => Script | undefined;
+
+  @Mutation(Mutations.SetSelectedScript)
+  setSelectedScript!: (id: number) => void;
+
+  get value() {
+    return this.selectedScriptId;
   }
 
-  private newScript() {
-    this.$emit('input', {
-      name: 'New Script',
-      code: 'public void setup() {\n\n}\n\npublic void loop() {\n\n}\n'
-    });
+  set value(val: number) {
+    this.setSelectedScript(val);
+  }
+
+  get active(): Script | null {
+    return this.scriptById(this.activeScriptId) || null;
+  }
+
+  isActiveScript(script: Script) {
+    return this.active !== null && this.active.id === script.id;
   }
 }
 </script>

@@ -11,7 +11,7 @@
             update([$event.target.value, maxValue]) : update([$event.target.value])"
         ></v-text-field>
       </v-flex>
-      <v-flex :class="['pt-4', isRange ? 'xs12 md8 order-xs1 order-md2' : '']">
+      <v-flex :class="['pt-3', isRange ? 'xs12 md8 order-xs1 order-md2' : '']">
         <component
           :is="isRange ? 'v-range-slider' : 'v-slider'"
           :value="isRange ? internalValue : minValue"
@@ -24,6 +24,7 @@
           @end="isRange ? update($event) : update([$event])"
           thumb-label="always"
           thumb-size="40"
+          hide-details
         ></component>
       </v-flex>
       <v-flex v-if="isRange" shrink style="width: 75px" order-xs3>

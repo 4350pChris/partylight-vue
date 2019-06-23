@@ -1,5 +1,5 @@
 export default interface Script {
-    id?: number;
+    id: number;
     name: string;
     code: string;
 }

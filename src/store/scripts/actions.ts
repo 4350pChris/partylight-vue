@@ -9,7 +9,7 @@ export enum Actions {
   DeleteScript = 'deleteScript',
   FetchScripts = 'fetchScripts',
   SaveScript = 'saveScript',
-  SetActiveScript = 'setActiveScript'
+  SetActiveScript = 'setActiveScript',
 }
 
 const actions: ActionTree<State, {}> = {
@@ -30,9 +30,10 @@ const actions: ActionTree<State, {}> = {
    * @param {Script} payload
    * @returns {Promise<void>}
    */
-  async [Actions.SaveScript]({ commit }, payload: Script): Promise<void> {
+  async [Actions.SaveScript]({ commit, state }, payload: Script): Promise<void> {
     let success: boolean;
-    if (payload.id !== undefined) {
+    const existing = state.scripts.find(s => s.id === payload.id);
+    if (existing !== undefined) {
       commit(Mutations.UpdateScript, payload);
       success = await scriptsService.replaceScript(payload);
     } else {
@@ -51,18 +52,13 @@ const actions: ActionTree<State, {}> = {
    * @param {(Script | number)} payload
    * @returns {Promise<void>}
    */
-  async [Actions.SetActiveScript]({ commit }, payload: Script | number): Promise<void> {
-    let success: boolean;
-    if (typeof payload === 'object') {
-      success = await scriptsService.setActiveScript(payload);
-    } else {
-      success = await scriptsService.setActiveScriptById(payload);
-    }
-    if (!success) {
-      throw new Error('Failed setting active script on server.');
-    }
+  async [Actions.SetActiveScript]({ commit }, payload: number): Promise<void> {
+    // const success = await scriptsService.setActiveScriptById(payload);
+    // if (!success) {
+    //   throw new Error('Failed setting active script on server.');
+    // }
     commit(Mutations.SetActiveScript, payload);
-  }
+  },
 };
 
 export default actions;

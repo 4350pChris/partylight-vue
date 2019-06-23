@@ -3,25 +3,23 @@
 </template>
 
 <script lang="ts">
-import { Component, Prop, Watch, Vue } from 'vue-property-decorator';
+import { Component, Prop, Watch, Mixins } from 'vue-property-decorator';
 import * as monaco from 'monaco-editor/esm/vs/editor/editor.api';
 import { IPosition, editor, languages } from 'monaco-editor';
 import services from '@/api';
 import Completion from '@/models/completion';
+import ThemeMixin from '@/mixins/theme';
 
 @Component
-export default class ScriptEditor extends Vue {
+export default class ScriptEditor extends Mixins(ThemeMixin) {
   private editor?: editor.IStandaloneCodeEditor;
-
-  @Prop({ type: Boolean, default: false })
-  private dark!: boolean;
 
   @Prop()
   private value!: string;
 
-  @Watch('dark')
+  @Watch('theme', { deep: true })
   private onDarkChanged(val: boolean) {
-    const theme = this.dark ? 'vs-dark' : 'vs';
+    const theme = this.theme.isDark ? 'vs-dark' : 'vs';
     monaco.editor.setTheme(theme);
   }
 
@@ -73,7 +71,7 @@ export default class ScriptEditor extends Vue {
     const options: monaco.editor.IEditorConstructionOptions = {
       value: this.value,
       language: 'csharp',
-      theme: this.dark ? 'vs-dark' : 'vs',
+      theme: this.theme.isDark ? 'vs-dark' : 'vs',
       scrollBeyondLastLine: false,
       automaticLayout: true,
       minimap: { enabled: false }
