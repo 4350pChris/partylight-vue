@@ -1,5 +1,5 @@
 <template>
-  <div id="editor"></div>
+  <div id="editor" v-resize="resizeEditor"></div>
 </template>
 
 <script lang="ts">
@@ -100,11 +100,6 @@ export default class ScriptEditor extends Mixins(ThemeMixin) {
     this.registerCompletion();
     this.editor = this.createEditor();
     this.registerInputListener();
-    window.addEventListener('resize', this.resizeEditor);
-  }
-
-  private beforeDestroy() {
-    window.removeEventListener('resize', this.resizeEditor);
   }
 }
 </script>

@@ -3,27 +3,25 @@
     <template v-if="!scriptsLoading">
       <v-flex shrink>
         <v-layout column>
-          <!-- <v-card class="pb-3" :color="theme.isDark ? '#1e1e1e' : ''"> -->
-            <v-container fluid grid-list-md>
-              <v-layout align-end row wrap>
-                <v-flex xs12 sm6 md3 v-if="$vuetify.breakpoint.mdAndUp">
-                  <v-text-field v-model="editorScript.name" label="Name" hide-details/>
+          <v-container fluid grid-list-md>
+            <v-layout align-end row wrap>
+              <v-flex xs12 sm6 md3 v-if="$vuetify.breakpoint.mdAndUp">
+                <v-text-field v-model="editorScript.name" label="Name" hide-details/>
+              </v-flex>
+              <v-flex xs12 sm6 md3>
+                <ScriptList/>
+              </v-flex>
+                <v-spacer/>
+                <v-flex v-if="$vuetify.breakpoint.mdAndUp">
+                  <v-btn @click="newScript">New Script</v-btn>
                 </v-flex>
-                <v-flex xs12 sm6 md3>
-                  <ScriptList/>
+                <v-flex class="text-xs-right">
+                  <ScriptDeleteButton :script="editorScript" />
+                  <ScriptActivateButton :script="editorScript" />
+                  <ScriptSaveButton v-if="$vuetify.breakpoint.mdAndUp" :script="editorScript" />
                 </v-flex>
-                  <v-spacer/>
-                  <v-flex v-if="$vuetify.breakpoint.mdAndUp">
-                    <v-btn @click="newScript">New Script</v-btn>
-                  </v-flex>
-                  <v-flex class="text-xs-right">
-                    <ScriptDeleteButton :script="editorScript" />
-                    <ScriptActivateButton :script="editorScript" />
-                    <ScriptSaveButton v-if="$vuetify.breakpoint.mdAndUp" :script="editorScript" />
-                  </v-flex>
-              </v-layout>
-            </v-container>
-          <!-- </v-card> -->
+            </v-layout>
+          </v-container>
         </v-layout>            
       </v-flex>
       <v-flex v-if="$vuetify.breakpoint.smAndUp">
