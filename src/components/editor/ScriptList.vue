@@ -1,8 +1,8 @@
 <template>
   <v-select
     v-model="value"
+    class="py-1"
     :items="scripts"
-    :item-avatar="false"
     item-text="name"
     item-value="id"
     solo

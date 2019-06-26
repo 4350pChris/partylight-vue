@@ -1,5 +1,12 @@
 <template>
-  <LoadingButton color="success" :outlined="theme.isDark" :load="saveScript">save</LoadingButton>
+  <LoadingButton
+    color="success"
+    v-bind="$attrs"
+    :outlined="theme.isDark"
+    :load="saveScript"
+  >
+    <slot>save</slot>
+  </LoadingButton>
 </template>
 
 <script lang="ts">

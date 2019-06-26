@@ -12,7 +12,7 @@ import ThemeMixin from '@/mixins/theme';
 
 @Component
 export default class ScriptEditor extends Mixins(ThemeMixin) {
-  private editor?: editor.IStandaloneCodeEditor;
+  private editor: editor.IStandaloneCodeEditor | null = null;
 
   @Prop()
   private value!: string;
@@ -25,7 +25,7 @@ export default class ScriptEditor extends Mixins(ThemeMixin) {
 
   @Watch('value')
   private onValueChanged(val: string, oldVal: string) {
-    if (this.editor !== undefined && val !== this.editor.getValue()) {
+    if (this.editor !== null && val !== this.editor.getValue()) {
       this.editor.setValue(val);
     }
   }
@@ -67,23 +67,22 @@ export default class ScriptEditor extends Mixins(ThemeMixin) {
     });
   }
 
-  private createEditor() {
+  private createEditor(): editor.IStandaloneCodeEditor {
     const options: monaco.editor.IEditorConstructionOptions = {
       value: this.value,
       language: 'csharp',
       theme: this.theme.isDark ? 'vs-dark' : 'vs',
       scrollBeyondLastLine: false,
-      automaticLayout: true,
       minimap: { enabled: false }
     };
-    this.editor = monaco.editor.create(
+    return monaco.editor.create(
       document.getElementById('editor') as HTMLElement,
       options
     );
   }
 
   private registerInputListener() {
-    if (this.editor !== undefined) {
+    if (this.editor !== null) {
       const e = this.editor;
       e.onDidChangeModelContent(() => {
         this.$emit('input', e.getValue());
@@ -91,10 +90,21 @@ export default class ScriptEditor extends Mixins(ThemeMixin) {
     }
   }
 
+  private resizeEditor() {
+    if (this.editor !== null) {
+      this.editor.layout();
+    }
+  }
+
   private mounted() {
     this.registerCompletion();
-    this.createEditor();
+    this.editor = this.createEditor();
     this.registerInputListener();
+    window.addEventListener('resize', this.resizeEditor);
+  }
+
+  private beforeDestroy() {
+    window.removeEventListener('resize', this.resizeEditor);
   }
 }
 </script>

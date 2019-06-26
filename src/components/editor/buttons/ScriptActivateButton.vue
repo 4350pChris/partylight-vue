@@ -4,7 +4,10 @@
     :outlined="theme.isDark"
     :load="setActiveScript"
     :disabled="disabled"
-  >activate</LoadingButton>
+    v-bind="$attrs"
+  >
+    <slot>activate</slot>
+  </LoadingButton>
 </template>
 
 <script lang="ts">

@@ -1,15 +1,13 @@
 <template>
-  <v-list-item>
+  <v-list-item class="px-0">
     <v-flex xs2 class="pl-0">
       <v-slide-x-transition>
         <v-icon v-if="active" color="success">mdi-check-circle</v-icon>
       </v-slide-x-transition>
     </v-flex>
-    <v-flex>
-      <v-list-item-content>
-        <v-list-item-title>{{ value.name }}</v-list-item-title>
-      </v-list-item-content>
-    </v-flex>
+    <v-list-item-content>
+      {{ value.name }}
+    </v-list-item-content>
   </v-list-item>
 </template>
 

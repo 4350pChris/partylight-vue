@@ -7,7 +7,10 @@
         :outlined="theme.isDark"
         :disabled="disabled"
         v-on="on"
-      >Delete</v-btn>
+        v-bind="$attrs"
+      >
+        <slot>delete</slot>
+      </v-btn>
     </template>
     <v-card>
       <v-card-title class="headline">Confirm Deletion</v-card-title>
