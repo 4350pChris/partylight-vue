@@ -16,10 +16,10 @@
         <v-flex>
           <v-divider/>
           <div class="title text-xs-center">Status</div>
-          <AppStatus/>
+          <AppStatus class="shrink" />
         </v-flex>
         <v-flex shrink>
-          <v-img id="logo" pb-1 :src="require('@/assets/splash.png')" />
+          <v-img :src="require('@/assets/splash.png')" />
         </v-flex>
       </v-layout>
     </v-container>

@@ -1,6 +1,6 @@
 <template>
   <v-container fluid>
-    <v-layout justify-space-between row wrap>
+    <v-layout wrap text-xs-center>
       <v-flex>Sampling Rate - {{ samplingRate }}</v-flex>
       <v-flex>Packets / sec - {{ packetsPerSecond }}</v-flex>
       <v-flex>Max Frequency - {{ maximumFrequency }}</v-flex>
