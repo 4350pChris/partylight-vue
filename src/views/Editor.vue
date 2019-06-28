@@ -9,7 +9,7 @@
                 <v-text-field v-model="editorScript.name" label="Name" hide-details/>
               </v-flex>
               <v-flex xs12 sm6 md3>
-                <ScriptList/>
+                <ScriptList class="script-list" />
               </v-flex>
                 <v-spacer/>
                 <v-flex v-if="$vuetify.breakpoint.mdAndUp">
@@ -95,3 +95,9 @@ export default class Editor extends Mixins(Alert, ThemeMixin, InitModule) {
   }
 }
 </script>
+
+<style scoped>
+.script-list {
+  margin-bottom: -3px;
+}
+</style>
