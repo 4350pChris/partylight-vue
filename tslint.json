@@ -13,6 +13,6 @@
     "ordered-imports": false,
     "object-literal-sort-keys": false,
     "no-consecutive-blank-lines": false,
-    "member-access": false
+    "member-access": [true, "no-public"]
   }
 }
