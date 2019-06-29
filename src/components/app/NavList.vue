@@ -18,7 +18,7 @@ import { Route } from 'vue-router';
 @Component
 export default class NavList extends Vue {
   @Prop({ required: true, type: Array })
-  private routes!: Route[];
+  routes!: Route[];
 }
 </script>
 

@@ -19,7 +19,7 @@ import VisualPanel from '@/components/settings/VisualPanel.vue';
   components: { AudioPanel, VisualPanel }
 })
 export default class SettingsList extends Vue {
-  private tab = 0;
+  tab = 0;
 }
 </script>
 

@@ -18,15 +18,15 @@ import { StoreState } from '@/store';
 @Component
 export default class AppStatus extends Vue {
   @State((store: StoreState) => store.dmx.samplingRate)
-  private samplingRate!: number;
+  samplingRate!: number;
 
   @State((store: StoreState) => store.dmx.packetsPerSecond)
-  private packetsPerSecond!: number;
+  packetsPerSecond!: number;
 
   @State((store: StoreState) => store.dmx.maximumFrequency)
-  private maximumFrequency!: number;
+  maximumFrequency!: number;
 
   @State((store: StoreState) => store.dmx.usedFrequency)
-  private usedFrequency!: number;
+  usedFrequency!: number;
 }
 </script>

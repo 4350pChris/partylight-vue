@@ -2,7 +2,9 @@ import { InitFunction, State, InitFunctions } from '.';
 import { MutationTree } from 'vuex';
 
 export enum Mutations {
-  SetModuleInitialized = 'SetModuleInitialized'
+  SetDarkMode = 'setDarkMode',
+  SetDrawer = 'setDrawer',
+  SetModuleInitialized = 'setModuleInitialized'
 }
 
 const mutations: MutationTree<State> = {
@@ -15,7 +17,13 @@ const mutations: MutationTree<State> = {
       ...state.initFunctions,
       [payload.module]: m
     };
-  }
+  },
+  [Mutations.SetDarkMode](state, darkMode: boolean) {
+    state.darkMode = darkMode;
+  },
+  [Mutations.SetDrawer](state, drawer: boolean | null) {
+    state.drawer = drawer;
+  },
 };
 
 export default mutations;

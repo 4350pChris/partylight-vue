@@ -1,8 +1,7 @@
 <template>
   <v-navigation-drawer
     id="navdrawer"
-    :value="value"
-    @input="$emit('input', $event)"
+    v-model="drawer"
     :clipped="$vuetify.breakpoint.smAndDown"
     fixed
     app
@@ -11,7 +10,7 @@
       <v-layout column>
         <NavList :routes="routes"/>
         <v-flex px-3>
-          <v-switch @change="$emit('dark-mode')" label="Dark Mode"></v-switch>
+          <DarkModeSwitch />
         </v-flex>
         <v-flex>
           <v-divider/>
@@ -32,13 +31,27 @@ import { Route } from 'vue-router';
 import { routes as origRoutes } from '@/router';
 import NavList from '@/components/app/NavList.vue';
 import AppStatus from '@/components/app/AppStatus.vue';
+import DarkModeSwitch from '@/components/app/DarkModeSwitch.vue';
+import { State, Mutation } from 'vuex-class';
+import { StoreState, Mutations } from '@/store';
 
-@Component({ components: { AppStatus, NavList }})
+@Component({ components: { AppStatus, DarkModeSwitch, NavList }})
 export default class AppDrawer extends Vue {
-  @Prop({ default: null })
-  private value!: boolean | null;
+  @Mutation(Mutations.SetDrawer)
+  setDrawer!: (dm: boolean | null) => void;
 
-  private routes = origRoutes.filter(r => r.name);
+  get drawer() {
+    return this._drawer;
+  }
+
+  set drawer(val: boolean | null) {
+    this.setDrawer(val);
+  }
+
+  routes = origRoutes.filter(r => r.name);
+
+  @State((store: StoreState) => store.drawer)
+  _drawer!: boolean | null;
 }
 </script>
 

@@ -1,7 +1,7 @@
 import * as signalR from '@aspnet/signalr';
 
 export abstract class BaseSocketService {
-  public static baseUrl: string;
+  static baseUrl: string;
 
   private readonly connection: signalR.HubConnection;
 
@@ -12,11 +12,11 @@ export abstract class BaseSocketService {
       .build();
   }
 
-  public get isConnected() {
+  get isConnected() {
     return this.connection.state === signalR.HubConnectionState.Connected;
   }
 
-  public async startConnection() {
+  async startConnection() {
     if (!this.isConnected) {
       return this.connection.start();
     }

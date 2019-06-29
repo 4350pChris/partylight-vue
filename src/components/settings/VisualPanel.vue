@@ -39,32 +39,32 @@ import Alert from '@/mixins/alert';
   components: { ColorPicker, SliderCard }
 })
 export default class VisualPanel extends Mixins(Alert, InitModule) {
-  @Inject() private theme!: { isDark: boolean };
+  @Inject() theme!: { isDark: boolean };
 
   @State((store: StoreState) => store.settings)
-  private settings!: Settings;
+  settings!: Settings;
 
   @State((store: StoreState) => store.dmx.samplingRate)
-  private samplingRate!: number;
+  samplingRate!: number;
 
   @State((store: StoreState) => store.dmx.lengthOfUniverse)
-  private lengthOfUniverse!: number;
+  lengthOfUniverse!: number;
 
   @Action(DMXActions.SaveSamplingRate)
-  private saveSamplingRate!: (rate: number) => Promise<void>;
+  saveSamplingRate!: (rate: number) => Promise<void>;
 
   @Action(DMXActions.SaveLengthOfUniverse)
-  private saveLengthOfUniverse!: (rate: number) => Promise<void>;
+  saveLengthOfUniverse!: (rate: number) => Promise<void>;
 
-  private get color(): Color {
+  get color(): Color {
     return this.settings.color;
   }
 
-  private set color(color: Color) {
+  set color(color: Color) {
     this.saveSettings({ color });
   }
 
-  private get settingsPanel() {
+  get settingsPanel() {
     return [
       {
         min: 0,
@@ -99,12 +99,12 @@ export default class VisualPanel extends Mixins(Alert, InitModule) {
     ];
   }
 
-  private saveSettings(settings: Partial<Settings>) {
+  saveSettings(settings: Partial<Settings>) {
     this.$store.dispatch(SettingsActions.SaveSettings, settings)
       .catch(e => (this.savingFailed(e)));
   }
 
-  private saveDMXParameters({ lengthOfUniverse, samplingRate }: Partial<DMXState>) {
+  saveDMXParameters({ lengthOfUniverse, samplingRate }: Partial<DMXState>) {
     const calls = [];
     if (lengthOfUniverse !== undefined) {
       calls.push(this.saveLengthOfUniverse(lengthOfUniverse));
@@ -115,14 +115,14 @@ export default class VisualPanel extends Mixins(Alert, InitModule) {
     Promise.all(calls).catch(e => (this.savingFailed(e)));
   }
 
-  private savingFailed(e: any) {
+  savingFailed(e: any) {
     this.showAlert({
       type: 'error',
       message: 'Failed saving settings.<br>' + e
     });
   }
 
-  private created() {
+  created() {
     Promise.all([
       this.initModule('settings'),
       this.initModule('dmx')

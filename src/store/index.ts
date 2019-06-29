@@ -19,6 +19,8 @@ Vue.use(Vuex);
 const debug = process.env.NODE_ENV !== 'production';
 
 const state: State = {
+  drawer: null,
+  darkMode: false,
   initFunctions: {
     audio: { fn: initAudio },
     dmx: { fn: initDMX },
@@ -37,7 +39,7 @@ const storeOptions: StoreOptions<State> = {
 };
 
 // cast to StoreState so type includes modules
-const store = new Vuex.Store(storeOptions) as Store<StoreState>;
+const store = new Vuex.Store(storeOptions) as unknown as Store<StoreState>;
 
 export default store;
 
@@ -52,6 +54,8 @@ export type InitFunctions = {
 
 export interface State {
   initFunctions: InitFunctions;
+  darkMode: boolean;
+  drawer: boolean | null;
 }
 
 export interface StoreModules {

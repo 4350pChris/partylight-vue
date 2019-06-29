@@ -12,25 +12,25 @@ import ThemeMixin from '@/mixins/theme';
 
 @Component
 export default class ScriptEditor extends Mixins(ThemeMixin) {
-  private editor: editor.IStandaloneCodeEditor | null = null;
+  editor: editor.IStandaloneCodeEditor | null = null;
 
   @Prop()
-  private value!: string;
+  value!: string;
 
   @Watch('theme', { deep: true })
-  private onDarkChanged(val: boolean) {
+  onDarkChanged(val: boolean) {
     const theme = this.theme.isDark ? 'vs-dark' : 'vs';
     monaco.editor.setTheme(theme);
   }
 
   @Watch('value')
-  private onValueChanged(val: string, oldVal: string) {
+  onValueChanged(val: string, oldVal: string) {
     if (this.editor !== null && val !== this.editor.getValue()) {
       this.editor.setValue(val);
     }
   }
 
-  private registerCompletion() {
+  registerCompletion() {
     monaco.languages.registerCompletionItemProvider('csharp', {
       provideCompletionItems: async (model, position) => {
         const source = model.getValue();
@@ -67,7 +67,7 @@ export default class ScriptEditor extends Mixins(ThemeMixin) {
     });
   }
 
-  private createEditor(): editor.IStandaloneCodeEditor {
+  createEditor(): editor.IStandaloneCodeEditor {
     const options: monaco.editor.IEditorConstructionOptions = {
       value: this.value,
       language: 'csharp',
@@ -81,7 +81,7 @@ export default class ScriptEditor extends Mixins(ThemeMixin) {
     );
   }
 
-  private registerInputListener() {
+  registerInputListener() {
     if (this.editor !== null) {
       const e = this.editor;
       e.onDidChangeModelContent(() => {
@@ -90,13 +90,13 @@ export default class ScriptEditor extends Mixins(ThemeMixin) {
     }
   }
 
-  private resizeEditor() {
+  resizeEditor() {
     if (this.editor !== null) {
       this.editor.layout();
     }
   }
 
-  private mounted() {
+  mounted() {
     this.registerCompletion();
     this.editor = this.createEditor();
     this.registerInputListener();

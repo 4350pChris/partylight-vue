@@ -5,7 +5,8 @@
       color="accent"
       text
       :loading="reconnecting"
-      @click="reconnect">
+      @click="reconnect"
+    >
       reconnect
     </v-btn>
   </v-snackbar>
@@ -21,19 +22,19 @@ import { Actions } from '@/store/actions';
 
 @Component
 export default class DisconnectedSnackbar extends Vue {
-  private reconnecting = false;
+  reconnecting = false;
+
+  @Action(Actions.InitModule)
+  initModule!: (payload: keyof InitFunctions) => Promise<any>;
 
   @Getter(Getters.FailedInitModules)
   private failedInitModules!: Array<keyof InitFunctions>;
 
-  private get snackbar() {
+  get snackbar() {
     return this.failedInitModules.length > 0;
   }
 
-  @Action(Actions.InitModule)
-  private initModule!: (payload: keyof InitFunctions) => Promise<any>;
-
-  private async reconnect() {
+  async reconnect() {
     this.reconnecting = true;
     await Promise.all(this.failedInitModules.map(mod => this.initModule(mod)));
     this.reconnecting = false;

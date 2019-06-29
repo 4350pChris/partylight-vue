@@ -12,13 +12,13 @@ import { StoreState } from '@/store';
 @Component
 export default class AppAlert extends Vue {
   @State((state: StoreState) => state.alert.visible)
-  private alertVisible!: boolean;
+  alertVisible!: boolean;
 
   @State((state: StoreState) => state.alert.message)
-  private alertMessage!: string;
+  alertMessage!: string;
 
   @State((state: StoreState) => state.alert.type)
-  private alertType!: string;
+  alertType!: string;
 }
 </script>
 

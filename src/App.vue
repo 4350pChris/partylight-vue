@@ -1,9 +1,7 @@
 <template>
-  <v-app :dark="dark">
-    <v-app-bar app clipped-left dense v-if="$vuetify.breakpoint.mdAndDown">
-      <v-app-bar-nav-icon @click.stop="drawer = !drawer"/>
-    </v-app-bar>
-    <AppDrawer @dark-mode="dark = !dark" v-model="drawer"/>
+  <v-app :dark="darkMode">
+    <AppTopBar/>
+    <AppDrawer/>
     <v-content>
       <v-container fluid fill-height>
         <v-slide-y-transition mode="out-in">
@@ -21,15 +19,17 @@ import { Component, Vue } from 'vue-property-decorator';
 import { RouteConfig } from 'vue-router';
 import AppAlert from '@/components/app/AppAlert.vue';
 import AppDrawer from '@/components/app/AppDrawer.vue';
+import AppTopBar from '@/components/app/AppTopBar.vue';
 import DisconnectedSnackbar from '@/components/app/DisconnectedSnackbar.vue';
-
+import { State } from 'vuex-class';
+import { StoreState } from '@/store';
 
 @Component({
-  components: { AppDrawer, AppAlert, DisconnectedSnackbar }
+  components: { AppDrawer, AppAlert, AppTopBar, DisconnectedSnackbar }
 })
 export default class App extends Vue {
-  private dark: boolean = false;
-  private drawer: boolean | null = null;
+  @State((store: StoreState) => store.darkMode)
+  darkMode!: boolean;
 }
 </script>
 

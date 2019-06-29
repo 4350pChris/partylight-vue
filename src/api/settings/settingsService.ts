@@ -3,19 +3,19 @@ import { Color } from '@/models/settings';
 
 export default class SettingsService extends BaseSocketService {
 
-  public getBrightness = () => this.invoke<number>('GetBrightness');
+  getBrightness = () => this.invoke<number>('GetBrightness');
 
-  public getDelay = () => this.invoke<number>('GetDelay');
+  getDelay = () => this.invoke<number>('GetDelay');
 
-  public getColor = () => this.invoke<number>('GetColor').then(n => this.numberToColor(n));
+  getColor = () => this.invoke<number>('GetColor').then(n => this.numberToColor(n));
 
-  public setBrightness = (brightness: number) => this.invoke<void>('SetBrightness', brightness);
+  setBrightness = (brightness: number) => this.invoke<void>('SetBrightness', brightness);
 
-  public setDelay = (delay: number) => this.invoke<void>('SetDelay', delay);
+  setDelay = (delay: number) => this.invoke<void>('SetDelay', delay);
 
-  public setColor = (color: Color) => this.invoke<void>('SetColor', this.colorToNumber(color));
+  setColor = (color: Color) => this.invoke<void>('SetColor', this.colorToNumber(color));
 
-  public onSettingChanged(cb: (prop: string, val: number) => void): void {
+  onSettingChanged(cb: (prop: string, val: number) => void): void {
     this.on('PropertyChanged', cb);
   }
 

@@ -47,12 +47,12 @@ import Alert from '@/mixins/alert';
 })
 export default class AudioPanel extends Mixins(Alert, InitModule) {
   @State((store: StoreState) => store.audio.parameters)
-  private audioParameters!: AudioParameters;
+  audioParameters!: AudioParameters;
 
   @Action(AudioActions.SaveParameters)
-  private saveParameters!: (params: Partial<AudioParameters>) => Promise<void>;
+  saveParameters!: (params: Partial<AudioParameters>) => Promise<void>;
 
-  private get audioPanel() {
+  get audioPanel() {
     return [
       {
         min: 0,
@@ -90,40 +90,40 @@ export default class AudioPanel extends Mixins(Alert, InitModule) {
     ];
   }
 
-  private get useAverage(): boolean {
+  get useAverage(): boolean {
     return this.audioParameters.useAverage;
   }
 
-  private set useAverage(avg: boolean) {
+  set useAverage(avg: boolean) {
     this.save({ useAverage: avg });
   }
 
-  private get scaling(): number {
+  get scaling(): number {
     return this.audioParameters.scalingStrategy;
   }
 
-  private set scaling(n: number) {
+  set scaling(n: number) {
     this.save({ scalingStrategy: n });
   }
 
-  public get scalingStrategies(): Array<[string, any]> {
+  get scalingStrategies(): Array<[string, any]> {
     return Object.entries(ScalingStrategy).filter(
       ([key, value]) => !isNaN(Number(key))
     );
   }
 
-  private savingFailed(e: any) {
+  savingFailed(e: any) {
     this.showAlert({
       type: 'error',
       message: 'Failed saving settings.<br>' + e
     });
   }
 
-  private save(params: Partial<AudioParameters>) {
+  save(params: Partial<AudioParameters>) {
     this.saveParameters(params).catch((e: any) => this.savingFailed(e));
   }
 
-  private created() {
+  created() {
     this.initModule('audio').catch((e: any) => this.showAlert({
         type: 'error',
         message: 'Failed getting audio settings from server.<br>' + e

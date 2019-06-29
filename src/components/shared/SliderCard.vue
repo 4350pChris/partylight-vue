@@ -54,23 +54,23 @@ import { Vuelidate } from '@/decorators';
   components: { VRangeSlider, VSlider }
 })
 export default class SliderCard extends Vue {
-  @Prop({ required: true, type: Array }) private value!: number[];
-  @Prop({ required: true, type: Number }) private min!: number;
-  @Prop({ required: true, type: Number }) private max!: number;
-  @Prop({ required: false, type: Number }) private step!: number;
+  @Prop({ required: true, type: Array }) value!: number[];
+  @Prop({ required: true, type: Number }) min!: number;
+  @Prop({ required: true, type: Number }) max!: number;
+  @Prop({ required: false, type: Number }) step!: number;
 
   private internalValue = this.value;
 
-  private get minValue(): number {
+  get minValue(): number {
     return min(this.internalValue) as number;
   }
 
-  private get maxValue(): number {
+  get maxValue(): number {
     return max(this.internalValue) as number;
   }
 
   @Vuelidate
-  private validations() {
+  validations() {
     return {
       internalValue: {
         $each: {
@@ -81,11 +81,11 @@ export default class SliderCard extends Vue {
     };
   }
 
-  private get isRange() {
+  get isRange() {
     return this.value.length > 1;
   }
 
-  private get errors() {
+  get errors() {
     const errors: string[] = [];
     if (!this.$v.internalValue.$dirty) {
       return errors;
@@ -108,7 +108,7 @@ export default class SliderCard extends Vue {
     return errors;
   }
 
-  private update(v: number[]) {
+  update(v: number[]) {
     this.internalValue = v.map(n => Number(n)).sort();
     this.$v.internalValue.$touch();
     if (!this.$v.internalValue.$invalid) {

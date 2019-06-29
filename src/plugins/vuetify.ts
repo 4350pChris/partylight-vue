@@ -1,7 +1,7 @@
 import Vue from 'vue';
-import Vuetify, { VList } from 'vuetify/lib';
+import Vuetify from 'vuetify/lib';
 
-Vue.use(Vuetify, { components: { VList }});
+Vue.use(Vuetify);
 
 export default new Vuetify({
   icons: {
