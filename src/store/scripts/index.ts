@@ -21,11 +21,11 @@ export const state: State = {
   selectedScriptId: null,
 };
 
-const module: Module<State, any> = {
+const store: Module<State, any> = {
   state,
   mutations,
   getters,
   actions
 };
 
-export default module;
+export default store;
