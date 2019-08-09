@@ -1,24 +1,38 @@
-import alertStore, { Actions, State } from '@/store/alert';
+import alertStore, { Actions, State, state } from '@/store/alert';
 import Vuex, { Store } from 'vuex';
 import { createLocalVue } from '@vue/test-utils';
+import { cloneDeep } from 'lodash';
 
 const localVue = createLocalVue();
 
 localVue.use(Vuex);
+jest.useRealTimers();
 
 describe('Alert Store Actions', () => {
   let store: Store<State>;
 
   beforeEach(() => {
-    store = new Vuex.Store(alertStore);
+    store = new Vuex.Store(cloneDeep(alertStore));
   });
 
-  it('Show/Hide Alert', async () => {
-    const payload = { type: 'error', message: 'Test', duration: 2000 };
+  it('Show Alert', done => {
+    const payload = { type: 'error', message: 'Test', duration: 0 };
     store.dispatch(Actions.ShowAlert, payload);
     // alert should be visible right after the call
     expect(store.state.visible).toBe(true);
-    // after waiting for duration ms the alert should not be visible anymore
-    await setTimeout(() => expect(store.state.visible).toBe(false), payload.duration);
+    // it then calls hide which is debounced by 2 seconds
+    setTimeout(() => {
+      expect(store.state.visible).toBe(false);
+      done();
+    }, 2500);
+  });
+  it ('Hide Alert', done => {
+    store.replaceState({ ...state, visible: true });
+    expect(store.state.visible).toBe(true);
+    store.dispatch(Actions.HideAlert);
+    setTimeout(() => {
+      expect(store.state.visible).toBe(false);
+      done();
+    }, 2500);
   });
 });
