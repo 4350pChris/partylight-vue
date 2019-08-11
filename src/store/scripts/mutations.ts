@@ -1,7 +1,6 @@
 import { MutationTree } from 'vuex';
 import { State } from '.';
 import Script from '@/models/script';
-import { maxBy } from 'lodash';
 import Vue from 'vue';
 
 export enum Mutations {

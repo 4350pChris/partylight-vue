@@ -53,10 +53,10 @@ const actions: ActionTree<State, {}> = {
    * @returns {Promise<void>}
    */
   async [Actions.SetActiveScript]({ commit }, payload: number): Promise<void> {
-    // const success = await scriptsService.setActiveScriptById(payload);
-    // if (!success) {
-    //   throw new Error('Failed setting active script on server.');
-    // }
+    const success = await scriptsService.setActiveScriptById(payload);
+    if (!success) {
+      throw new Error('Failed setting active script on server.');
+    }
     commit(Mutations.SetActiveScript, payload);
   },
 };
