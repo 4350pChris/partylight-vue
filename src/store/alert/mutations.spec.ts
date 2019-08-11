@@ -1,5 +1,5 @@
-import { State } from '@/store/alert';
-import mutations, { Mutations } from '@/store/alert/mutations';
+import { State } from '.';
+import mutations, { Mutations } from './mutations';
 
 const makeState: () => State = () => ({ message: '', visible: true, type: 'alert' });
 

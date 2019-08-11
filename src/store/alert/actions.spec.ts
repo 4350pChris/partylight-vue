@@ -4,13 +4,14 @@ import { createLocalVue } from '@vue/test-utils';
 import { cloneDeep } from 'lodash';
 import lolex from 'lolex';
 
+const localVue = createLocalVue();
+localVue.use(Vuex);
+
 describe('Alert Store Actions', () => {
   let store: Store<State>;
   let clock: lolex.InstalledClock;
 
   beforeEach(() => {
-    const localVue = createLocalVue();
-    localVue.use(Vuex);
     clock = lolex.install();
     store = new Vuex.Store(cloneDeep(alertStore));
   });
