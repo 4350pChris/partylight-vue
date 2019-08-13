@@ -38,7 +38,7 @@ export interface Item {
  title: string;
  unit?: string;
  value: number[];
-};
+}
 
 @Component({ components: { SliderCard }})
 export default class PanelItem extends Vue {
