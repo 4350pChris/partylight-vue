@@ -109,7 +109,7 @@ export default class SliderCard extends Vue {
   }
 
   update(v: number[]) {
-    this.internalValue = v.map(n => Number(n)).sort();
+    this.internalValue = v;
     this.$v.internalValue.$touch();
     if (!this.$v.internalValue.$invalid) {
       this.$emit('input', this.internalValue);
