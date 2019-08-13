@@ -1,24 +1,46 @@
 <template>
-  <v-container fluid grid-list-xs>
-    <v-layout row wrap>
-      <v-flex>
-        <v-layout row wrap justify-space-around>
-          <v-flex xs12>
-            <div class="subtitle-1 text-xs-center mb-1">Scaling Strategy</div>
-          </v-flex>
-          <v-radio-group v-model="scaling" column>
-            <v-radio
-              v-for="[name, val] in scalingStrategies"
-              :key="name"
-              :label="val"
-              :value="Number(name)"
-            ></v-radio>
-          </v-radio-group>
-          <v-switch v-model="useAverage" label="Use Average"></v-switch>
-        </v-layout>
-      </v-flex>
-      <v-flex v-for="(item, key) in audioPanel" :key="key" xs12 md6>
-        <div class="subtitle-1 text-xs-center mb-1">{{ item.title }}</div>
+  <v-expansion-panels>
+    <v-expansion-panel>
+      <v-expansion-panel-header #default="{ open }">
+        Scaling Stragegy
+        <v-fade-transition leave-absolute>
+          <span v-if="!open" class="text--secondary pl-4">{{ scalingName }}</span>
+        </v-fade-transition>
+      </v-expansion-panel-header>
+      <v-expansion-panel-content>
+        <v-radio-group v-model="scaling" row>
+          <v-radio
+            v-for="[name, val] in scalingStrategies"
+            :key="name"
+            :label="val"
+            :value="Number(name)"
+          ></v-radio>
+        </v-radio-group>
+      </v-expansion-panel-content>
+    </v-expansion-panel>
+    <v-expansion-panel>
+      <v-expansion-panel-header>
+        Use Average
+        <span class="text--secondary pl-4">{{ useAverage }}</span>
+      </v-expansion-panel-header>
+      <v-expansion-panel-content>
+        <v-switch v-model="useAverage"></v-switch>
+      </v-expansion-panel-content>
+    </v-expansion-panel>
+    <v-expansion-panel v-for="item in audioPanel" :key="item.title">
+      <v-expansion-panel-header #default="{ open }">
+        {{ item.title }}
+        <v-fade-transition>
+          <span v-if="!open" class="text--secondary pl-4">
+            <span v-if="item.value.length === 1">{{ item.value[0] }}</span>
+            <v-layout v-else>
+              <span>Min: {{ item.value[0] }}</span>
+              <span class="pl-2">Max: {{ item.value[1] }}</span>
+            </v-layout>
+          </span>
+        </v-fade-transition>
+      </v-expansion-panel-header>
+      <v-expansion-panel-content class="pt-4">
         <slider-card
           :name="`${item.title}-slider`"
           :min="item.min"
@@ -26,9 +48,9 @@
           @input="item.update($event)"
           :value="item.value"
         ></slider-card>
-      </v-flex>
-    </v-layout>
-  </v-container>
+      </v-expansion-panel-content>
+    </v-expansion-panel>
+  </v-expansion-panels>
 </template>
 
 <script lang="ts">
@@ -58,11 +80,10 @@ export default class AudioPanel extends Mixins(Alert, InitModule) {
         min: 0,
         max: 20000,
         update: debounce(
-          ([min, max]: number[]) =>
-            this.save({
-              minimumFrequency: min,
-              maximumFrequency: max
-            }),
+          ([min, max]: number[]) => this.save({
+            minimumFrequency: min,
+            maximumFrequency: max
+          }),
           350
         ),
         title: 'Frequency (in Hz)',
@@ -104,6 +125,10 @@ export default class AudioPanel extends Mixins(Alert, InitModule) {
 
   set scaling(n: number) {
     this.save({ scalingStrategy: n });
+  }
+
+  get scalingName() {
+    return ScalingStrategy[this.scaling];
   }
 
   get scalingStrategies(): Array<[string, any]> {
