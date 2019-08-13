@@ -22,10 +22,10 @@ export const state: State = {
   usedFrequency: 0
 };
 
-const module: Module<State, any> = {
+const store: Module<State, any> = {
   state,
   mutations,
   actions
 };
 
-export default module;
+export default store;

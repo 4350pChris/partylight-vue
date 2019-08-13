@@ -25,7 +25,7 @@
         </v-layout>            
       </v-flex>
       <v-flex v-if="$vuetify.breakpoint.smAndUp">
-        <ScriptEditor class="elevation-2" v-model="editorScript.code"/>
+        <ScriptEditor class="elevation-2" :code.sync="editorScript.code"/>
       </v-flex>
     </template>
     <v-progress-circular size="80" width="8" indeterminate v-else />

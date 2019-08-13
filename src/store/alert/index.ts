@@ -11,7 +11,7 @@ export const state: State = {
   type: 'info'
 };
 
-const module: Module<State, any> = {
+const store: Module<State, any> = {
   state,
   mutations,
   actions
@@ -25,4 +25,4 @@ export interface State {
   type: 'success' | 'info' | 'warning' | 'alert';
 }
 
-export default module;
+export default store;

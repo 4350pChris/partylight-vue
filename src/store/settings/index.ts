@@ -13,7 +13,7 @@ export const state: State = {
   delay: 0
 };
 
-const module: Module<State, any> = {
+const store: Module<State, any> = {
   state,
   mutations,
   actions
@@ -25,4 +25,4 @@ export interface State {
   delay: number;
 }
 
-export default module;
+export default store;
