@@ -9,7 +9,7 @@
     <v-container fluid class="pa-0" fill-height>
       <v-layout column>
         <NavList :routes="routes"/>
-        <v-flex px-3>
+        <v-flex pl-4>
           <DarkModeSwitch />
         </v-flex>
         <v-flex>
