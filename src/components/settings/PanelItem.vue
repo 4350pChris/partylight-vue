@@ -30,14 +30,14 @@
 import { Component, Prop, Vue } from 'vue-property-decorator';
 import SliderCard from '@/components/shared/SliderCard.vue';
 
-export type Item = {
- min: number,
- max: number,
- update: (args: number[]) => any,
- step?: number,
- title: string,
- unit?: string,
- value: number[]
+export interface Item {
+ min: number;
+ max: number;
+ update: (args: number[]) => any;
+ step?: number;
+ title: string;
+ unit?: string;
+ value: number[];
 };
 
 @Component({ components: { SliderCard }})
