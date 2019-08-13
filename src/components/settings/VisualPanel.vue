@@ -1,26 +1,28 @@
 <template>
-  <v-container fluid grid-list-xs>
-    <v-layout row wrap>
-      <v-flex v-for="(item, key) in settingsPanel" :key="key" xs12 md6>
-        <div class="subtitle-1 text-xs-center mb-1">{{ item.title }}</div>        
-        <slider-card
-          :name="`${item.title}-slider`"
-          :min="item.min"
-          :max="item.max"
-          :step="item.step"
-          @input="item.update($event)"
-          :value="item.value"
-        ></slider-card>
-      </v-flex>
-      <v-flex>
+  <v-expansion-panels accordion>
+    <PanelItem v-for="item in settingsPanel" :key="item.title" :value="item" />      
+    <v-expansion-panel>
+      <v-expansion-panel-header #default="{ open }">
+        <v-layout align-center>
+          <v-flex shrink>Color</v-flex>
+          <v-flex pl-4>
+            <v-fade-transition>
+              <svg v-if="!open" height="24px">
+                <circle cx="12" cy="12" r="12" :fill="colorFill"></circle>
+              </svg>
+            </v-fade-transition>
+          </v-flex>
+        </v-layout>
+      </v-expansion-panel-header>
+      <v-expansion-panel-content>
         <color-picker
           :value="color"
           @input="color = $event.rgba"
-          :class="['elevation-0', { 'theme--dark': theme.isDark }]"
+          :class="{'theme--dark': theme.isDark }"
         ></color-picker>
-      </v-flex>
-    </v-layout>
-  </v-container>
+      </v-expansion-panel-content>
+    </v-expansion-panel>
+  </v-expansion-panels>
 </template>
 
 <script lang="ts">
@@ -31,12 +33,13 @@ import { Actions as DMXActions, State as DMXState } from '@/store/dmx';
 import { Actions as SettingsActions, Actions } from '@/store/settings';
 import { StoreState } from '@/store';
 import Settings, { Color } from '@/models/settings';
-import SliderCard from '@/components/shared/SliderCard.vue';
 import InitModule from '@/mixins/initModule';
 import Alert from '@/mixins/alert';
+import { RGBAtoHex } from 'vuetify/src/util/colorUtils';
+import PanelItem, { Item } from './PanelItem.vue';
 
 @Component({
-  components: { ColorPicker, SliderCard }
+  components: { ColorPicker, PanelItem }
 })
 export default class VisualPanel extends Mixins(Alert, InitModule) {
   @Inject() theme!: { isDark: boolean };
@@ -56,6 +59,10 @@ export default class VisualPanel extends Mixins(Alert, InitModule) {
   @Action(DMXActions.SaveLengthOfUniverse)
   saveLengthOfUniverse!: (rate: number) => Promise<void>;
 
+  get colorFill() {
+    return RGBAtoHex(this.color);
+  }
+
   get color(): Color {
     return this.settings.color;
   }
@@ -64,13 +71,14 @@ export default class VisualPanel extends Mixins(Alert, InitModule) {
     this.saveSettings({ color });
   }
 
-  get settingsPanel() {
+  get settingsPanel(): Item[] {
     return [
       {
         min: 0,
         max: 100,
         update: ([e, ...rest]: number[]) => this.saveSettings({ brightness: e }),
-        title: 'Brightness (in %)',
+        title: 'Brightness',
+        unit: '%',
         value: [this.settings.brightness]
       },
       {
@@ -78,7 +86,8 @@ export default class VisualPanel extends Mixins(Alert, InitModule) {
         max: 100,
         step: 10,
         update: ([e, ...rest]: number[]) => this.saveSettings({ delay: e }),
-        title: 'Delay (in ms)',
+        title: 'Delay',
+        unit: 'ms',
         value: [this.settings.delay]
       },
       {
@@ -86,7 +95,8 @@ export default class VisualPanel extends Mixins(Alert, InitModule) {
         max: 1000,
         step: 50,
         update: ([e, ...rest]: number[]) => this.saveDMXParameters({ samplingRate: e }),
-        title: 'Sampling Rate (in ms)',
+        title: 'Sampling Rate',
+        unit: 'ms',
         value: [this.samplingRate]
       },
       {

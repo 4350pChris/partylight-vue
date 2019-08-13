@@ -1,5 +1,5 @@
 <template>
-  <v-expansion-panels>
+  <v-expansion-panels accordion>
     <v-expansion-panel>
       <v-expansion-panel-header #default="{ open }">
         Scaling Stragegy
@@ -19,37 +19,15 @@
       </v-expansion-panel-content>
     </v-expansion-panel>
     <v-expansion-panel>
-      <v-expansion-panel-header>
+      <v-expansion-panel-header #default="{ open }">
         Use Average
-        <span class="text--secondary pl-4">{{ useAverage }}</span>
+        <span v-if="!open" class="text--secondary pl-4">{{ useAverage }}</span>
       </v-expansion-panel-header>
       <v-expansion-panel-content>
         <v-switch v-model="useAverage"></v-switch>
       </v-expansion-panel-content>
     </v-expansion-panel>
-    <v-expansion-panel v-for="item in audioPanel" :key="item.title">
-      <v-expansion-panel-header #default="{ open }">
-        {{ item.title }}
-        <v-fade-transition>
-          <span v-if="!open" class="text--secondary pl-4">
-            <span v-if="item.value.length === 1">{{ item.value[0] }}</span>
-            <v-layout v-else>
-              <span>Min: {{ item.value[0] }}</span>
-              <span class="pl-2">Max: {{ item.value[1] }}</span>
-            </v-layout>
-          </span>
-        </v-fade-transition>
-      </v-expansion-panel-header>
-      <v-expansion-panel-content class="pt-4">
-        <slider-card
-          :name="`${item.title}-slider`"
-          :min="item.min"
-          :max="item.max"
-          @input="item.update($event)"
-          :value="item.value"
-        ></slider-card>
-      </v-expansion-panel-content>
-    </v-expansion-panel>
+    <PanelItem v-for="item in audioPanel" :key="item.title" :value="item"/>      
   </v-expansion-panels>
 </template>
 
@@ -60,12 +38,12 @@ import { Component, Mixins, Vue } from 'vue-property-decorator';
 import { debounce } from 'lodash';
 import { StoreState, Actions as RootActions, InitFunctions } from '@/store';
 import AudioParameters, { ScalingStrategy } from '@/models/audioParameters';
-import SliderCard from '@/components/shared/SliderCard.vue';
 import InitModule from '@/mixins/initModule';
 import Alert from '@/mixins/alert';
+import PanelItem, { Item } from './PanelItem.vue';
 
 @Component({
-  components: { SliderCard }
+  components: { PanelItem }
 })
 export default class AudioPanel extends Mixins(Alert, InitModule) {
   @State((store: StoreState) => store.audio.parameters)
@@ -74,7 +52,7 @@ export default class AudioPanel extends Mixins(Alert, InitModule) {
   @Action(AudioActions.SaveParameters)
   saveParameters!: (params: Partial<AudioParameters>) => Promise<void>;
 
-  get audioPanel() {
+  get audioPanel(): Item[] {
     return [
       {
         min: 0,
@@ -86,7 +64,8 @@ export default class AudioPanel extends Mixins(Alert, InitModule) {
           }),
           350
         ),
-        title: 'Frequency (in Hz)',
+        title: 'Frequency',
+        unit: 'Hz',
         value: [
           this.audioParameters.minimumFrequency,
           this.audioParameters.maximumFrequency
@@ -95,16 +74,14 @@ export default class AudioPanel extends Mixins(Alert, InitModule) {
       {
         min: 1,
         max: 32,
-        update: ([e, ...rest]: number[]) =>
-          this.save({ numberOfChannels: e }),
+        update: ([e, ...rest]: number[]) => this.save({ numberOfChannels: e }),
         title: 'Number of Channels',
         value: [this.audioParameters.numberOfChannels]
       },
       {
         min: 0,
         max: 255,
-        update: ([e, ...rest]: number[]) =>
-          this.save({ maximumAmplitude: e }),
+        update: ([e, ...rest]: number[]) => this.save({ maximumAmplitude: e }),
         title: 'Maximum Amplitude',
         value: [this.audioParameters.maximumAmplitude]
       }
