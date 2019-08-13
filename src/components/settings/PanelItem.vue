@@ -21,6 +21,7 @@
         :max="value.max"
         @input="value.update($event)"
         :value="value.value"
+        :suffix="value.unit ? value.unit : ''"
       ></slider-card>
     </v-expansion-panel-content>
   </v-expansion-panel>

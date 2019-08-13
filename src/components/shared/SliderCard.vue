@@ -4,6 +4,7 @@
       <v-flex shrink style="width: 75px" :class="[isRange ? 'order-xs2 order-md1' : '']">
         <v-text-field
           :value="minValue"
+          :suffix="suffix"
           hide-details
           single-line
           type="number"
@@ -24,6 +25,7 @@
           @end="isRange ? update($event) : update([$event])"
           thumb-label="always"
           thumb-size="40"
+          class="pt-4"
           hide-details
         ></component>
       </v-flex>
@@ -34,6 +36,7 @@
           single-line
           shrink
           type="number"
+          :suffix="suffix"
           @blur="isRange ?
             update([minValue, $event.target.value]) : update([$event.target.value])"
         ></v-text-field>
@@ -58,6 +61,7 @@ export default class SliderCard extends Vue {
   @Prop({ required: true, type: Number }) min!: number;
   @Prop({ required: true, type: Number }) max!: number;
   @Prop({ required: false, type: Number }) step!: number;
+  @Prop({ required: false, type: String, default: '' }) suffix!: string;
 
   private internalValue = this.value;
 
