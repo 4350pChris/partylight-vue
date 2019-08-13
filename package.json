@@ -19,7 +19,7 @@
     "vue": "^2.6.10",
     "vue-class-component": "^7.1.0",
     "vue-color": "^2.7.0",
-    "vue-monaco": "^1.0.0",
+    "vue-monaco": "^1.1.0",
     "vue-property-decorator": "^8.2.1",
     "vue-router": "^3.0.7",
     "vuelidate": "^0.7.4",
