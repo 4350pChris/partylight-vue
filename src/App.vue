@@ -1,5 +1,5 @@
 <template>
-  <v-app :dark="darkMode">
+  <v-app>
     <AppTopBar/>
     <AppDrawer/>
     <v-content>
@@ -15,21 +15,18 @@
 </template>
 
 <script lang="ts">
-import { Component, Vue } from 'vue-property-decorator';
+import { Component, Vue, Watch } from 'vue-property-decorator';
 import { RouteConfig } from 'vue-router';
 import AppAlert from '@/components/app/AppAlert.vue';
 import AppDrawer from '@/components/app/AppDrawer.vue';
 import AppTopBar from '@/components/app/AppTopBar.vue';
 import DisconnectedSnackbar from '@/components/app/DisconnectedSnackbar.vue';
-import { State } from 'vuex-class';
-import { StoreState } from '@/store';
 
 @Component({
   components: { AppDrawer, AppAlert, AppTopBar, DisconnectedSnackbar }
 })
 export default class App extends Vue {
-  @State((store: StoreState) => store.darkMode)
-  darkMode!: boolean;
+
 }
 </script>
 

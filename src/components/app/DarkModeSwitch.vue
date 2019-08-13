@@ -21,7 +21,9 @@ export default class DarkModeSwitch extends Vue {
   }
 
   set dm(val: boolean) {
+    console.log(val);
     this.setDarkMode(val);
+    this.$vuetify.theme.dark = val;
   }
 }
 </script>
