@@ -1,6 +1,6 @@
 <template>
   <v-expansion-panel>
-    <v-expansion-panel-header #default="{ open }">
+    <v-expansion-panel-header #default="{ open }" ripple>
       {{ value.title }}
       <v-fade-transition>
         <span v-if="!open" class="text--secondary pl-4">

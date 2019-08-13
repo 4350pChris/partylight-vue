@@ -1,7 +1,7 @@
 <template>
   <v-expansion-panels accordion focusable>
     <v-expansion-panel>
-      <v-expansion-panel-header #default="{ open }">
+      <v-expansion-panel-header #default="{ open }" ripple>
         Scaling Stragegy
         <v-fade-transition leave-absolute>
           <span v-if="!open" class="text--secondary pl-4">{{ scalingName }}</span>
@@ -19,7 +19,7 @@
       </v-expansion-panel-content>
     </v-expansion-panel>
     <v-expansion-panel>
-      <v-expansion-panel-header #default="{ open }">
+      <v-expansion-panel-header #default="{ open }" ripple>
         Use Average
         <span v-if="!open" class="text--secondary pl-4">{{ useAverage }}</span>
       </v-expansion-panel-header>

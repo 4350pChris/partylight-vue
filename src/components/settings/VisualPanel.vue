@@ -2,7 +2,7 @@
   <v-expansion-panels accordion focusable>
     <PanelItem v-for="item in settingsPanel" :key="item.title" :value="item" />      
     <v-expansion-panel>
-      <v-expansion-panel-header #default="{ open }" class="py-0">
+      <v-expansion-panel-header #default="{ open }" class="py-0" ripple>
         <v-layout align-center>
           <v-flex shrink>Color</v-flex>
           <v-flex pl-4>
