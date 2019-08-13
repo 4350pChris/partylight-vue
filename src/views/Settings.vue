@@ -1,24 +1,22 @@
 <template>
   <v-layout>
-    <v-row>
-      <v-col>
-        <v-list :elevation="4" class="panels">
-          <v-list-group prepend-icon="mdi-eye">
-            <template #activator>
-              <v-list-item-title>Visual</v-list-item-title>
-            </template>
-            <VisualPanel/>
-            <v-divider/>
-          </v-list-group>
-          <v-list-group prepend-icon="mdi-ear-hearing">
-            <template #activator>
-              <v-list-item-title>Audio</v-list-item-title>
-            </template>
-            <AudioPanel/>
-          </v-list-group>
-        </v-list>
-      </v-col>
-    </v-row>
+    <v-flex xs12>
+      <v-list :elevation="4" class="panels">
+        <v-list-group prepend-icon="mdi-eye">
+          <template #activator>
+            <v-list-item-title>Visual</v-list-item-title>
+          </template>
+          <VisualPanel/>
+          <v-divider/>
+        </v-list-group>
+        <v-list-group prepend-icon="mdi-ear-hearing">
+          <template #activator>
+            <v-list-item-title>Audio</v-list-item-title>
+          </template>
+          <AudioPanel/>
+        </v-list-group>
+      </v-list>
+    </v-flex>
   </v-layout>
 </template>
 
