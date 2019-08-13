@@ -14,7 +14,7 @@
         </v-flex>
         <v-flex>
           <v-divider/>
-          <div class="title text-xs-center">Status</div>
+          <div class="title pl-2">Status</div>
           <AppStatus class="shrink" />
         </v-flex>
         <v-flex shrink>
