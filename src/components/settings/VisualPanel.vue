@@ -1,5 +1,5 @@
 <template>
-  <v-expansion-panels accordion>
+  <v-expansion-panels accordion focusable>
     <PanelItem v-for="item in settingsPanel" :key="item.title" :value="item" />      
     <v-expansion-panel>
       <v-expansion-panel-header #default="{ open }" class="py-0">

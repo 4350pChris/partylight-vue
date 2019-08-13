@@ -1,5 +1,5 @@
 <template>
-  <v-expansion-panels accordion>
+  <v-expansion-panels accordion focusable>
     <v-expansion-panel>
       <v-expansion-panel-header #default="{ open }">
         Scaling Stragegy
