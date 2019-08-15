@@ -6,6 +6,10 @@ export class Measurement {
     this.value = v;
     this.unit = unit;
   }
+
+  toString() {
+    return `${this.value} ${this.unit}`;
+  }
 }
 
 export class Frequency extends Measurement {
