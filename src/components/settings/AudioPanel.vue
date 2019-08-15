@@ -33,24 +33,25 @@
 
 <script lang="ts">
 import { Action, State, Mutation } from 'vuex-class';
-import { Actions as AudioActions } from '@/store/audio';
+import { Actions as AudioActions, State as AudioState } from '@/store/audio';
 import { Component, Mixins, Vue } from 'vue-property-decorator';
 import { debounce } from 'lodash';
 import { StoreState, Actions as RootActions, InitFunctions } from '@/store';
-import AudioParameters, { ScalingStrategy } from '@/models/audioParameters';
+import { ScalingStrategy } from '@/models/audioParameters';
 import InitModule from '@/mixins/initModule';
 import Alert from '@/mixins/alert';
 import PanelItem, { Item } from './PanelItem.vue';
+import { Frequency } from '@/models/measurement';
 
 @Component({
   components: { PanelItem }
 })
 export default class AudioPanel extends Mixins(Alert, InitModule) {
   @State((store: StoreState) => store.audio.parameters)
-  audioParameters!: AudioParameters;
+  audioParameters!: AudioState['parameters'];
 
   @Action(AudioActions.SaveParameters)
-  saveParameters!: (params: Partial<AudioParameters>) => Promise<void>;
+  saveParameters!: (params: Partial<AudioState['parameters']>) => Promise<void>;
 
   get audioPanel(): Item[] {
     return [
@@ -59,16 +60,16 @@ export default class AudioPanel extends Mixins(Alert, InitModule) {
         max: 20000,
         update: debounce(
           ([min, max]: number[]) => this.save({
-            minimumFrequency: min,
-            maximumFrequency: max
+            minimumFrequency: new Frequency(min),
+            maximumFrequency: new Frequency(max)
           }),
           350
         ),
         title: 'Frequency',
-        unit: 'Hz',
+        unit: this.audioParameters.minimumFrequency.unit,
         value: [
-          this.audioParameters.minimumFrequency,
-          this.audioParameters.maximumFrequency
+          this.audioParameters.minimumFrequency.value,
+          this.audioParameters.maximumFrequency.value
         ]
       },
       {
@@ -121,7 +122,7 @@ export default class AudioPanel extends Mixins(Alert, InitModule) {
     });
   }
 
-  save(params: Partial<AudioParameters>) {
+  save(params: Partial<AudioState['parameters']>) {
     this.saveParameters(params).catch((e: any) => this.savingFailed(e));
   }
 

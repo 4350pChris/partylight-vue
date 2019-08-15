@@ -23,7 +23,7 @@ const mutations: MutationTree<State> = {
     state.color = payload;
   },
 
-  [Mutations.SetSettings](state, payload: { [key: string]: number}) {
+  [Mutations.SetSettings](state, payload: { [key: string]: any}) {
     for (const [key, value] of Object.entries(payload)) {
       Vue.set(state, key, value);
     }

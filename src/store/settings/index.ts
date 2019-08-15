@@ -21,9 +21,9 @@ const store: Module<State, any> = {
 };
 
 export interface State {
-  brightness: Measurement;
+  brightness: Percentage;
   color: Color;
-  delay: Measurement;
+  delay: Millisecond;
 }
 
 export default store;

@@ -45,8 +45,11 @@ export default class PanelItem extends Vue {
   @Prop({ required: true, type: Object }) value!: Item;
 
   formatted(v: number): string {
-    const suffix = this.value.unit ? this.value.unit : '';
-    return `${v} ${suffix}`;
+    if (this.value.unit) {
+      return `${v} ${this.value.unit}`;
+    } else {
+      return this.value.value.toString();
+    }
   }
 }
 </script>

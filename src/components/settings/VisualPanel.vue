@@ -30,13 +30,15 @@ import { Action, State, Mutation } from 'vuex-class';
 import { Chrome as ColorPicker } from 'vue-color';
 import { Component, Inject, Mixins, Vue } from 'vue-property-decorator';
 import { Actions as DMXActions, State as DMXState } from '@/store/dmx';
-import { Actions as SettingsActions, Actions } from '@/store/settings';
+import { Actions as SettingsActions, Actions, State as SettingsState } from '@/store/settings';
 import { StoreState } from '@/store';
-import Settings, { Color } from '@/models/settings';
+import { Color } from '@/models/settings';
 import InitModule from '@/mixins/initModule';
 import Alert from '@/mixins/alert';
 import { RGBAtoHex } from 'vuetify/src/util/colorUtils';
 import PanelItem, { Item } from './PanelItem.vue';
+import { Frequency } from '@/models/measurement';
+import { Percentage, Millisecond } from '../../models/measurement';
 
 @Component({
   components: { ColorPicker, PanelItem }
@@ -45,10 +47,10 @@ export default class VisualPanel extends Mixins(Alert, InitModule) {
   @Inject() theme!: { isDark: boolean };
 
   @State((store: StoreState) => store.settings)
-  settings!: Settings;
+  settings!: SettingsState;
 
   @State((store: StoreState) => store.dmx.samplingRate)
-  samplingRate!: number;
+  samplingRate!: Frequency;
 
   @State((store: StoreState) => store.dmx.lengthOfUniverse)
   lengthOfUniverse!: number;
@@ -59,6 +61,9 @@ export default class VisualPanel extends Mixins(Alert, InitModule) {
   @Action(DMXActions.SaveLengthOfUniverse)
   saveLengthOfUniverse!: (rate: number) => Promise<void>;
 
+  @Action(SettingsActions.SaveSettings)
+  saveSettings!: (state: Partial<SettingsState>) => Promise<void>;
+
   get colorFill() {
     return RGBAtoHex(this.color);
   }
@@ -68,7 +73,7 @@ export default class VisualPanel extends Mixins(Alert, InitModule) {
   }
 
   set color(color: Color) {
-    this.saveSettings({ color });
+    this.displayMsgOnError(() => this.saveSettings({ color }));
   }
 
   get settingsPanel(): Item[] {
@@ -76,60 +81,48 @@ export default class VisualPanel extends Mixins(Alert, InitModule) {
       {
         min: 0,
         max: 100,
-        update: ([e, ...rest]: number[]) => this.saveSettings({ brightness: e }),
+        update: ([e, ...rest]: number[]) => this.saveSettings({ brightness: new Percentage(e) }),
         title: 'Brightness',
-        unit: '%',
-        value: [this.settings.brightness]
+        unit: this.settings.brightness.unit,
+        value: [this.settings.brightness.value]
       },
       {
         min: 0,
         max: 100,
         step: 10,
-        update: ([e, ...rest]: number[]) => this.saveSettings({ delay: e }),
+        update: ([e, ...rest]: number[]) => this.saveSettings({ delay: new Millisecond(e) }),
         title: 'Delay',
-        unit: 'ms',
-        value: [this.settings.delay]
+        unit: this.settings.delay.unit,
+        value: [this.settings.delay.value]
       },
       {
         min: 50,
         max: 1000,
         step: 50,
-        update: ([e, ...rest]: number[]) => this.saveDMXParameters({ samplingRate: e }),
+        update: ([e, ...rest]: number[]) => this.saveSamplingRate(e),
         title: 'Sampling Rate',
-        unit: 'ms',
-        value: [this.samplingRate]
+        unit: this.samplingRate.unit,
+        value: [this.samplingRate.value]
       },
       {
         min: 1,
         max: 255,
-        update: ([e, ...rest]: number[]) => this.saveDMXParameters({ lengthOfUniverse: e }),
+        update: ([e, ...rest]: number[]) => this.saveLengthOfUniverse(e),
         title: 'Length of Universe',
         value: [this.lengthOfUniverse]
       }
-    ];
+    ].map(item => ({
+      ...item,
+      // wrap all update functions to show an error on failure
+      update: (args: number[]) => this.displayMsgOnError(() => item.update(args))
+    }));
   }
 
-  saveSettings(settings: Partial<Settings>) {
-    this.$store.dispatch(SettingsActions.SaveSettings, settings)
-      .catch(e => (this.savingFailed(e)));
-  }
-
-  saveDMXParameters({ lengthOfUniverse, samplingRate }: Partial<DMXState>) {
-    const calls = [];
-    if (lengthOfUniverse !== undefined) {
-      calls.push(this.saveLengthOfUniverse(lengthOfUniverse));
-    }
-    if (samplingRate !== undefined) {
-      calls.push(this.saveSamplingRate(samplingRate));
-    }
-    Promise.all(calls).catch(e => (this.savingFailed(e)));
-  }
-
-  savingFailed(e: any) {
-    this.showAlert({
+  displayMsgOnError(fn: () => Promise<any>) {
+    return fn().catch(e => this.showAlert({
       type: 'error',
       message: 'Failed saving settings.<br>' + e
-    });
+    }));
   }
 
   created() {

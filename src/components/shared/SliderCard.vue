@@ -1,7 +1,7 @@
 <template>
   <v-container fluid>
     <v-layout row wrap justify-space-between>
-      <v-flex shrink style="width: 75px" :class="[isRange ? 'order-xs2 order-md1' : '']">
+      <v-flex shrink :class="['restricted-width', isRange ? 'order-xs2 order-md1' : '']">
         <v-text-field
           :value="minValue"
           :suffix="suffix"
@@ -12,7 +12,7 @@
             update([$event.target.value, maxValue]) : update([$event.target.value])"
         ></v-text-field>
       </v-flex>
-      <v-flex :class="['pt-3', isRange ? 'xs12 md8 order-xs1 order-md2' : '']">
+      <v-flex :class="['pt-3 px-4', isRange ? 'xs12 md8 order-xs1 order-md2' : '']">
         <component
           :is="isRange ? 'v-range-slider' : 'v-slider'"
           :value="isRange ? internalValue : minValue"
@@ -29,7 +29,7 @@
           hide-details
         ></component>
       </v-flex>
-      <v-flex v-if="isRange" shrink style="width: 75px" order-xs3>
+      <v-flex v-if="isRange" shrink order-xs3 class="restricted-width">
         <v-text-field
           :value="maxValue"
           hide-details
@@ -121,3 +121,9 @@ export default class SliderCard extends Vue {
   }
 }
 </script>
+
+<style scoped>
+.restricted-width {
+  max-width: 96px;
+}
+</style>
