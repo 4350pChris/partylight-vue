@@ -2,15 +2,16 @@ import { Color } from '@/models/settings';
 import { Module } from 'vuex';
 import actions from './actions';
 import mutations from './mutations';
+import { Percentage, Millisecond } from '@/models/measurement';
 
 export { Actions } from './actions';
 export { Mutations } from './mutations';
 export { initSettings } from './reactivity';
 
 export const state: State = {
-  brightness: 0,
+  brightness: new Percentage(0),
   color: { a: 0, r: 0, g: 0, b: 0},
-  delay: 0
+  delay: new Millisecond(0)
 };
 
 const store: Module<State, any> = {
@@ -20,9 +21,9 @@ const store: Module<State, any> = {
 };
 
 export interface State {
-  brightness: number;
+  brightness: Measurement;
   color: Color;
-  delay: number;
+  delay: Measurement;
 }
 
 export default store;

@@ -12,11 +12,11 @@ export enum Mutations {
 
 const mutations: MutationTree<State> = {
   [Mutations.SetBrightness](state, payload: number) {
-    state.brightness = payload;
+    state.brightness.value = payload;
   },
 
   [Mutations.SetDelay](state, payload: number) {
-    state.delay = payload;
+    state.delay.value = payload;
   },
 
   [Mutations.SetColor](state, payload: Color) {

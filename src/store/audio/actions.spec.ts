@@ -1,13 +1,13 @@
-import AudioParameters, { ScalingStrategy } from '@/models/audioParameters';
+import { ScalingStrategy } from '@/models/audioParameters';
 import { createLocalVue } from '@vue/test-utils';
 import Vuex, { Store } from 'vuex';
 import { cloneDeep } from 'lodash';
 import api from '@/api';
 
-const mockAudioParams: AudioParameters = {
+const mockAudioParams: State['parameters'] = {
   maximumAmplitude: 100,
-  minimumFrequency: 1,
-  maximumFrequency: 20000,
+  minimumFrequency: new Frequency(100),
+  maximumFrequency: { unit: 'Hz', value: 8000},
   numberOfChannels: 32,
   useAverage: true,
   scalingStrategy: ScalingStrategy.Decibel
@@ -20,6 +20,7 @@ jest.mock('@/api', () => ({
 }));
 
 import audioStore, { Actions, State } from '.';
+import { Frequency } from '@/models/measurement';
 
 const localVue = createLocalVue();
 localVue.use(Vuex);

@@ -1,6 +1,5 @@
 import { MutationTree } from 'vuex';
 import { State } from '.';
-import AudioParameters from '../../models/audioParameters';
 
 export enum Mutations {
   SetBuffer = 'setBuffer',
@@ -8,11 +7,11 @@ export enum Mutations {
 }
 
 const mutations: MutationTree<State> = {
-  [Mutations.SetParameters](state, payload: Partial<AudioParameters>) {
+  [Mutations.SetParameters](state, payload: Partial<State['parameters']>) {
     state.parameters = { ...state.parameters, ...payload };
   },
 
-  [Mutations.SetBuffer](state, payload: number[]) {
+  [Mutations.SetBuffer](state, payload: State['buffer']) {
     state.buffer = payload;
   }
 };

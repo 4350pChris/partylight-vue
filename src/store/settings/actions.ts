@@ -23,13 +23,13 @@ const actions: ActionTree<State, {}> = {
     const promises: Array<Promise<void>> = [];
 
     if (payload.brightness !== undefined) {
-      promises.push(service.setBrightness(payload.brightness));
+      promises.push(service.setBrightness(payload.brightness.value));
     }
     if (payload.color !== undefined) {
       promises.push(service.setColor(payload.color));
     }
     if (payload.delay !== undefined) {
-      promises.push(service.setDelay(payload.delay));
+      promises.push(service.setDelay(payload.delay.value));
     }
     return Promise.all(promises);
   }

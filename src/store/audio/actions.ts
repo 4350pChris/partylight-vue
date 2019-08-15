@@ -16,9 +16,13 @@ const actions: ActionTree<State, any> = {
     commit(Mutations.SetParameters, parameters);
   },
 
-  [Actions.SaveParameters]({ commit, state }, payload: Partial<AudioParameters>) {
+  [Actions.SaveParameters]({ commit, state }, payload: Partial<State['parameters']>) {
     commit(Mutations.SetParameters, payload);
-    return audioService.setAudioParameters(state.parameters);
+    const onlyNums = Object.entries(state.parameters).reduce(
+      (obj, [key, val]) => typeof val === 'object' ?
+        { ...obj, [key]: val.value } : { ...obj, [key]: val }
+    , {} as AudioParameters);
+    return audioService.setAudioParameters(onlyNums);
   }
 };
 
