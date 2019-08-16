@@ -1,6 +1,5 @@
-import { Color } from '@/models/settings';
 import { MutationTree } from 'vuex';
-import { State } from '.';
+import { Color, State } from '.';
 import Vue from 'vue';
 
 export enum Mutations {
@@ -20,7 +19,7 @@ const mutations: MutationTree<State> = {
   },
 
   [Mutations.SetColor](state, payload: Color) {
-    state.color = payload;
+    state.color = { ...state.color, ...payload };
   },
 
   [Mutations.SetSettings](state, payload: { [key: string]: any}) {

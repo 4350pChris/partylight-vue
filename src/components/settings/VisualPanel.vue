@@ -8,7 +8,7 @@
           <v-flex pl-4>
             <v-fade-transition>
               <svg v-if="!open" height="24px">
-                <circle cx="12" cy="12" r="12" :fill="colorFill"></circle>
+                <circle cx="12" cy="12" r="12" :fill="settings.color.hex8"></circle>
               </svg>
             </v-fade-transition>
           </v-flex>
@@ -29,7 +29,6 @@ import { Component, Mixins, Vue } from 'vue-property-decorator';
 import { Actions as DMXActions, State as DMXState } from '@/store/dmx';
 import { Actions as SettingsActions, Actions, State as SettingsState } from '@/store/settings';
 import { StoreState } from '@/store';
-import { Color } from '@/models/settings';
 import InitModule from '@/mixins/initModule';
 import Alert from '@/mixins/alert';
 import { RGBAtoHex } from 'vuetify/src/util/colorUtils';
@@ -40,8 +39,6 @@ import { Frequency, Percentage, Millisecond } from '@/models/measurement';
   components: { ColorPicker, PanelItem }
 })
 export default class VisualPanel extends Mixins(Alert, InitModule) {
-  colorChanged = throttle((e: any) => this.displayMsgOnError(() => this.saveSettings({ color: e.rgba })), 500);
-
   @State((store: StoreState) => store.settings)
   settings!: SettingsState;
 
@@ -60,9 +57,7 @@ export default class VisualPanel extends Mixins(Alert, InitModule) {
   @Action(SettingsActions.SaveSettings)
   saveSettings!: (state: Partial<SettingsState>) => Promise<void>;
 
-  get colorFill() {
-    return RGBAtoHex(this.settings.color);
-  }
+  colorChanged = throttle((color: any) => this.displayMsgOnError(() => this.saveSettings({ color })), 500);
 
   get settingsPanel(): Item[] {
     return [

@@ -13,7 +13,7 @@ const actions: ActionTree<State, {}> = {
   [Actions.FetchSettings]({ commit }) {
     return Promise.all([
       service.getBrightness().then(val => commit(Mutations.SetBrightness, val)),
-      service.getColor().then(val => commit(Mutations.SetColor, val)),
+      service.getColor().then(val => commit(Mutations.SetColor, { rgba: val })),
       service.getDelay().then(val => commit(Mutations.SetDelay, val))
     ]);
   },
@@ -26,7 +26,7 @@ const actions: ActionTree<State, {}> = {
       promises.push(service.setBrightness(payload.brightness.value));
     }
     if (payload.color !== undefined) {
-      promises.push(service.setColor(payload.color));
+      promises.push(service.setColor(payload.color.rgba));
     }
     if (payload.delay !== undefined) {
       promises.push(service.setDelay(payload.delay.value));

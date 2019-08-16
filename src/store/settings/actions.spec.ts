@@ -3,11 +3,12 @@ import Vuex, { Store } from 'vuex';
 import { cloneDeep } from 'lodash';
 import { Millisecond, Percentage } from '@/models/measurement';
 
+const mockColor = { r: 140, g: 121, b: 210, a: 1 };
 jest.mock('@/api', () => ({
   settings: {
     getBrightness: jest.fn().mockResolvedValue(100),
     getDelay: jest.fn().mockResolvedValue(200),
-    getColor: jest.fn().mockResolvedValue({ a: 0, r: 100, g: 200, b: 50 }),
+    getColor: jest.fn().mockResolvedValue(mockColor),
     setBrightness: jest.fn(),
     setDelay: jest.fn(),
     setColor: jest.fn()
@@ -32,19 +33,19 @@ describe('Test Settings Actions', () => {
     expect(store.state).toEqual({
       brightness: new Percentage(100),
       delay: new Millisecond(200),
-      color: { a: 0, r: 100, g: 200, b: 50 }
+      color: { ...store.state.color, rgba: mockColor }
     });
   });
   it('Save Settings', () => {
     const state: State = {
       brightness: new Percentage(50),
       delay: new Millisecond(100),
-      color: { a: 0, r: 50, g: 100, b: 200 }
+      color: { ...store.state.color, rgba: mockColor }
     };
     store.dispatch(Actions.SaveSettings, state);
     expect(store.state).toEqual(state);
     expect(api.settings.setBrightness).toHaveBeenCalledWith(state.brightness.value);
-    expect(api.settings.setColor).toHaveBeenCalledWith(state.color);
+    expect(api.settings.setColor).toHaveBeenCalledWith(state.color.rgba);
     expect(api.settings.setDelay).toHaveBeenCalledWith(state.delay.value);
   });
 });
