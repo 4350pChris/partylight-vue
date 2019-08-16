@@ -1,25 +1,25 @@
 <template>
-  <v-layout column justify-center>
+  <v-layout column>
     <template v-if="!scriptsLoading">
       <v-flex shrink>
         <v-layout column>
           <v-container fluid grid-list-md>
-            <v-layout align-end row wrap>
-              <v-flex xs12 sm6 md3 v-if="$vuetify.breakpoint.mdAndUp">
+            <v-layout align-center row wrap>
+              <v-flex sm6 md3 class="hidden-sm-and-down">
                 <v-text-field v-model="editorScript.name" label="Name" hide-details/>
               </v-flex>
               <v-flex xs12 sm6 md3>
                 <ScriptList class="script-list" />
               </v-flex>
-                <v-spacer/>
-                <v-flex v-if="$vuetify.breakpoint.mdAndUp">
-                  <v-btn @click="newScript">New Script</v-btn>
-                </v-flex>
-                <v-flex class="text-xs-right">
-                  <ScriptDeleteButton :script="editorScript" />
-                  <ScriptActivateButton :script="editorScript" />
-                  <ScriptSaveButton v-if="$vuetify.breakpoint.mdAndUp" :script="editorScript" />
-                </v-flex>
+              <v-spacer/>
+              <v-flex class="shrink">
+                <v-btn-toggle rounded>
+                  <v-btn text v-if="$vuetify.breakpoint.mdAndUp" @click="newScript">New Script</v-btn>
+                  <ScriptDeleteButton :script="editorScript" text />
+                  <ScriptActivateButton :script="editorScript" text />
+                  <ScriptSaveButton v-if="$vuetify.breakpoint.mdAndUp" text :script="editorScript" />
+                </v-btn-toggle>
+              </v-flex>
             </v-layout>
           </v-container>
         </v-layout>            
