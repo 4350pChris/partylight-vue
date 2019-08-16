@@ -24,7 +24,7 @@
           </v-container>
         </v-layout>            
       </v-flex>
-      <v-flex v-if="$vuetify.breakpoint.smAndUp">
+      <v-flex v-if="$vuetify.breakpoint.mdAndUp">
         <ScriptEditor class="elevation-2" :code.sync="editorScript.code"/>
       </v-flex>
     </template>
