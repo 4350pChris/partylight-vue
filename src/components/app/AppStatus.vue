@@ -1,11 +1,9 @@
 <template>
-  <v-container fluid>
-    <v-layout wrap text-xs-center>
-      <v-flex>Sampling Rate - {{ samplingRate }}</v-flex>
-      <v-flex>Packets / sec - {{ packetsPerSecond }}</v-flex>
-      <v-flex>Max Frequency - {{ maximumFrequency }}</v-flex>
-      <v-flex>Used Frequency - {{ usedFrequency }}</v-flex>
-    </v-layout>
+  <v-container>
+    <v-row dense v-for="{ text, value } in items" :key="text">
+      <v-col cols="9">{{ text }}</v-col>
+      <v-col>{{ value }}</v-col>
+    </v-row>
   </v-container>
 </template>
 
@@ -28,5 +26,14 @@ export default class AppStatus extends Vue {
 
   @State((store: StoreState) => store.dmx.usedFrequency)
   usedFrequency!: number;
+
+  get items() {
+    return [
+      { text: 'Sampling Rate', value: this.samplingRate },
+      { text: 'Packets per Second', value: this.packetsPerSecond },
+      { text: 'Used Frequency', value: this.usedFrequency },
+      { text: 'Maximum Frequency', value: this.maximumFrequency }
+    ];
+  }
 }
 </script>
