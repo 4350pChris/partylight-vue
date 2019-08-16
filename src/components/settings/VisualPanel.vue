@@ -15,11 +15,7 @@
         </v-layout>
       </v-expansion-panel-header>
       <v-expansion-panel-content>
-        <color-picker
-          :value="color"
-          @input="color = $event.rgba"
-          :class="{'theme--dark': theme.isDark }"
-        ></color-picker>
+        <color-picker :value="settings.color" @input="colorChanged"></color-picker>
       </v-expansion-panel-content>
     </v-expansion-panel>
   </v-expansion-panels>
@@ -27,8 +23,9 @@
 
 <script lang="ts">
 import { Action, State, Mutation } from 'vuex-class';
-import { Chrome as ColorPicker } from 'vue-color';
-import { Component, Inject, Mixins, Vue } from 'vue-property-decorator';
+import { Slider as ColorPicker } from 'vue-color';
+import { throttle } from 'lodash';
+import { Component, Mixins, Vue } from 'vue-property-decorator';
 import { Actions as DMXActions, State as DMXState } from '@/store/dmx';
 import { Actions as SettingsActions, Actions, State as SettingsState } from '@/store/settings';
 import { StoreState } from '@/store';
@@ -37,14 +34,13 @@ import InitModule from '@/mixins/initModule';
 import Alert from '@/mixins/alert';
 import { RGBAtoHex } from 'vuetify/src/util/colorUtils';
 import PanelItem, { Item } from './PanelItem.vue';
-import { Frequency } from '@/models/measurement';
-import { Percentage, Millisecond } from '../../models/measurement';
+import { Frequency, Percentage, Millisecond } from '@/models/measurement';
 
 @Component({
   components: { ColorPicker, PanelItem }
 })
 export default class VisualPanel extends Mixins(Alert, InitModule) {
-  @Inject() theme!: { isDark: boolean };
+  colorChanged = throttle((e: any) => this.displayMsgOnError(() => this.saveSettings({ color: e.rgba })), 500);
 
   @State((store: StoreState) => store.settings)
   settings!: SettingsState;
@@ -65,15 +61,7 @@ export default class VisualPanel extends Mixins(Alert, InitModule) {
   saveSettings!: (state: Partial<SettingsState>) => Promise<void>;
 
   get colorFill() {
-    return RGBAtoHex(this.color);
-  }
-
-  get color(): Color {
-    return this.settings.color;
-  }
-
-  set color(color: Color) {
-    this.displayMsgOnError(() => this.saveSettings({ color }));
+    return RGBAtoHex(this.settings.color);
   }
 
   get settingsPanel(): Item[] {
@@ -140,19 +128,17 @@ export default class VisualPanel extends Mixins(Alert, InitModule) {
 </script>
 
 <style lang="scss">
-.vc-chrome.theme--dark {
-  .vc-chrome-body {
-    background-color: #303030 !important;
-  }
+.vc-slider {
+  display: flex;
+  flex-flow: row wrap;
+  width: auto !important;
+  padding: 5px;
 
-  path {
-    fill: white !important;
-  }
-}
-
-.vc-editable-input {
-  input, span {
-    color: inherit !important;
+  > div {
+    flex-basis: 300px;
+    flex-grow: 1;
+    margin: 5px;
+    margin-top: 20px;
   }
 }
 </style>

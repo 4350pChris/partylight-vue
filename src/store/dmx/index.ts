@@ -16,9 +16,9 @@ export interface State {
 }
 
 export const state: State = {
-  samplingRate: new Frequency(0),
+  samplingRate: new Frequency(50),
   packetsPerSecond: 0,
-  lengthOfUniverse: 0,
+  lengthOfUniverse: 1,
   maximumFrequency: new Frequency(0),
   usedFrequency: new Frequency(0)
 };
