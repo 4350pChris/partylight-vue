@@ -2,6 +2,7 @@ import { ScalingStrategy } from '@/models/audioParameters';
 import { createLocalVue } from '@vue/test-utils';
 import Vuex, { Store } from 'vuex';
 import { cloneDeep } from 'lodash';
+import { Frequency } from '@/models/measurement';
 import api from '@/api';
 
 const mockAudioParams: State['parameters'] = {
@@ -20,7 +21,6 @@ jest.mock('@/api', () => ({
 }));
 
 import audioStore, { Actions, State } from '.';
-import { Frequency } from '@/models/measurement';
 
 const localVue = createLocalVue();
 localVue.use(Vuex);
