@@ -12,13 +12,13 @@ export { initScripts } from './reactivity';
 export interface State {
   scripts: Script[];
   activeScriptId: number | null;
-  selectedScriptId: number | null;
+  editorScript: Script | null;
 }
 
 export const state: State = {
   scripts: [],
   activeScriptId: null,
-  selectedScriptId: null,
+  editorScript: null,
 };
 
 const store: Module<State, any> = {

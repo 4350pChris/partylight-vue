@@ -9,7 +9,7 @@ const makeState: () => State = () => ({
     { code: 'another', id: 3, name: 'third' },
   ],
   activeScriptId: null,
-  selectedScriptId: null
+  editorScript: null
 });
 
 describe('Scripts Store Mutations', () => {
@@ -53,8 +53,8 @@ describe('Scripts Store Mutations', () => {
     expect(state.activeScriptId).toBe(id);
   });
   it('Set Selected Script', () => {
-    const id = 1;
-    mutations[Mutations.SetSelectedScript](state, id);
-    expect(state.selectedScriptId).toBe(id);
+    const script = { code: 'some other code', id: 1, name: 'replaced' };
+    mutations[Mutations.SetEditorScript](state, script);
+    expect(state.editorScript).toEqual(script);
   });
 });

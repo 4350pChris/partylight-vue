@@ -9,7 +9,7 @@ export enum Mutations {
   UpdateScript = 'updateScript',
   DeleteScript = 'deleteScript',
   SetActiveScript = 'setActiveScript',
-  SetSelectedScript = 'setSelectedScript',
+  SetEditorScript = 'setEditorScript',
 }
 
 const mutations: MutationTree<State> = {
@@ -36,8 +36,8 @@ const mutations: MutationTree<State> = {
     state.activeScriptId = id;
   },
 
-  [Mutations.SetSelectedScript](state, id: number | null) {
-    state.selectedScriptId = id;
+  [Mutations.SetEditorScript](state, script: Script | null) {
+    state.editorScript = script;
   },
 };
 
