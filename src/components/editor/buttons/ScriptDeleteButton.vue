@@ -4,12 +4,13 @@
       <v-btn
         class="lighten-1"
         color="error"
-        :outlined="theme.isDark"
         :disabled="disabled"
         v-on="on"
         v-bind="$attrs"
+        :icon="icon"
       >
-        <slot>delete</slot>
+        <v-icon v-if="icon">mdi-delete-circle</v-icon>
+        <slot v-else>delete</slot>
       </v-btn>
     </template>
     <v-card>
@@ -30,12 +31,13 @@ import { Action, Getter } from 'vuex-class';
 import { Actions, Getters } from '@/store/scripts';
 import Script from '@/models/script';
 import AlertMixin from '@/mixins/alert';
-import ThemeMixin from '@/mixins/theme';
 import LoadingButton from '@/components/shared/LoadingButton.vue';
 
 @Component({ components: { LoadingButton }})
-export default class ScriptDeleteButton extends Mixins(AlertMixin, ThemeMixin) {
+export default class ScriptDeleteButton extends Mixins(AlertMixin) {
   deleteDialog: boolean = false;
+
+  @Prop({ required: false, default: false }) icon!: boolean;
 
   @Prop({ required: true, type: Object })
   script!: Script;

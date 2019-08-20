@@ -1,11 +1,12 @@
 <template>
   <LoadingButton
-    color="success"
+    color="primary"
     v-bind="$attrs"
-    :outlined="theme.isDark"
     :load="saveScript"
+    :icon="icon"
   >
-    <slot>save</slot>
+    <v-icon v-if="icon">mdi-content-save</v-icon>
+    <slot v-else>save</slot>
   </LoadingButton>
 </template>
 
@@ -15,13 +16,14 @@ import { Action, Mutation } from 'vuex-class';
 import { Actions, Mutations } from '@/store/scripts';
 import Script from '@/models/script';
 import AlertMixin from '@/mixins/alert';
-import ThemeMixin from '@/mixins/theme';
 import LoadingButton from '@/components/shared/LoadingButton.vue';
 
 @Component({ components: { LoadingButton }})
-export default class ScriptSaveButton extends Mixins(AlertMixin, ThemeMixin) {
+export default class ScriptSaveButton extends Mixins(AlertMixin) {
   @Prop({ required: true, type: Object })
   script!: Script;
+
+  @Prop({ required: false, default: false }) icon!: boolean;
 
   @Action(Actions.SaveScript)
   save!: (script: Script) => Promise<void>;

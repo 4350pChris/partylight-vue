@@ -1,12 +1,13 @@
 <template>
   <LoadingButton
     color="accent"
-    :outlined="theme.isDark"
     :load="setActiveScript"
     :disabled="disabled"
+    :icon="icon"
     v-bind="$attrs"
   >
-    <slot>activate</slot>
+    <v-icon v-if="icon">mdi-check-circle</v-icon>
+    <slot v-else>activate</slot>
   </LoadingButton>
 </template>
 
@@ -16,13 +17,14 @@ import { Action, Getter } from 'vuex-class';
 import { Actions, Getters } from '@/store/scripts';
 import Script from '@/models/script';
 import AlertMixin from '@/mixins/alert';
-import ThemeMixin from '@/mixins/theme';
 import LoadingButton from '@/components/shared/LoadingButton.vue';
 
 @Component({ components: { LoadingButton }})
-export default class ScriptActivateButton extends Mixins(AlertMixin, ThemeMixin) {
+export default class ScriptActivateButton extends Mixins(AlertMixin) {
   @Prop({ type: Object, required: true })
   script!: Script;
+
+  @Prop({ required: false, default: false }) icon!: boolean;
 
   @Action(Actions.SetActiveScript)
   setActive!: (id: number | null) => Promise<void>;
