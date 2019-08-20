@@ -13,27 +13,24 @@
     <v-card>
       <v-card-title class="headline">Rename Script</v-card-title>
       <v-card-text>
-        <v-text-field v-model="syncedScript.name" />
+        <v-text-field v-model="name" />
       </v-card-text>
       <v-card-actions>
         <v-spacer/>
         <v-btn text @click.stop="dialog = false">Cancel</v-btn>
-        <LoadingButton color="primary" text :load="renameScript">Rename</LoadingButton>
+        <v-btn color="primary" text @click="renameScript">Rename</v-btn>
       </v-card-actions>
     </v-card>
   </v-dialog>
 </template>
 
 <script lang="ts">
-import { Component, Prop, Mixins, PropSync } from 'vue-property-decorator';
-import { Mutation, Action } from 'vuex-class';
-import { Mutations, Actions } from '@/store/scripts';
+import { Component, Prop, Vue, PropSync } from 'vue-property-decorator';
 import Script from '@/models/script';
 import AlertMixin from '@/mixins/alert';
-import LoadingButton from '@/components/shared/LoadingButton.vue';
 
-@Component({ components: { LoadingButton }})
-export default class ScriptNewButton extends Mixins(AlertMixin) {
+@Component
+export default class ScriptNewButton extends Vue {
   dialog = false;
 
   name = '';
@@ -43,20 +40,13 @@ export default class ScriptNewButton extends Mixins(AlertMixin) {
   @PropSync('script', { required: true, type: Object })
   syncedScript!: Script;
 
-  @Action(Actions.SaveScript)
-  saveScript!: (script: Script) => Promise<void>;
+  mounted() {
+    this.name = this.syncedScript.name;
+  }
 
-  async renameScript() {
-    try {
-      this.saveScript(this.syncedScript);
-    } catch (e) {
-      this.showAlert({
-        type: 'error',
-        message: 'Renaming script on server failed.'
-      });
-    } finally {
-      this.dialog = false;
-    }
+  renameScript() {
+    this.$emit('input', this.name);
+    this.dialog = false;
   }
 }
 </script>
