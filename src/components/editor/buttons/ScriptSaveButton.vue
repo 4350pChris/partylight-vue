@@ -22,8 +22,6 @@ import { isEqual } from 'lodash';
 
 @Component({ components: { LoadingButton }})
 export default class ScriptSaveButton extends Mixins(AlertMixin) {
-  disabled: boolean = false;
-
   @PropSync('script', { required: true, type: Object })
   syncedScript!: Script;
 
@@ -38,14 +36,9 @@ export default class ScriptSaveButton extends Mixins(AlertMixin) {
   @Mutation(Mutations.SetSelectedScript)
   setSelectedScript!: (id: number | null) => void;
 
-  get original() {
-    return this.scriptById(this.syncedScript.id);
-  }
-
-  @Watch('script', { deep: true })
-  scriptChanged() {
-    console.log('Watcher invoked');
-    this.disabled = isEqual(this.syncedScript, this.original);
+  get disabled() {
+    const original = this.scriptById(this.syncedScript.id);
+    return isEqual(this.syncedScript, original);
   }
 
   async saveScript(): Promise<void> {
