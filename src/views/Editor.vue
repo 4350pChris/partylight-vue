@@ -1,34 +1,33 @@
 <template>
-  <v-layout column>
+  <v-layout column justify-center>
     <template v-if="!scriptsLoading">
       <v-flex shrink>
-        <v-layout column>
-          <v-container fluid grid-list-md>
-            <v-layout align-center row wrap>
-              <v-flex sm6 md3 class="hidden-sm-and-down">
-                <v-text-field v-model="editorScript.name" label="Name" hide-details/>
-              </v-flex>
-              <v-flex xs12 sm6 md3>
-                <ScriptList class="script-list" />
-              </v-flex>
-              <v-spacer/>
-              <v-flex class="shrink">
-                <v-btn-toggle rounded>
-                  <v-btn text v-if="$vuetify.breakpoint.mdAndUp" @click="newScript">New Script</v-btn>
-                  <ScriptDeleteButton :script="editorScript" text />
-                  <ScriptActivateButton :script="editorScript" text />
-                  <ScriptSaveButton v-if="$vuetify.breakpoint.mdAndUp" text :script="editorScript" />
-                </v-btn-toggle>
-              </v-flex>
-            </v-layout>
-          </v-container>
-        </v-layout>            
+        <v-container fluid>
+          <v-layout align-center row wrap justify-md-space-between justify-end>
+            <v-flex md3 class="hidden-sm-and-down">
+              <v-text-field v-model="editorScript.name" label="Name" hide-details/>
+            </v-flex>
+            <v-flex xs12 md4>
+              <ScriptList class="script-list" />
+            </v-flex>
+            <v-flex shrink class="mt-4 mt-md-0">
+              <v-btn-toggle rounded>
+                <ScriptActivateButton :script="editorScript" text />
+                <v-btn text v-if="$vuetify.breakpoint.mdAndUp" @click="newScript">New Script</v-btn>
+                <ScriptDeleteButton :script="editorScript" text />
+                <ScriptSaveButton v-if="$vuetify.breakpoint.mdAndUp" text :script="editorScript" />
+              </v-btn-toggle>
+            </v-flex>
+          </v-layout>
+        </v-container>
       </v-flex>
-      <v-flex v-if="$vuetify.breakpoint.mdAndUp">
-        <ScriptEditor class="elevation-2" :code.sync="editorScript.code"/>
+      <v-flex>
+        <ScriptEditor class="elevation-2 hidden-sm-and-down" :code.sync="editorScript.code"/>
       </v-flex>
     </template>
-    <v-progress-circular size="80" width="8" indeterminate v-else />
+    <v-flex shrink align-self-center v-else>
+      <v-progress-circular size="80" width="8" indeterminate />
+    </v-flex>
   </v-layout>
 </template>
 
@@ -95,9 +94,3 @@ export default class Editor extends Mixins(Alert, ThemeMixin, InitModule) {
   }
 }
 </script>
-
-<style scoped>
-.script-list {
-  margin-bottom: -3px;
-}
-</style>
