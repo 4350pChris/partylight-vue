@@ -17,6 +17,7 @@ import { IPosition, IRange, editor, languages } from 'monaco-editor';
 import services from '@/api';
 import Completion from '@/models/completion';
 import ThemeMixin from '@/mixins/theme';
+import { setTimeout } from 'timers';
 
 @Component({ components: { MonacoEditor }})
 export default class ScriptEditor extends Mixins(ThemeMixin) {
@@ -37,7 +38,7 @@ export default class ScriptEditor extends Mixins(ThemeMixin) {
   }
 
   resizeEditor() {
-    this.editor.layout();
+    setTimeout(this.resizeEditor, 0);
   }
 
   registerCompletion() {
