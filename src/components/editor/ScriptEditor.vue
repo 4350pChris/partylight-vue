@@ -1,7 +1,8 @@
 <template>
   <MonacoEditor
     id="editor"
-    v-model="syncedCode"
+    :value="code"
+    @change="codeChanged"
     language="csharp"
     :theme="editorTheme"
     :options="options"
@@ -17,12 +18,11 @@ import { IPosition, IRange, editor, languages } from 'monaco-editor';
 import services from '@/api';
 import Completion from '@/models/completion';
 import ThemeMixin from '@/mixins/theme';
-import { setTimeout } from 'timers';
 
 @Component({ components: { MonacoEditor }})
 export default class ScriptEditor extends Mixins(ThemeMixin) {
-  @PropSync('code', { type: String })
-  syncedCode!: string;
+  @PropSync('value', { required: true, type: String })
+  code!: string;
 
   options: editor.IEditorConstructionOptions = {
     scrollBeyondLastLine: false,
@@ -39,6 +39,10 @@ export default class ScriptEditor extends Mixins(ThemeMixin) {
 
   resizeEditor() {
     setTimeout(this.resizeEditor, 0);
+  }
+
+  codeChanged(code: string) {
+    this.$emit('input', code);
   }
 
   registerCompletion() {

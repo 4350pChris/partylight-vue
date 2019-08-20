@@ -1,28 +1,11 @@
 <template>
   <v-layout column justify-center>
-    <template v-if="!scriptsLoading">
+    <template v-if="!scriptsLoading && script">
       <v-flex shrink>
-        <v-container fluid>
-          <v-layout align-center row wrap justify-md-space-between justify-end>
-            <v-flex md3 class="hidden-sm-and-down">
-              <v-text-field v-model="editorScript.name" label="Name" hide-details/>
-            </v-flex>
-            <v-flex xs12 md4>
-              <ScriptList class="script-list" />
-            </v-flex>
-            <v-flex shrink class="mt-4 mt-md-0">
-              <v-btn-toggle rounded>
-                <ScriptActivateButton :script="editorScript" text />
-                <v-btn text v-if="$vuetify.breakpoint.mdAndUp" @click="newScript">New Script</v-btn>
-                <ScriptDeleteButton :script="editorScript" text />
-                <ScriptSaveButton v-if="$vuetify.breakpoint.mdAndUp" text :script="editorScript" />
-              </v-btn-toggle>
-            </v-flex>
-          </v-layout>
-        </v-container>
+        <ScriptToolbar :script="script"/>
       </v-flex>
       <v-flex>
-        <ScriptEditor class="elevation-2 hidden-sm-and-down" :code.sync="editorScript.code"/>
+        <ScriptEditor class="elevation-2 hidden-sm-and-down" v-model="code"/>
       </v-flex>
     </template>
     <v-flex shrink align-self-center v-else>
@@ -32,32 +15,35 @@
 </template>
 
 <script lang="ts">
-import { Component, Mixins } from 'vue-property-decorator';
-import { State, Mutation, Getter } from 'vuex-class';
-import { Getters, Mutations } from '@/store/scripts';
-import { StoreState, InitFunctions } from '@/store';
+import { Component, Mixins, Watch } from 'vue-property-decorator';
+import { State, Getter } from 'vuex-class';
+import { Getters } from '@/store/scripts';
+import { StoreState } from '@/store';
 import Script from '@/models/script';
 import ScriptEditor from '@/components/editor/ScriptEditor.vue';
-import ScriptList from '@/components/editor/ScriptList.vue';
 import InitModule from '@/mixins/initModule';
 import Alert from '@/mixins/alert';
-import ThemeMixin from '@/mixins/theme';
-import ScriptActivateButton from '@/components/editor/buttons/ScriptActivateButton.vue';
-import ScriptDeleteButton from '@/components/editor/buttons/ScriptDeleteButton.vue';
-import ScriptSaveButton from '@/components/editor/buttons/ScriptSaveButton.vue';
+import ScriptToolbar from '@/components/editor/ScriptToolbar.vue';
 
 @Component({
-  components: {
-    ScriptEditor,
-    ScriptList,
-    ScriptActivateButton,
-    ScriptDeleteButton,
-    ScriptSaveButton,
-  }
+  components: { ScriptEditor, ScriptToolbar }
 })
-export default class Editor extends Mixins(Alert, ThemeMixin, InitModule) {
+export default class Editor extends Mixins(Alert, InitModule) {
   scriptsLoading = true;
   dial = true;
+  script: Script | null = null;
+
+  get code() {
+    if (this.script) {
+      return this.script.code;
+    }
+    return '';
+  }
+
+  set code(code: string) {
+    const s = this.script as Script;
+    this.script = { ...s, code };
+  }
 
   @State((store: StoreState) => store.scripts.selectedScriptId)
   selectedScriptId!: number | null;
@@ -68,23 +54,18 @@ export default class Editor extends Mixins(Alert, ThemeMixin, InitModule) {
   @Getter(Getters.EmptyScript)
   emptyScript!: Script;
 
-  @Mutation(Mutations.SetSelectedScript)
-  setSelectedScript!: (id: number | null) => void;
-
-  get editorScript(): Script {
-    let script: Script | null = null;
+  @Watch('selectedScriptId')
+  selectedScriptChanged() {
     if (this.selectedScriptId !== null) {
-      script = this.scriptById(this.selectedScriptId);
+      this.script = this.scriptById(this.selectedScriptId);
+    } else {
+      this.script = { ...this.emptyScript };
     }
-    return script === null ? this.emptyScript : { ...script };
-  }
-
-  newScript() {
-    this.setSelectedScript(null);
   }
 
   created() {
     this.initModule('scripts')
+      .then(() => this.selectedScriptChanged())
       .catch((e: any) => this.showAlert({
           type: 'error',
           message: 'Getting script settings from server failed.<br>' + e
