@@ -5,6 +5,8 @@
     language="csharp"
     :theme="editorTheme"
     :options="options"
+    ref="editor"
+    v-resize="resizeEditor"
   />
 </template>
 
@@ -28,6 +30,14 @@ export default class ScriptEditor extends Mixins(ThemeMixin) {
 
   get editorTheme() {
     return this.theme.isDark ? 'vs-dark' : 'vs';
+  }
+
+  get editor(): editor.IStandaloneCodeEditor {
+    return (this.$refs.editor as any).getEditor();
+  }
+
+  resizeEditor() {
+    this.editor.layout();
   }
 
   registerCompletion() {
