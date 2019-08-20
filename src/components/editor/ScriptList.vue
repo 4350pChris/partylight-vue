@@ -1,19 +1,19 @@
 <template>
   <v-select
     v-model="value"
-    class="py-1"
     :items="scripts"
     item-text="name"
     item-value="id"
-    solo
-    rounded
     hide-details
+    single-line
     label="Select a script"
   >
-    <template #item="{ item }">
-      <ScriptItem :active="isActiveScript(item)" :value="item" />
+    <template #prepend-inner>
+      <v-slide-x-transition>
+        <v-icon v-if="active" color="success">mdi-check-circle</v-icon>
+      </v-slide-x-transition>
     </template>
-    <template #selection="{ item }">
+    <template #item="{ item }">
       <ScriptItem :active="isActiveScript(item)" :value="item" />
     </template>
   </v-select>
