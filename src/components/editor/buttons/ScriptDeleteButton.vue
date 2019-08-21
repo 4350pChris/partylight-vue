@@ -1,16 +1,21 @@
 <template>
   <v-dialog v-model="deleteDialog" max-width="290">
-    <template #activator="{ on }">
-      <v-btn
-        class="lighten-1"
-        color="error"
-        v-on="on"
-        v-bind="$attrs"
-        :icon="icon"
-      >
-        <v-icon v-if="icon">mdi-delete-circle</v-icon>
-        <slot v-else>delete</slot>
-      </v-btn>
+    <template #activator="{ on: dialog }">
+      <v-tooltip bottom>
+        <span>Delete</span>
+        <template #activator="{ on: tooltip }">
+          <v-btn
+            class="lighten-1"
+            color="error"
+            v-on="{ ...dialog, ...tooltip }"
+            v-bind="$attrs"
+            :icon="icon"
+          >
+            <v-icon v-if="icon">mdi-delete-circle</v-icon>
+            <slot v-else>delete</slot>
+          </v-btn>
+        </template>
+      </v-tooltip>
     </template>
     <v-card>
       <v-card-title class="headline">Confirm Deletion</v-card-title>

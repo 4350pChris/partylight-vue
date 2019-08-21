@@ -1,13 +1,19 @@
 <template>
-  <LoadingButton
-    color="accent"
-    :load="setActiveScript"
-    :icon="icon"
-    v-bind="$attrs"
-  >
-    <v-icon v-if="icon">mdi-check-circle</v-icon>
-    <slot v-else>activate</slot>
-  </LoadingButton>
+  <v-tooltip bottom>
+    <span>Activate</span>
+    <template #activator="{ on }">
+      <LoadingButton
+        color="accent"
+        :load="setActiveScript"
+        :icon="icon"
+        v-bind="$attrs"
+        v-on="on"
+      >
+        <v-icon v-if="icon">mdi-check-circle</v-icon>
+        <slot v-else>activate</slot>
+      </LoadingButton>
+    </template>
+  </v-tooltip>
 </template>
 
 <script lang="ts">

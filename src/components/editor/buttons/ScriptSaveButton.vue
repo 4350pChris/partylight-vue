@@ -1,14 +1,20 @@
 <template>
-  <LoadingButton
-    color="primary"
-    v-bind="$attrs"
-    :load="saveScript"
-    :icon="icon"
-    :disabled="disabled"
-  >
-    <v-icon v-if="icon">mdi-content-save</v-icon>
-    <slot v-else>save</slot>
-  </LoadingButton>
+  <v-tooltip bottom>
+    <span>Save</span>
+    <template #activator="{ on }">
+      <LoadingButton
+        color="primary"
+        v-bind="$attrs"
+        v-on="on"
+        :load="saveScript"
+        :icon="icon"
+        :disabled="disabled"
+      >
+        <v-icon v-if="icon">mdi-content-save</v-icon>
+        <slot v-else>save</slot>
+      </LoadingButton>
+    </template>
+  </v-tooltip>
 </template>
 
 <script lang="ts">

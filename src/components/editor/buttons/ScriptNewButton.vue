@@ -1,8 +1,13 @@
 <template>
-  <v-btn :icon="icon" @click="newScript">
-    <v-icon v-if="icon">mdi-new-box</v-icon>
-    <slot v-else>New Scripts</slot>
-  </v-btn>
+  <v-tooltip bottom>
+    <span>New Script</span>
+    <template #activator="{ on }">
+      <v-btn :icon="icon" @click="newScript" v-on="on">
+        <v-icon v-if="icon">mdi-new-box</v-icon>
+        <slot v-else>New Script</slot>
+      </v-btn>
+    </template>
+  </v-tooltip>
 </template>
 
 <script lang="ts">

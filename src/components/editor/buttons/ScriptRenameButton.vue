@@ -1,14 +1,19 @@
 <template>
   <v-dialog v-model="dialog" max-width="290">
-    <template #activator="{ on }">
-      <v-btn
-        :icon="icon"
-        v-on="on"
-        v-bind="$attrs"
-      >
-        <v-icon v-if="icon">mdi-rename-box</v-icon>
-        <slot v-else>rename</slot>
-      </v-btn>
+    <template #activator="{ on: dialog }">
+      <v-tooltip bottom>
+        <span>Rename</span>
+        <template #activator="{ on: tooltip }">
+          <v-btn
+            :icon="icon"
+            v-on="{ ...dialog, ...tooltip }"
+            v-bind="$attrs"
+          >
+            <v-icon v-if="icon">mdi-rename-box</v-icon>
+            <slot v-else>rename</slot>
+          </v-btn>
+        </template>
+      </v-tooltip>
     </template>
     <v-card>
       <v-card-title class="headline">Rename Script</v-card-title>
