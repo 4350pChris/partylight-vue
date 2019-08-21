@@ -1,8 +1,7 @@
 <template>
   <MonacoEditor
     id="editor"
-    :value="code"
-    @change="codeChanged"
+    v-model="code"
     language="csharp"
     :theme="editorTheme"
     :options="options"
@@ -13,21 +12,36 @@
 
 <script lang="ts">
 import { Component, PropSync, Watch, Mixins } from 'vue-property-decorator';
+import { State, Action } from 'vuex-class';
 import MonacoEditor from 'vue-monaco';
 import { IPosition, IRange, editor, languages } from 'monaco-editor';
 import services from '@/api';
 import Completion from '@/models/completion';
 import ThemeMixin from '@/mixins/theme';
+import { StoreState } from '@/store/index';
+import Script from '@/models/script';
+import { Actions } from '@/store/scripts';
 
 @Component({ components: { MonacoEditor }})
 export default class ScriptEditor extends Mixins(ThemeMixin) {
-  @PropSync('value', { required: true, type: String })
-  code!: string;
+  @State((store: StoreState) => store.scripts.editorScript)
+  script!: Script | null;
+
+  @Action(Actions.UpdateEditorScript)
+  updateScript!: (s: Partial<Script>) => void;
 
   options: editor.IEditorConstructionOptions = {
     scrollBeyondLastLine: false,
     minimap: { enabled: false }
   };
+
+  get code() {
+    return this.script ? this.script.code : '';
+  }
+
+  set code(code: string) {
+    this.updateScript({ ...this.script, code });
+  }
 
   get editorTheme() {
     return this.theme.isDark ? 'vs-dark' : 'vs';

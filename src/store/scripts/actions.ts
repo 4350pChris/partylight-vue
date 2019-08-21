@@ -1,5 +1,5 @@
 import { ActionTree } from 'vuex';
-import { State, Mutations } from '.';
+import { State, Mutations, Getters } from '.';
 import Script from '@/models/script';
 import services from '@/api';
 
@@ -10,6 +10,7 @@ export enum Actions {
   FetchScripts = 'fetchScripts',
   SaveScript = 'saveScript',
   SetActiveScript = 'setActiveScript',
+  UpdateEditorScript = 'updateEditorScript'
 }
 
 const actions: ActionTree<State, {}> = {
@@ -59,6 +60,11 @@ const actions: ActionTree<State, {}> = {
     }
     commit(Mutations.SetActiveScript, payload);
   },
+
+  [Actions.UpdateEditorScript]({ commit, getters }, payload: Partial<Script>) {
+    const emptyScript = getters[Getters.EmptyScript];
+    commit(Mutations.SetEditorScript, { ...emptyScript, ...payload });
+  }
 };
 
 export default actions;

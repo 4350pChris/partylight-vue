@@ -2,7 +2,6 @@
   <LoadingButton
     color="accent"
     :load="setActiveScript"
-    :disabled="disabled"
     :icon="icon"
     v-bind="$attrs"
   >
@@ -31,10 +30,6 @@ export default class ScriptActivateButton extends Mixins(AlertMixin) {
 
   @Getter(Getters.ScriptById)
   scriptById!: (id: number) => Script | null;
-
-  get disabled(): boolean {
-    return this.scriptById(this.script.id) === null;
-  }
 
   async setActiveScript(): Promise<void> {
     return this.setActive(this.script.id).catch((e: any) => this.showAlert({

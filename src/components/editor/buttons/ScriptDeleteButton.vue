@@ -4,7 +4,6 @@
       <v-btn
         class="lighten-1"
         color="error"
-        :disabled="disabled"
         v-on="on"
         v-bind="$attrs"
         :icon="icon"
@@ -44,10 +43,6 @@ export default class ScriptDeleteButton extends Mixins(AlertMixin) {
 
   @Getter(Getters.ScriptById)
   scriptById!: (id: number) => Script | null;
-
-  get disabled(): boolean {
-    return this.scriptById(this.script.id) === null;
-  }
 
   @Action(Actions.DeleteScript)
   deleteScript!: (id: number) => Promise<void>;

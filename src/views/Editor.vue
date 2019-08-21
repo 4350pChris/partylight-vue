@@ -1,11 +1,11 @@
 <template>
   <v-layout column justify-center>
-    <template v-if="!scriptsLoading && script">
+    <template v-if="!scriptsLoading">
       <v-flex shrink>
-        <ScriptToolbar :script="script"/>
+        <ScriptToolbar />
       </v-flex>
       <v-flex>
-        <ScriptEditor class="elevation-2 hidden-sm-and-down" v-model="code"/>
+        <ScriptEditor class="elevation-2 hidden-sm-and-down"/>
       </v-flex>
     </template>
     <v-flex shrink align-self-center v-else>
@@ -30,42 +30,9 @@ import ScriptToolbar from '@/components/editor/ScriptToolbar.vue';
 })
 export default class Editor extends Mixins(Alert, InitModule) {
   scriptsLoading = true;
-  dial = true;
-  script: Script | null = null;
-
-  get code() {
-    if (this.script) {
-      return this.script.code;
-    }
-    return '';
-  }
-
-  set code(code: string) {
-    const s = this.script as Script;
-    this.script = { ...s, code };
-  }
-
-  @State((store: StoreState) => store.scripts.selectedScriptId)
-  selectedScriptId!: number | null;
-
-  @Getter(Getters.ScriptById)
-  scriptById!: (id: number) => Script | null;
-
-  @Getter(Getters.EmptyScript)
-  emptyScript!: Script;
-
-  @Watch('selectedScriptId')
-  selectedScriptChanged() {
-    if (this.selectedScriptId !== null) {
-      this.script = this.scriptById(this.selectedScriptId);
-    } else {
-      this.script = { ...this.emptyScript };
-    }
-  }
 
   created() {
     this.initModule('scripts')
-      .then(() => this.selectedScriptChanged())
       .catch((e: any) => this.showAlert({
           type: 'error',
           message: 'Getting script settings from server failed.<br>' + e

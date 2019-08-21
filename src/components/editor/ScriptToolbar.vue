@@ -1,17 +1,19 @@
 <template>
-  <v-toolbar>
+  <v-toolbar v-if="script !== null">
+    <v-toolbar-title>{{ name }}</v-toolbar-title>
+    <ScriptRenameButton v-model="name" :icon="true" />
+    <v-spacer/>
     <ScriptList/>
-    <ScriptRenameButton :script="syncedScript" :icon="true" />
     <v-spacer/>
     <ScriptNewButton :icon="true"/>
-    <ScriptActivateButton :script="syncedScript" :icon="true" />
-    <ScriptDeleteButton :script="syncedScript" :icon="true"/>
-    <ScriptSaveButton :script="syncedScript" :icon="true" />
+    <ScriptActivateButton :script="script" :icon="true" />
+    <ScriptDeleteButton :script="script" :icon="true"/>
+    <ScriptSaveButton :script="script" :icon="true" />
   </v-toolbar>
 </template>
 
 <script lang="ts">
-import { Vue, Component, PropSync } from 'vue-property-decorator';
+import { Vue, Component } from 'vue-property-decorator';
 import ScriptList from '@/components/editor/ScriptList.vue';
 import ScriptActivateButton from '@/components/editor/buttons/ScriptActivateButton.vue';
 import ScriptDeleteButton from '@/components/editor/buttons/ScriptDeleteButton.vue';
@@ -19,11 +21,26 @@ import ScriptNewButton from '@/components/editor/buttons/ScriptNewButton.vue';
 import ScriptSaveButton from '@/components/editor/buttons/ScriptSaveButton.vue';
 import ScriptRenameButton from '@/components/editor/buttons/ScriptRenameButton.vue';
 import Script from '@/models/script';
+import { State, Action } from 'vuex-class';
+import { StoreState } from '@/store';
+import { Actions } from '@/store/scripts';
 
 @Component({
   components: { ScriptList, ScriptActivateButton, ScriptDeleteButton, ScriptNewButton, ScriptSaveButton, ScriptRenameButton }
 })
 export default class ScriptToolbar extends Vue {
-  @PropSync('script') syncedScript!: Script;
+  @State((store: StoreState) => store.scripts.editorScript)
+  script!: Script | null;
+
+  @Action(Actions.UpdateEditorScript)
+  updateScript!: (s: Partial<Script>) => void;
+
+  get name() {
+    return this.script ? this.script.name : '';
+  }
+
+  set name(name: string) {
+    this.updateScript({ ...this.script, name });
+  }
 }
 </script>

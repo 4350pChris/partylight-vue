@@ -7,18 +7,18 @@
 
 <script lang="ts">
 import { Component, Prop, Vue } from 'vue-property-decorator';
-import { Mutation } from 'vuex-class';
-import { Mutations } from '@/store/scripts';
+import { Action } from 'vuex-class';
+import { Actions } from '@/store/scripts';
 
 @Component
 export default class ScriptNewButton extends Vue {
   @Prop({ required: false, default: false }) icon!: boolean;
 
-  @Mutation(Mutations.SetSelectedScript)
-  setSelectedScript!: (id: number | null) => void;
+  @Action(Actions.UpdateEditorScript)
+  setEditorScript!: () => void;
 
   newScript() {
-    this.setSelectedScript(null);
+    this.setEditorScript();
   }
 }
 </script>

@@ -32,8 +32,8 @@ export default class ScriptList extends Vue {
   @State((store: StoreState) => store.scripts.scripts)
   scripts!: Script[];
 
-  @State((store: StoreState) => store.scripts.selectedScriptId)
-  selectedScriptId!: number;
+  @State((store: StoreState) => store.scripts.editorScript)
+  editorScript!: Script | null;
 
   @State((store: StoreState) => store.scripts.activeScriptId)
   activeScriptId!: number;
@@ -41,15 +41,15 @@ export default class ScriptList extends Vue {
   @Getter(Getters.ScriptById)
   scriptById!: (id: number) => Script | undefined;
 
-  @Mutation(Mutations.SetSelectedScript)
-  setSelectedScript!: (id: number) => void;
+  @Mutation(Mutations.SetEditorScript)
+  setEditorScript!: (script: Script | number | null) => void;
 
   get value() {
-    return this.selectedScriptId;
+    return this.editorScript ? this.editorScript.id : undefined;
   }
 
-  set value(val: number) {
-    this.setSelectedScript(val);
+  set value(val: number | undefined) {
+    this.setEditorScript(val === undefined ? null : val);
   }
 
   get active(): Script | null {

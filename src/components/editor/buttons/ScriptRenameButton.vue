@@ -13,7 +13,7 @@
     <v-card>
       <v-card-title class="headline">Rename Script</v-card-title>
       <v-card-text>
-        <v-text-field v-model="name" />
+        <v-text-field :value="name" @input="localName = $event" />
       </v-card-text>
       <v-card-actions>
         <v-spacer/>
@@ -25,27 +25,28 @@
 </template>
 
 <script lang="ts">
-import { Component, Prop, Vue, PropSync } from 'vue-property-decorator';
+import { Component, Model, Prop, Vue, Watch } from 'vue-property-decorator';
 import Script from '@/models/script';
 import AlertMixin from '@/mixins/alert';
 
 @Component
-export default class ScriptNewButton extends Vue {
+export default class ScriptRenameButton extends Vue {
   dialog = false;
 
-  name = '';
+  localName = '';
 
   @Prop({ required: false, default: false }) icon!: boolean;
 
-  @PropSync('script', { required: true, type: Object })
-  syncedScript!: Script;
+  @Model('change', { required: true })
+  name!: string;
 
-  mounted() {
-    this.name = this.syncedScript.name;
+  @Watch('name')
+  nameChanged() {
+    this.localName = this.name;
   }
 
   renameScript() {
-    this.$emit('input', this.name);
+    this.$emit('change', this.localName);
     this.dialog = false;
   }
 }

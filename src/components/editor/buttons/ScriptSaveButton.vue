@@ -12,7 +12,7 @@
 </template>
 
 <script lang="ts">
-import { Component, Prop, Mixins, Watch, PropSync } from 'vue-property-decorator';
+import { Component, Prop, Mixins, Watch } from 'vue-property-decorator';
 import { Action, Mutation, Getter } from 'vuex-class';
 import { Actions, Mutations, Getters } from '@/store/scripts';
 import Script from '@/models/script';
@@ -22,8 +22,8 @@ import { isEqual } from 'lodash';
 
 @Component({ components: { LoadingButton }})
 export default class ScriptSaveButton extends Mixins(AlertMixin) {
-  @PropSync('script', { required: true, type: Object })
-  syncedScript!: Script;
+  @Prop({ required: true })
+  script!: Script;
 
   @Prop({ required: false, default: false }) icon!: boolean;
 
@@ -33,18 +33,14 @@ export default class ScriptSaveButton extends Mixins(AlertMixin) {
   @Action(Actions.SaveScript)
   save!: (script: Script) => Promise<void>;
 
-  @Mutation(Mutations.SetSelectedScript)
-  setSelectedScript!: (id: number | null) => void;
-
   get disabled() {
-    const original = this.scriptById(this.syncedScript.id);
-    return isEqual(this.syncedScript, original);
+    const original = this.scriptById(this.script.id);
+    return isEqual(this.script, original);
   }
 
   async saveScript(): Promise<void> {
     try {
-      this.setSelectedScript(this.syncedScript.id);
-      await this.save(this.syncedScript);
+      await this.save(this.script);
     } catch (e) {
       this.showAlert({
         type: 'error',

@@ -5,6 +5,8 @@ import { Actions, Mutations } from '.';
 export async function initScripts(store: Store<any>) {
   const scriptsService = services.scripts;
 
+  store.dispatch(Actions.UpdateEditorScript); // sets the editor script to the empty one
+
   await scriptsService.startConnection();
   await store.dispatch(Actions.FetchScripts);
 

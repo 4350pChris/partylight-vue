@@ -36,8 +36,12 @@ const mutations: MutationTree<State> = {
     state.activeScriptId = id;
   },
 
-  [Mutations.SetEditorScript](state, script: Script | null) {
-    state.editorScript = script;
+  [Mutations.SetEditorScript](state, script: Script | number | null) {
+    if (typeof script !== 'object') {
+      state.editorScript = state.scripts.find(s => s.id === script) || null;
+    } else {
+      state.editorScript = script;
+    }
   },
 };
 
