@@ -52,7 +52,7 @@ export default class ScriptEditor extends Mixins(ThemeMixin) {
   }
 
   resizeEditor() {
-    setTimeout(this.resizeEditor, 0);
+    setTimeout(() => this.editor.layout(), 0);
   }
 
   codeChanged(code: string) {
