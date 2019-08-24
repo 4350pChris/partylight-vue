@@ -1,9 +1,7 @@
 <template>
   <v-toolbar v-if="script !== null">
-    <v-toolbar-title>{{ name }}</v-toolbar-title>
-    <ScriptRenameButton v-model="name" :icon="true" />
-    <v-spacer/>
     <ScriptList/>
+    <ScriptRenameButton v-model="name" :icon="true" />
     <v-spacer/>
     <ScriptNewButton :icon="true"/>
     <ScriptActivateButton :script="script" :icon="true" />
@@ -21,9 +19,9 @@ import ScriptNewButton from '@/components/editor/buttons/ScriptNewButton.vue';
 import ScriptSaveButton from '@/components/editor/buttons/ScriptSaveButton.vue';
 import ScriptRenameButton from '@/components/editor/buttons/ScriptRenameButton.vue';
 import Script from '@/models/script';
-import { State, Action } from 'vuex-class';
+import { State, Action, Getter } from 'vuex-class';
 import { StoreState } from '@/store';
-import { Actions } from '@/store/scripts';
+import { Actions, Getters } from '@/store/scripts';
 
 @Component({
   components: { ScriptList, ScriptActivateButton, ScriptDeleteButton, ScriptNewButton, ScriptSaveButton, ScriptRenameButton }
@@ -32,8 +30,14 @@ export default class ScriptToolbar extends Vue {
   @State((store: StoreState) => store.scripts.editorScript)
   script!: Script | null;
 
+  @Getter(Getters.ScriptById)
+  scriptById!: (id: number) => Script | null;
+
   @Action(Actions.UpdateEditorScript)
   updateScript!: (s: Partial<Script>) => void;
+
+  @Action(Actions.SaveScript)
+  saveScript!: (s: Script) => Promise<void>;
 
   get name() {
     return this.script ? this.script.name : '';
@@ -41,6 +45,12 @@ export default class ScriptToolbar extends Vue {
 
   set name(name: string) {
     this.updateScript({ ...this.script, name });
+    if (this.script !== null) {
+      const existing = this.scriptById(this.script.id);
+      if (existing !== null) {
+        this.saveScript({ ...existing, name });
+      }
+    }
   }
 }
 </script>
