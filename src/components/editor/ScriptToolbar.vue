@@ -3,10 +3,14 @@
     <ScriptList/>
     <ScriptRenameButton v-model="name" :icon="true" />
     <v-spacer/>
-    <ScriptNewButton :icon="true"/>
+    <v-divider vertical />
+    <template v-if="$vuetify.breakpoint.mdAndUp">
+      <ScriptNewButton  :icon="true"/>
+      <ScriptSaveButton :script="script" :icon="true" />
+      <v-divider vertical />
+    </template>
     <ScriptActivateButton :script="script" :icon="true" />
     <ScriptDeleteButton :script="script" :icon="true"/>
-    <ScriptSaveButton :script="script" :icon="true" />
   </v-toolbar>
 </template>
 
@@ -24,7 +28,14 @@ import { StoreState } from '@/store';
 import { Actions, Getters } from '@/store/scripts';
 
 @Component({
-  components: { ScriptList, ScriptActivateButton, ScriptDeleteButton, ScriptNewButton, ScriptSaveButton, ScriptRenameButton }
+  components: {
+    ScriptList,
+    ScriptActivateButton,
+    ScriptDeleteButton,
+    ScriptNewButton,
+    ScriptSaveButton,
+    ScriptRenameButton
+  }
 })
 export default class ScriptToolbar extends Vue {
   @State((store: StoreState) => store.scripts.editorScript)
